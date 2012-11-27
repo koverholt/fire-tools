@@ -137,16 +137,16 @@ def check_input_fields():
 
     C, H, O, N = 0, 0, 0, 0
 
-    match = re.search('C(\d+\.?\d*)', formula)
+    match = re.search('[cC](\d+\.?\d*)', formula)
     if match:
         C = match.group(1)
-    match = re.search('H(\d+\.?\d*)', formula)
+    match = re.search('[hH](\d+\.?\d*)', formula)
     if match:
         H = match.group(1)
-    match = re.search('O(\d+\.?\d*)', formula)
+    match = re.search('[oO](\d+\.?\d*)', formula)
     if match:
         O = match.group(1)
-    match = re.search('N(\d+\.?\d*)', formula)
+    match = re.search('[nN](\d+\.?\d*)', formula)
     if match:
         N = match.group(1)
 
@@ -220,14 +220,14 @@ def check_input_fields():
     try:
         form["sel_prec_value"].value
         if soot_yield > 0:
-            print FORMULA_OUTPUT_HI_PREC % (fuel_lhs, formula, air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
+            print FORMULA_OUTPUT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
         else:
-            print FORMULA_OUTPUT_NO_SOOT_HI_PREC % (fuel_lhs, formula, air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+            print FORMULA_OUTPUT_NO_SOOT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
     except KeyError:
         if soot_yield > 0:
-            print FORMULA_OUTPUT % (fuel_lhs, formula, air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
+            print FORMULA_OUTPUT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
         else:
-            print FORMULA_OUTPUT_NO_SOOT % (fuel_lhs, formula, air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+            print FORMULA_OUTPUT_NO_SOOT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
     
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
