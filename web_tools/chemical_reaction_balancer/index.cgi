@@ -31,7 +31,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index.cgi'
+SCRIPT_NAME = '/cgi-bin/chemical_reaction_balancer/index.cgi'
 form = cgi.FieldStorage()
 
 global resolution
@@ -78,7 +78,7 @@ def print_html_body():
     """
 
     CHEM_INPUT = """<table border=0>
-    <tr><td colspan=3 align='right'><br/><input class="btn btn-large btn-primary" name="submit" type="submit" value="Balance chemical equation"></td></td></table><br/>
+    <tr><td colspan=3 align='right'><br/><input class="btn btn-large btn-primary" name="submit" type="submit" value="Balance chemical reaction"></td></td></table><br/>
     """
 
     print HTML_INPUTS
@@ -170,7 +170,7 @@ def check_input_fields():
         sys.exit()
 
     #  ==========================================
-    #  = Chemical equation balance calculations =
+    #  = Chemical reaction balance calculations =
     #  ==========================================
 
     MW_C = 12.0107
@@ -198,22 +198,22 @@ def check_input_fields():
     #  =================
 
     FORMULA_OUTPUT = """
-    <h3>Balanced chemical equation</h3>
+    <h3>Balanced chemical reaction</h3>
     <h4>Products: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Reactants: <br><br> <font color="blue">%0.4f</font> CO<sub>2</sub> + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub> + <font color="blue">%0.4f</font> C</h4>
     """
 
     FORMULA_OUTPUT_NO_SOOT = """
-    <h3>Balanced chemical equation</h3>
+    <h3>Balanced chemical reaction</h3>
     <h4>Products: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Reactants: <br><br> <font color="blue">%0.4f</font> CO<sub>2</sub> + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
     """
 
     FORMULA_OUTPUT_HI_PREC = """
-    <h3>Balanced chemical equation</h3>
+    <h3>Balanced chemical reaction</h3>
     <h4>Products: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Reactants: <br><br> <font color="blue">%0.6f</font> CO<sub>2</sub> + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.6f</font> N<sub>2</sub> + <font color="blue">%0.6f</font> C</h4>
     """
 
     FORMULA_OUTPUT_NO_SOOT_HI_PREC = """
-    <h3>Balanced chemical equation</h3>
+    <h3>Balanced chemical reaction</h3>
     <h4>Products: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Reactants: <br><br> <font color="blue">%0.6f</font> CO<sub>2</sub> + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
     """
 
@@ -271,4 +271,3 @@ x0_dim.style.backgroundColor = "#FF0000";
 print js_form_textbox_red_2
 
 print_html_footer()
-
