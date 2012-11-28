@@ -187,7 +187,7 @@ def check_input_fields():
     # Check to see if CO option is selected, then products include CO
     try:
         form["sel_co_value"].value
-        C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
+        C_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) / MW_C * soot_yield
 
         fuel_lhs = 1
         C_lhs = C
@@ -204,7 +204,7 @@ def check_input_fields():
     
     # If CO option is not selected, products include CO2
     except KeyError:
-        C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
+        C_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) / MW_C * soot_yield
 
         fuel_lhs = 1
         C_lhs = C
