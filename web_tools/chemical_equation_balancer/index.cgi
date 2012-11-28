@@ -34,9 +34,6 @@ cgitb.enable()
 SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index.cgi'
 form = cgi.FieldStorage()
 
-global resolution
-resolution = ''
-
 # Writes out html page templates and form fields
 def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE HTML>
@@ -73,7 +70,7 @@ def print_html_body():
     <label>Soot yield </label>
     <input class="input-small" name="sel_Y_s" type="text" size="4" value="0.01"><br/><br/>
 
-    <input type="checkbox" name="sel_co2_value" value="co2" id="co2">
+    <input type="checkbox" name="sel_co_value" value="co2" id="co2">
     &nbsp;Reactants go to CO instead of CO2 <br/><br/>
 
     <input type="checkbox" name="sel_prec_value" value="prec" id="prec">
@@ -128,9 +125,9 @@ def check_input_fields():
         print """<h2><font color="red">Soot yield is not a valid number</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-        
-    sel_Y_s = float(sel_Y_s)
 
+    sel_Y_s = float(sel_Y_s)
+    
     formula = sel_formula
     soot_yield = sel_Y_s
 
@@ -140,6 +137,7 @@ def check_input_fields():
 
     C, H, O, N = 0, 0, 0, 0
 
+    # Search for C, H, O, N atoms in formula
     match = re.search('[cC](\d+\.?\d*)', formula)
     if match:
         C = match.group(1)
@@ -153,6 +151,8 @@ def check_input_fields():
     if match:
         N = match.group(1)
 
+    # If an atom is included with no number following,
+    # then assign it a value of 1
     if (C == 0) and ('C' in formula):
         C = 1
     if (H == 0) and ('H' in formula):
@@ -162,11 +162,13 @@ def check_input_fields():
     if (N == 0) and ('N' in formula):
         N = 1
 
+    # Convert all atom numbers to floats
     C = float(C)
     H = float(H)
     O = float(O)
     N = float(N)
 
+    # Throw error if formula does not include C or H
     if ((C == 0) or (H == 0)):
         print """<h2><font color="red">C and H must be included in the fuel</font></h2><br/>"""
         fill_previous_values()
@@ -176,13 +178,15 @@ def check_input_fields():
     #  = Chemical equation balance calculations =
     #  ==========================================
 
+    # Molecular weights of C, H, O, N
     MW_C = 12.0107
     MW_H = 1.00794
     MW_O = 15.9994
     MW_N = 14.0067
 
+    # Check to see if CO option is selected, then products include CO
     try:
-        form["sel_co2_value"].value
+        form["sel_co_value"].value
         C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
 
         fuel_lhs = 1
@@ -197,7 +201,8 @@ def check_input_fields():
         H2O_rhs = H_lhs / 2
         air_lhs = (CO_rhs / 2) + (H2O_rhs / 2) - (O_lhs / 2)
         N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
-            
+    
+    # If CO option is not selected, products include CO2
     except KeyError:
         C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
 
@@ -257,8 +262,10 @@ def check_input_fields():
     <h3>Balanced chemical equation</h3>
     <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
     """
+
+    # Check to see if CO option is selected, then products include CO
     try:
-        form["sel_co2_value"].value
+        form["sel_co_value"].value
         try:
             form["sel_prec_value"].value
             if soot_yield > 0:
@@ -270,6 +277,8 @@ def check_input_fields():
                 print FORMULA_OUTPUT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs, C_rhs)
             else:
                 print FORMULA_OUTPUT_NO_SOOT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs)
+
+    # If CO option is not selected, products include CO2                
     except KeyError:
         try:
             form["sel_prec_value"].value
@@ -293,14 +302,15 @@ def fill_previous_values():
     for field in input_values:
         print js_form_fill % {'FORM_ELEMENT_NAME':input_fields[form_count], 'FORM_VALUE':field}
         print """<script type="text/javascript">"""
+        # Set previous value of checkboxes
         try:
             form["sel_prec_value"].value
             print "document.forms[0].sel_prec_value.checked = true;"
         except KeyError:
             pass
         try:
-            form["sel_co2_value"].value
-            print "document.forms[0].sel_co2_value.checked = true;"
+            form["sel_co_value"].value
+            print "document.forms[0].sel_co_value.checked = true;"
         except KeyError:
             pass
         print "</script>"
@@ -318,15 +328,5 @@ print_html_body()
 check_input_fields()
 
 fill_previous_values()
-
-js_form_textbox_red = """<script type="text/javascript">
-document.getElementById("x0_dim").style.color="red";
-</script>"""
-
-js_form_textbox_red_2 = """<script type="text/javascript">
-x0_dim.style.backgroundColor = "#FF0000";
-</script>"""
-
-print js_form_textbox_red_2
 
 print_html_footer()
