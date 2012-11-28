@@ -73,6 +73,9 @@ def print_html_body():
     <label>Soot yield </label>
     <input class="input-small" name="sel_Y_s" type="text" size="4" value="0.01"><br/><br/>
 
+    <input type="checkbox" name="sel_co2_value" value="co2" id="co2">
+    &nbsp;Reactants go to CO instead of CO2 <br/><br/>
+
     <input type="checkbox" name="sel_prec_value" value="prec" id="prec">
     &nbsp;Print extra decimal precision <br/>
     """
@@ -178,20 +181,38 @@ def check_input_fields():
     MW_O = 15.9994
     MW_N = 14.0067
 
-    C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
+    try:
+        form["sel_co2_value"].value
+        C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
 
-    fuel_lhs = 1
-    C_lhs = C
-    H_lhs = H
-    O_lhs = O
-    N_lhs = N
-    O2_lhs = 1
-    N2_lhs = 3.7619
+        fuel_lhs = 1
+        C_lhs = C
+        H_lhs = H
+        O_lhs = O
+        N_lhs = N
+        O2_lhs = 1
+        N2_lhs = 3.7619
 
-    CO2_rhs = C_lhs - C_rhs
-    H2O_rhs = H_lhs / 2
-    air_lhs = CO2_rhs + (H2O_rhs / 2) - (O_lhs / 2)
-    N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
+        CO_rhs = C_lhs - C_rhs
+        H2O_rhs = H_lhs / 2
+        air_lhs = (CO_rhs / 2) + (H2O_rhs / 2) - (O_lhs / 2)
+        N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
+            
+    except KeyError:
+        C_rhs = ((C * MW_C) + (H * MW_H)) / MW_C * soot_yield
+
+        fuel_lhs = 1
+        C_lhs = C
+        H_lhs = H
+        O_lhs = O
+        N_lhs = N
+        O2_lhs = 1
+        N2_lhs = 3.7619
+
+        CO2_rhs = C_lhs - C_rhs
+        H2O_rhs = H_lhs / 2
+        air_lhs = CO2_rhs + (H2O_rhs / 2) - (O_lhs / 2)
+        N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
 
     #  =================
     #  = Print results =
@@ -215,19 +236,52 @@ def check_input_fields():
     FORMULA_OUTPUT_NO_SOOT_HI_PREC = """
     <h3>Balanced chemical equation</h3>
     <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO<sub>2</sub> + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
+    """     
+
+    FORMULA_OUTPUT_CO = """
+    <h3>Balanced chemical equation</h3>
+    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub> + <font color="blue">%0.4f</font> C</h4>
     """
 
+    FORMULA_OUTPUT_NO_SOOT_CO = """
+    <h3>Balanced chemical equation</h3>
+    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
+    """
+
+    FORMULA_OUTPUT_HI_PREC_CO = """
+    <h3>Balanced chemical equation</h3>
+    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.6f</font> N<sub>2</sub> + <font color="blue">%0.6f</font> C</h4>
+    """
+
+    FORMULA_OUTPUT_NO_SOOT_HI_PREC_CO = """
+    <h3>Balanced chemical equation</h3>
+    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
+    """
     try:
-        form["sel_prec_value"].value
-        if soot_yield > 0:
-            print FORMULA_OUTPUT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
-        else:
-            print FORMULA_OUTPUT_NO_SOOT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+        form["sel_co2_value"].value
+        try:
+            form["sel_prec_value"].value
+            if soot_yield > 0:
+                print FORMULA_OUTPUT_HI_PREC_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs, C_rhs)
+            else:
+                print FORMULA_OUTPUT_NO_SOOT_HI_PREC_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs)
+        except KeyError:
+            if soot_yield > 0:
+                print FORMULA_OUTPUT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs, C_rhs)
+            else:
+                print FORMULA_OUTPUT_NO_SOOT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs)
     except KeyError:
-        if soot_yield > 0:
-            print FORMULA_OUTPUT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
-        else:
-            print FORMULA_OUTPUT_NO_SOOT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+        try:
+            form["sel_prec_value"].value
+            if soot_yield > 0:
+                print FORMULA_OUTPUT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
+            else:
+                print FORMULA_OUTPUT_NO_SOOT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+        except KeyError:
+            if soot_yield > 0:
+                print FORMULA_OUTPUT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
+            else:
+                print FORMULA_OUTPUT_NO_SOOT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
     
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
@@ -238,13 +292,18 @@ def fill_previous_values():
     form_count = 0
     for field in input_values:
         print js_form_fill % {'FORM_ELEMENT_NAME':input_fields[form_count], 'FORM_VALUE':field}
+        print """<script type="text/javascript">"""
         try:
             form["sel_prec_value"].value
-            print """<script type="text/javascript">"""
             print "document.forms[0].sel_prec_value.checked = true;"
-            print "</script>"
         except KeyError:
             pass
+        try:
+            form["sel_co2_value"].value
+            print "document.forms[0].sel_co2_value.checked = true;"
+        except KeyError:
+            pass
+        print "</script>"
         form_count += 1
     
     
