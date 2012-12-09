@@ -70,11 +70,11 @@ def print_html_body():
     <label>Soot yield </label>
     <input class="input-small" name="sel_Y_s" type="text" size="4" value="0.01"><br/><br/>
 
-    <input type="checkbox" name="sel_co_value" value="co2" id="co2">
-    &nbsp;Reactants go to CO instead of CO2 <br/><br/>
+    <label><input type="checkbox" name="sel_co_value" value="co2" id="co2">
+    &nbsp;Reactants go to CO instead of CO2 </label><br/>
 
-    <input type="checkbox" name="sel_prec_value" value="prec" id="prec">
-    &nbsp;Print extra decimal precision <br/>
+    <label><input type="checkbox" name="sel_prec_value" value="prec" id="prec">
+    &nbsp;Print extra decimal precision </label>
     """
 
     CHEM_INPUT = """<table border=0>

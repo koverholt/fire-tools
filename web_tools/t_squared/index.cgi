@@ -86,12 +86,12 @@ def print_html_body():
     HTML_XDIM = """<br/><b>Fire growth coefficient</b><br/><br/>
     
     <blockquote>
-    <input type="radio" name="sel_alpha_value" value="option1" id="option1" checked>&nbsp;Slow: 0.00293 kW/s<sup>2</sup><br/>
-    <input type="radio" name="sel_alpha_value" value="option2" id="option2">&nbsp;Medium: 0.01172 kW/s<sup>2</sup><br/>
-    <input type="radio" name="sel_alpha_value" value="option3" id="option3">&nbsp;Fast: 0.0469 kW/s<sup>2</sup><br/>
-    <input type="radio" name="sel_alpha_value" value="option4" id="option4">&nbsp;Ultrafast: 0.1876 kW/s<sup>2</sup><br/>
-    <input type="radio" name="sel_alpha_value" value="other" id="other">&nbsp;Custom:
-    <input class="input-small" type="text" name="sel_custom_alpha_value" size="10"> kW/s<sup>2</sup>
+    <label><input type="radio" name="sel_alpha_value" value="option1" id="option1" checked>&nbsp;Slow: 0.00293 kW/s<sup>2</sup></label>
+    <label><input type="radio" name="sel_alpha_value" value="option2" id="option2">&nbsp;Medium: 0.01172 kW/s<sup>2</sup></label>
+    <label><input type="radio" name="sel_alpha_value" value="option3" id="option3">&nbsp;Fast: 0.0469 kW/s<sup>2</sup></label>
+    <label><input type="radio" name="sel_alpha_value" value="option4" id="option4">&nbsp;Ultrafast: 0.1876 kW/s<sup>2</sup></label>
+    <label><input type="radio" name="sel_alpha_value" value="other" id="other">&nbsp;Custom:</label>
+    <label><input class="input-small" type="text" name="sel_custom_alpha_value" size="10"> kW/s<sup>2</sup></label>
     </blockquote>
     
     <br/>
@@ -102,11 +102,11 @@ def print_html_body():
     
     <br/><br/>
     
-    <input type="radio" name="sel_stopping_value" value="opt1" id="opt1" checked>
-    &nbsp;Maximum HRR:&nbsp;<input class="input-small" type="text" name="sel_hrr_value" size="10" value="300">
-     kW <br/>
-    <input type="radio" name="sel_stopping_value" value="opt2" id="opt2">
-    &nbsp;Maximum time:&nbsp;<input class="input-small" type="text" name="sel_time_value" size="10" value="320">
+    <label><input type="radio" name="sel_stopping_value" value="opt1" id="opt1" checked>
+    &nbsp;Maximum HRR:&nbsp;</label><input class="input-small" type="text" name="sel_hrr_value" size="10" value="300">
+     kW
+    <label><input type="radio" name="sel_stopping_value" value="opt2" id="opt2">
+    &nbsp;Maximum time:&nbsp;</label><input class="input-small" type="text" name="sel_time_value" size="10" value="320">
      s
     </blockquote>
 
@@ -119,10 +119,10 @@ def print_html_body():
     
     <br/><br/>
     
-    <input type="checkbox" name="sel_save1_value" value="save1" id="save1">
-    &nbsp;Downloadable CSV file <br/>
-    <input type="checkbox" name="sel_save2_value" value="save2" id="save2">
-    &nbsp;FDS HRR ramp text <br/>
+    <label><input type="checkbox" name="sel_save1_value" value="save1" id="save1">
+    &nbsp;Downloadable CSV file </label>
+    <label><input type="checkbox" name="sel_save2_value" value="save2" id="save2">
+    &nbsp;FDS HRR ramp text </label>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FDS HRR vent size:
     <input class="input-small" type="text" name="sel_fds_1" size="4" value="1"> m x
     <input class="input-small" type="text" name="sel_fds_2" size="4" value="1"> m
