@@ -147,7 +147,7 @@ def check_input_fields():
         float(sel_Y_s)
         float(sel_Y_co)
     except:
-        print """<h2><font color="red">Soot yield is not a valid number</font></h2><br/>"""
+        print """<h2><font color="red">Check inputs for an invalid entry</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
 
