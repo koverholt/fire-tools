@@ -237,9 +237,9 @@ def check_input_fields():
 
     try:
         form["sel_prec_value"].value              
-        precision = 6
+        precision = "%0.6f"
     except KeyError:
-        precision = 4
+        precision = "%0.4f"
 
     #  =================
     #  = Print results =
@@ -247,48 +247,48 @@ def check_input_fields():
 
     # Check for existence of CO2 in reactants
     if CO2_lhs > 0:
-        CO2_reac = ' + <font color="blue">' + str(np.round(CO2_lhs, decimals=precision)) + ' </font> CO<sub>2</sub> '
+        CO2_reac = ' + <font color="blue">' + precision % CO2_lhs + ' </font> CO<sub>2</sub> '
     else:
         CO2_reac = ''
 
     # Check for existence of H2O in reactants
     if H2O_lhs > 0:
-        H2O_reac = ' + <font color="blue">' + str(np.round(H2O_lhs, decimals=precision)) + ' </font> H<sub>2</sub>O '
+        H2O_reac = ' + <font color="blue">' + precision % H2O_lhs + ' </font> H<sub>2</sub>O '
     else:
         H2O_reac = ''
 
     # Check for existence of C in products
     if C_rhs > 0:
-        C_prod = '+ <font color="blue">' + str(np.round(C_rhs, decimals=precision)) + '</font> C '
+        C_prod = '+ <font color="blue">' + precision % C_rhs + '</font> C '
     else:
         C_prod = ''
 
     # Check for existence of CO in products
     if CO_rhs > 0:
-        CO_prod = '+ <font color="blue">' + str(np.round(CO_rhs, decimals=precision)) + '</font> CO '
+        CO_prod = '+ <font color="blue">' + precision % CO_rhs + '</font> CO '
     else:
         CO_prod = ''
 
     FORMULA_OUTPUT = ('<h3>Balanced chemical equation</h3>' +
                       '<h4>Reactants: <br><br> <font color="blue">' +
-                      str(np.round(fuel_lhs, decimals=precision)) +
+                      precision % fuel_lhs +
                       '</font> ' +
                       formula.upper() +
                       ' + <font color="blue"> ' +
-                      str(np.round(N2_lhs, decimals=precision)) +
+                      precision % N2_lhs +
                       ' </font> N<sub>2</sub> + <font color="blue">' +
-                      str(np.round(O2_lhs, decimals=precision)) +
+                      precision % O2_lhs +
                       ' </font> O<sub>2</sub>' +
                       CO2_reac +
                       H2O_reac +
                       '<br><br> &darr; <br><br>' +
                       ' <br><br> Products: <br><br>' +
                       '<font color="blue">' +
-                      str(np.round(N2_rhs, decimals=precision)) +
+                      precision % N2_rhs +
                       '</font> N<sub>2</sub> + <font color="blue">' +
-                      str(np.round(CO2_rhs, decimals=precision)) +
+                      precision % CO2_rhs +
                       '</font> CO<sub>2</sub> + <font color="blue">' +
-                      str(np.round(H2O_rhs, decimals=precision)) +
+                      precision % H2O_rhs +
                       '</font> H<sub>2</sub>O ' +
                       CO_prod +
                       C_prod +
