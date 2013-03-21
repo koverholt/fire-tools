@@ -31,7 +31,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index.cgi'
+SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index_alternate.cgi'
 form = cgi.FieldStorage()
 
 # Writes out html page templates and form fields
@@ -64,14 +64,29 @@ def print_html_header():
     
 def print_html_body():
     HTML_INPUTS = """    
+    <h4>Reactants</h4>
     <label>Chemical formula of fuel </label>
-    <input class="input-small" name="sel_formula" type="text" size="4" value="C3H8"><br/><br/>
+    <input class="input-small" name="sel_formula" type="text" size="4" value="C7H16"><br/><br/>
     
-    <label>Soot yield </label>
+    <label>Nitrogen (mol) </label>
+    <input class="input-small" name="sel_X_n2" type="text" size="4" value="0.77"><br/><br/>
+
+    <label>Oxygen (mol) </label>
+    <input class="input-small" name="sel_X_o2" type="text" size="4" value="0.20"><br/><br/>
+
+    <label>Carbon dioxide (mol) </label>
+    <input class="input-small" name="sel_X_co2" type="text" size="4" value="0.01"><br/><br/>
+
+    <label>Water vapor (mol) </label>
+    <input class="input-small" name="sel_X_h2o" type="text" size="4" value="0.02"><br/><br/>
+
+    <h4>Products</h4>
+
+    <label>Soot yield (kg/kg) </label>
     <input class="input-small" name="sel_Y_s" type="text" size="4" value="0.01"><br/><br/>
 
-    <label><input type="checkbox" name="sel_co_value" value="co2" id="co2">
-    &nbsp;Reactants go to CO instead of CO2 </label><br/>
+    <label>Carbon monoxide yield (kg/kg) </label>
+    <input class="input-small" name="sel_Y_co" type="text" size="4" value="0.01"><br/><br/>
 
     <label><input type="checkbox" name="sel_prec_value" value="prec" id="prec">
     &nbsp;Print extra decimal precision </label>
@@ -79,8 +94,6 @@ def print_html_body():
 
     CHEM_INPUT = """<table border=0>
     <tr><td colspan=3 align='right'><br/><input class="btn btn-large btn-primary" name="submit" type="submit" value="Balance chemical equation"></td></td></table><br/>
-
-    Or, use an <a href="http://www.koverholt.com/cgi-bin/chemical_equation_balancer/index_alternate.cgi">alternate version of this calculator</a> with soot and CO yields.
     """
 
     print HTML_INPUTS
@@ -97,7 +110,12 @@ def check_input_fields():
     
     try:
         sel_formula = form["sel_formula"].value
+        sel_X_o2 = form["sel_X_o2"].value
+        sel_X_n2 = form["sel_X_n2"].value
+        sel_X_co2 = form["sel_X_co2"].value
+        sel_X_h2o = form["sel_X_h2o"].value
         sel_Y_s = form["sel_Y_s"].value
+        sel_Y_co = form["sel_Y_co"].value
     except:
         print_html_footer()
         sys.exit()
@@ -105,8 +123,8 @@ def check_input_fields():
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
-    input_fields = ("sel_formula", "sel_Y_s")
-    input_values = (sel_formula, sel_Y_s)
+    input_fields = ("sel_formula", "sel_X_o2", "sel_X_n2", "sel_X_co2", "sel_X_h2o", "sel_Y_s", "sel_Y_co")
+    input_values = (sel_formula, sel_X_o2, sel_X_n2, sel_X_co2, sel_X_h2o, sel_Y_s, sel_Y_co)
 
     # Loops through input values to check for empty fields and returns an error if so
     count = 0
@@ -122,16 +140,34 @@ def check_input_fields():
     count = 0
     # for field in input_values:
     try:
+        float(sel_X_o2)
+        float(sel_X_n2)
+        float(sel_X_co2)
+        float(sel_X_h2o)
         float(sel_Y_s)
+        float(sel_Y_co)
     except:
         print """<h2><font color="red">Soot yield is not a valid number</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
 
+    sel_X_o2 = float(sel_X_o2)
+    sel_X_n2 = float(sel_X_n2)
+    sel_X_co2 = float(sel_X_co2)
+    sel_X_h2o = float(sel_X_h2o)
     sel_Y_s = float(sel_Y_s)
+    sel_Y_co = float(sel_Y_co)
     
     formula = sel_formula
+    O2_lhs = sel_X_o2
+    N2_lhs = sel_X_n2
+    CO2_lhs = sel_X_co2
+    H2O_lhs = sel_X_h2o
+    water_vapor = sel_X_h2o
+    co2 = sel_X_co2
+    water_vapor = sel_X_h2o
     soot_yield = sel_Y_s
+    co_yield = sel_Y_co
 
     #  ==========================
     #  = Parse chemical formula =
@@ -186,113 +222,79 @@ def check_input_fields():
     MW_O = 15.9994
     MW_N = 14.0067
 
-    # Check to see if CO option is selected, then products include CO
+    C_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) * (soot_yield / MW_C)
+    CO_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) * (co_yield / (MW_C + MW_O))
+
+    fuel_lhs = 1
+    C_lhs = C + CO2_lhs
+    H_lhs = H + H2O_lhs * 2
+    O_lhs = O
+    N_lhs = N2_lhs * 2
+
+    CO2_rhs = C_lhs - C_rhs - CO_rhs
+    H2O_rhs = H_lhs / 2
+    N2_rhs = N_lhs / 2
+
     try:
-        form["sel_co_value"].value
-        C_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) / MW_C * soot_yield
-
-        fuel_lhs = 1
-        C_lhs = C
-        H_lhs = H
-        O_lhs = O
-        N_lhs = N
-        O2_lhs = 1
-        N2_lhs = 3.7619
-
-        CO_rhs = C_lhs - C_rhs
-        H2O_rhs = H_lhs / 2
-        air_lhs = (CO_rhs / 2) + (H2O_rhs / 2) - (O_lhs / 2)
-        N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
-    
-    # If CO option is not selected, products include CO2
+        form["sel_prec_value"].value              
+        precision = 6
     except KeyError:
-        C_rhs = ((C * MW_C) + (H * MW_H) + (O * MW_O) + (N * MW_N)) / MW_C * soot_yield
-
-        fuel_lhs = 1
-        C_lhs = C
-        H_lhs = H
-        O_lhs = O
-        N_lhs = N
-        O2_lhs = 1
-        N2_lhs = 3.7619
-
-        CO2_rhs = C_lhs - C_rhs
-        H2O_rhs = H_lhs / 2
-        air_lhs = CO2_rhs + (H2O_rhs / 2) - (O_lhs / 2)
-        N2_rhs = (air_lhs * N2_lhs) + (N_lhs / 2)
+        precision = 4
 
     #  =================
     #  = Print results =
     #  =================
 
-    FORMULA_OUTPUT = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO<sub>2</sub> + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub> + <font color="blue">%0.4f</font> C</h4>
-    """
+    # Check for existence of CO2 in reactants
+    if CO2_lhs > 0:
+        CO2_reac = ' + <font color="blue">' + str(np.round(CO2_lhs, decimals=precision)) + ' </font> CO<sub>2</sub> '
+    else:
+        CO2_reac = ''
 
-    FORMULA_OUTPUT_NO_SOOT = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO<sub>2</sub> + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
-    """
+    # Check for existence of H2O in reactants
+    if H2O_lhs > 0:
+        H2O_reac = ' + <font color="blue">' + str(np.round(H2O_lhs, decimals=precision)) + ' </font> H<sub>2</sub>O '
+    else:
+        H2O_reac = ''
 
-    FORMULA_OUTPUT_HI_PREC = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO<sub>2</sub> + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.6f</font> N<sub>2</sub> + <font color="blue">%0.6f</font> C</h4>
-    """
+    # Check for existence of C in products
+    if C_rhs > 0:
+        C_prod = '+ <font color="blue">' + str(np.round(C_rhs, decimals=precision)) + '</font> C '
+    else:
+        C_prod = ''
 
-    FORMULA_OUTPUT_NO_SOOT_HI_PREC = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO<sub>2</sub> + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
-    """     
+    # Check for existence of CO in products
+    if CO_rhs > 0:
+        CO_prod = '+ <font color="blue">' + str(np.round(CO_rhs, decimals=precision)) + '</font> CO '
+    else:
+        CO_prod = ''
 
-    FORMULA_OUTPUT_CO = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub> + <font color="blue">%0.4f</font> C</h4>
-    """
+    FORMULA_OUTPUT = ('<h3>Balanced chemical equation</h3>' +
+                      '<h4>Reactants: <br><br> <font color="blue">' +
+                      str(np.round(fuel_lhs, decimals=precision)) +
+                      '</font> ' +
+                      formula.upper() +
+                      ' + <font color="blue"> ' +
+                      str(np.round(N2_lhs, decimals=precision)) +
+                      ' </font> N<sub>2</sub> + <font color="blue">' +
+                      str(np.round(O2_lhs, decimals=precision)) +
+                      ' </font> O<sub>2</sub>' +
+                      CO2_reac +
+                      H2O_reac +
+                      '<br><br> &darr; <br><br>' +
+                      ' <br><br> Products: <br><br>' +
+                      '<font color="blue">' +
+                      str(np.round(N2_rhs, decimals=precision)) +
+                      '</font> N<sub>2</sub> + <font color="blue">' +
+                      str(np.round(CO2_rhs, decimals=precision)) +
+                      '</font> CO<sub>2</sub> + <font color="blue">' +
+                      str(np.round(H2O_rhs, decimals=precision)) +
+                      '</font> H<sub>2</sub>O + ' +
+                      CO_prod +
+                      C_prod +
+                      '</h4>')
 
-    FORMULA_OUTPUT_NO_SOOT_CO = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.4f</font> %s + <font color="blue">%0.4f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.4f</font> CO + <font color="blue">%0.4f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
-    """
-
-    FORMULA_OUTPUT_HI_PREC_CO = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.6f</font> N<sub>2</sub> + <font color="blue">%0.6f</font> C</h4>
-    """
-
-    FORMULA_OUTPUT_NO_SOOT_HI_PREC_CO = """
-    <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> <font color="blue">%0.6f</font> %s + <font color="blue">%0.6f</font> (O<sub>2</sub> + 3.7619 N<sub>2</sub>) <br><br> &darr; <br><br> Products: <br><br> <font color="blue">%0.6f</font> CO + <font color="blue">%0.6f</font> H<sub>2</sub>O + <font color="blue">%0.4f</font> N<sub>2</sub>
-    """
-
-    # Check to see if CO option is selected, then products include CO
-    try:
-        form["sel_co_value"].value
-        try:
-            form["sel_prec_value"].value
-            if soot_yield > 0:
-                print FORMULA_OUTPUT_HI_PREC_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs, C_rhs)
-            else:
-                print FORMULA_OUTPUT_NO_SOOT_HI_PREC_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs)
-        except KeyError:
-            if soot_yield > 0:
-                print FORMULA_OUTPUT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs, C_rhs)
-            else:
-                print FORMULA_OUTPUT_NO_SOOT_CO % (fuel_lhs, formula.upper(), air_lhs, CO_rhs, H2O_rhs, N2_rhs)
-
-    # If CO option is not selected, products include CO2                
-    except KeyError:
-        try:
-            form["sel_prec_value"].value
-            if soot_yield > 0:
-                print FORMULA_OUTPUT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
-            else:
-                print FORMULA_OUTPUT_NO_SOOT_HI_PREC % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
-        except KeyError:
-            if soot_yield > 0:
-                print FORMULA_OUTPUT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs, C_rhs)
-            else:
-                print FORMULA_OUTPUT_NO_SOOT % (fuel_lhs, formula.upper(), air_lhs, CO2_rhs, H2O_rhs, N2_rhs)
+    print FORMULA_OUTPUT
     
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
@@ -308,11 +310,6 @@ def fill_previous_values():
         try:
             form["sel_prec_value"].value
             print "document.forms[0].sel_prec_value.checked = true;"
-        except KeyError:
-            pass
-        try:
-            form["sel_co_value"].value
-            print "document.forms[0].sel_co_value.checked = true;"
         except KeyError:
             pass
         print "</script>"
