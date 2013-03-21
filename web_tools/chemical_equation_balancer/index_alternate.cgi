@@ -289,7 +289,7 @@ def check_input_fields():
                       str(np.round(CO2_rhs, decimals=precision)) +
                       '</font> CO<sub>2</sub> + <font color="blue">' +
                       str(np.round(H2O_rhs, decimals=precision)) +
-                      '</font> H<sub>2</sub>O + ' +
+                      '</font> H<sub>2</sub>O ' +
                       CO_prod +
                       C_prod +
                       '</h4>')
