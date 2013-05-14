@@ -114,24 +114,6 @@ def print_html_footer():
     }
     </script>
 
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    <script src="../assets/js/bootstrap-typeahead.js"></script>
-
     </div>
     </body>
     </html>"""
@@ -223,6 +205,10 @@ def check_input_fields(outfile=""):
             calc_time = 1
 
         if calc_time == 1:
+            # If FDS time is zero, set to small number to avoid dividing by zero
+            if fds_time == 0:
+                fds_time = 1e-6
+
             # The predicted end time calculation routine 
             predicted_end_time = cpu_time / (fds_time) * (t_end)
             remaining_time = predicted_end_time - cpu_time
@@ -276,7 +262,7 @@ def check_input_fields(outfile=""):
     #  ==============================================================
     #  = Plot estimated FDS runtime vs. elapsed FDS simulation time =
     #  ==============================================================
-    
+
     figure()
     if mesh_count > 1:
         multi_label = 'Mesh #%s' % (str(slowest_mesh + 1))
