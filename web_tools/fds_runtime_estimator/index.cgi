@@ -202,13 +202,14 @@ def check_input_fields(outfile=""):
                 fds_time = float(wall_clock_line[1]) / 60
             else:
                 fds_time = float(wall_clock_line[1]) / 3600
+
+            # If FDS time is zero, skip this line in the .out file
+            if fds_time == 0:
+                continue
+            
             calc_time = 1
 
         if calc_time == 1:
-            # If FDS time is zero, set to small number to avoid dividing by zero
-            if fds_time == 0:
-                fds_time = 1e-6
-
             # The predicted end time calculation routine 
             predicted_end_time = cpu_time / (fds_time) * (t_end)
             remaining_time = predicted_end_time - cpu_time
