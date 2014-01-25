@@ -43,7 +43,7 @@ def timeout(seconds=5, error_message=os.strerror(errno.ETIME)):
 
 
 def gen_input(x, y, z, door_height, door_width,
-              t_amb, HoC, time_ramp, hrr_ramp,
+              tmp_a, HoC, time_ramp, hrr_ramp,
               num, door, wall, simulation_time, dt_data):
     """
     Generate CFAST input file and initialize HRR arrays
@@ -112,6 +112,7 @@ HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         wall_matl = 'GYPSUM,OFF,GYPSUM'
     elif wall == 'fiberboard':
         wall_matl = 'FIBERBRD,OFF,FIBERBRD'
+
     door_vent = """!!Vent keywords
 !!
 HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
@@ -119,14 +120,14 @@ HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
 
     if door == 'Closed':
         outcase = template % {'simulation_time':simulation_time,
-                              'dt_data':dt_data, 't_ambient': t_amb+273.15,
+                              'dt_data':dt_data, 't_ambient': tmp_a+273.15,
                               'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
                               'num':num, 'door_open':'', 'HoC':HoC*1000,
                               'time_ramp':times_to_print,
                               'hrr_ramp':hrrs_to_print}
     elif door == 'Open':
         outcase = template % {'simulation_time':simulation_time,
-                              'dt_data':dt_data, 't_ambient': t_amb+273.15,
+                              'dt_data':dt_data, 't_ambient': tmp_a+273.15,
                               'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
                               'num':num, 'door_open':door_vent, 'HoC':HoC*1000,
                               'time_ramp':times_to_print,
@@ -137,7 +138,7 @@ HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
     #  =====================
 
     casename = 'case'
-    filename = '../../../CFAST_Model/' + casename + '.in'
+    filename = '../CFAST_Model/' + casename + '.in'
 
     # Opens a new file, writes the CFAST input file, and closes the file
     f = open(filename, 'w')
@@ -155,13 +156,13 @@ def run_cfast(casename):
     # Run appropriate executable depending on operating system
     try:
         if op_sys == 'Linux':
-            p = subprocess.Popen(['../../../CFAST_Model/cfast6_linux_64', '../../../CFAST_Model/' + casename])
+            p = subprocess.Popen(['../CFAST_Model/cfast6_linux_64', '../CFAST_Model/' + casename])
             p.wait()
         if op_sys == 'Darwin':
-            p = subprocess.Popen(['../../../CFAST_Model/cfast6_osx_64', '../../../CFAST_Model/' + casename])
+            p = subprocess.Popen(['../CFAST_Model/cfast6_osx_64', '../CFAST_Model/' + casename])
             p.wait()
         if op_sys == 'Windows':
-            p = subprocess.Popen(['../../../CFAST_Model/cfast6_win.exe', '../../../CFAST_Model/' + casename])
+            p = subprocess.Popen(['../CFAST_Model/cfast6_win.exe', '../CFAST_Model/' + casename])
             p.wait()
     except Exception:
         hangerror = 1
@@ -178,34 +179,33 @@ def read_cfast(casename):
     # casename_s.csv - species
     # casename_w.csv - wall temperatures
 
-    temperature_file = '../../../CFAST_Model/' + casename + '_n.csv'
+    temperature_file = '../CFAST_Model/' + casename + '_n.csv'
     temps = np.genfromtxt(temperature_file, delimiter=',', skip_header=3)
 
-    output_file = '../../../CFAST_Model/' + casename + '.out'
+    output_file = '../CFAST_Model/' + casename + '.out'
     outfile = open(output_file)
 
     return temps, outfile
 
 
-def run_multiple_cases(x, y, z, door_height, door_width, t_amb,
+def run_case(x, y, z, door_height, door_width, tmp_a,
                        HoC, time_ramp, hrr_ramp, num, door, wall,
                        simulation_time, dt_data):
     """
-    Generate multiple CFAST input files and calls other functions
+    Generate CFAST input file and call other functions
     """
 
     resulting_temps = np.array([])
 
-    for i in range(len(door_width)):
-        casename = gen_input(x, y, z, door_height[i], door_width[i],
-                  t_amb[i], HoC, time_ramp, hrr_ramp, num, door,
-                  wall, simulation_time, dt_data)
+    casename = gen_input(x, y, z, door_height, door_width, tmp_a, HoC,
+                         time_ramp, hrr_ramp, num, door, wall,
+                         simulation_time, dt_data)
 
-        run_cfast(casename)
-        temps, outfile = read_cfast(casename)
-        outfile.close()
-        hgl = temps[:,1]
-        resulting_temps = np.append(hgl[-1], resulting_temps)
+    run_cfast(casename)
+    temps, outfile = read_cfast(casename)
+    outfile.close()
+    hgl = temps[:,1]
+    resulting_temps = np.append(hgl[-1], resulting_temps)
 
     return(resulting_temps)
 
