@@ -6,7 +6,7 @@ import numpy as np
 import external_cfast
 
 #  ==========================
-#  = Monte Carlo Parameters =
+#  = Monte Carlo parameters =
 #  ==========================
 
 mc_iterations = 10
@@ -53,8 +53,12 @@ door = 'Open'
 # Wall material
 wall = 'gypsum'
 
+#  ============================
+#  = Plot input distributions =
+#  ============================
+
 #  ==========================
-#  = Monte Carlo Simulation =
+#  = Monte Carlo simulation =
 #  ==========================
 
 output_hgl_temps = np.array([])
@@ -79,5 +83,23 @@ for i in range(mc_iterations):
                                        dt_data=dt_data)
     output_hgl_temps = np.append(hgl_temp, output_hgl_temps)
 
+#  =============================
+#  = Plot output distributions =
+#  =============================
+
+#  =================
+#  = Print results =
+#  =================
+
+print 'HGL Temperatures:'
 print output_hgl_temps
+print
+print 'Minimum HGL Temperature:'
+print np.min(output_hgl_temps)
+print
+print 'Maximum HGL Temperature:'
+print np.max(output_hgl_temps)
+print
+print 'Mean HGL Temperature:'
+print np.mean(output_hgl_temps)
 

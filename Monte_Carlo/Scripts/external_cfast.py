@@ -188,9 +188,8 @@ def read_cfast(casename):
     return temps, outfile
 
 
-def run_case(x, y, z, door_height, door_width, tmp_a,
-                       HoC, time_ramp, hrr_ramp, num, door, wall,
-                       simulation_time, dt_data):
+def run_case(x, y, z, door_height, door_width, tmp_a, HoC, time_ramp,
+             hrr_ramp, num, door, wall, simulation_time, dt_data):
     """
     Generate CFAST input file and call other functions
     """
