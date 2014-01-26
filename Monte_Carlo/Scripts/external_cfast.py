@@ -42,9 +42,8 @@ def timeout(seconds=5, error_message=os.strerror(errno.ETIME)):
     return decorator
 
 
-def gen_input(x, y, z, door_height, door_width,
-              tmp_a, HoC, time_ramp, hrr_ramp,
-              num, door, wall, simulation_time, dt_data):
+def gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
+              time_ramp, hrr_ramp, num, door, wall, simulation_time, dt_data):
     """
     Generate CFAST input file and initialize HRR arrays
 
@@ -87,7 +86,7 @@ COMPA,Compartment 1,%(x)s,%(y)s,%(z)s,0,0,0,%(wall_matl)s
 %(door_open)s!!Fire keywords
 !!fire
 FIRE,%(num)s,1.8,1.2,0,1,1,0,0,0,1,fire
-CHEMI,6,10,5,0,0,0.37,%(HoC)s,METHANE
+CHEMI,6,10,5,0,0,0.37,%(hoc)s,METHANE
 TIME,%(time_ramp)s
 HRR,%(hrr_ramp)s
 SOOT,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015
@@ -122,14 +121,14 @@ HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
         outcase = template % {'simulation_time':simulation_time,
                               'dt_data':dt_data, 't_ambient': tmp_a+273.15,
                               'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
-                              'num':num, 'door_open':'', 'HoC':HoC*1000,
+                              'num':num, 'door_open':'', 'hoc':hoc*1000,
                               'time_ramp':times_to_print,
                               'hrr_ramp':hrrs_to_print}
     elif door == 'Open':
         outcase = template % {'simulation_time':simulation_time,
                               'dt_data':dt_data, 't_ambient': tmp_a+273.15,
                               'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
-                              'num':num, 'door_open':door_vent, 'HoC':HoC*1000,
+                              'num':num, 'door_open':door_vent, 'hoc':hoc*1000,
                               'time_ramp':times_to_print,
                               'hrr_ramp':hrrs_to_print}
 
@@ -188,7 +187,7 @@ def read_cfast(casename):
     return temps, outfile
 
 
-def run_case(x, y, z, door_height, door_width, tmp_a, HoC, time_ramp,
+def run_case(x, y, z, door_height, door_width, tmp_a, hoc, time_ramp,
              hrr_ramp, num, door, wall, simulation_time, dt_data):
     """
     Generate CFAST input file and call other functions
@@ -196,7 +195,7 @@ def run_case(x, y, z, door_height, door_width, tmp_a, HoC, time_ramp,
 
     resulting_temps = np.array([])
 
-    casename = gen_input(x, y, z, door_height, door_width, tmp_a, HoC,
+    casename = gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
                          time_ramp, hrr_ramp, num, door, wall,
                          simulation_time, dt_data)
 

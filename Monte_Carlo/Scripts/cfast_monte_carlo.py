@@ -3,35 +3,39 @@
 """Run CFAST Monte Carlo Simulation"""
 
 import numpy as np
+from pylab import *
 import external_cfast
+
+np.set_printoptions(precision=0)
 
 #  ==========================
 #  = Monte Carlo parameters =
 #  ==========================
 
-mc_iterations = 10
+mc_iterations = 20
 
 #  =====================
 #  = Varied parameters =
 #  =====================
 
+# Fixed value          - np.repeat(value, size)
 # Uniform distribution - np.random.uniform(lower, upper, size)
-# Normal distribution - np.random.normal(mean, std, size)
+# Normal distribution  - np.random.normal(mean, std, size)
 
 # x, y, z compartment dimensions, m
-x = np.random.uniform(2, 3, mc_iterations)
-y = np.random.uniform(2, 3, mc_iterations)
-z = np.random.uniform(2, 3, mc_iterations)
+x = np.repeat(3, mc_iterations)
+y = np.repeat(3, mc_iterations)
+z = np.repeat(2.4, mc_iterations)
 
 # Door height and width, m
-door_height = np.random.uniform(1, 2, mc_iterations)
-door_width = np.random.uniform(0.3, 1, mc_iterations)
+door_height = np.repeat(2, mc_iterations)
+door_width = np.repeat(1, mc_iterations)
 
 # Gas phase heat of combustion, kJ/kg
-HoC = np.random.normal(50000, 5000, mc_iterations)
+hoc = np.repeat(50000, mc_iterations)
 
 # Fire size, kW
-fire_size = np.random.normal(500, 50, mc_iterations)
+hrr = np.random.normal(500, 50, mc_iterations)
 
 #  ====================
 #  = Fixed parameters =
@@ -57,6 +61,33 @@ wall = 'gypsum'
 #  = Plot input distributions =
 #  ============================
 
+figure()
+hist(hrr, bins=20, normed=1)
+xlabel('HRR (kW)', fontsize=20)
+ylabel('PDF', fontsize=20)
+grid(True)
+ax = gca()
+for xlabel_i in ax.get_xticklabels():
+    xlabel_i.set_fontsize(16)
+for ylabel_i in ax.get_yticklabels():
+    ylabel_i.set_fontsize(16)
+gcf().subplots_adjust(left=0.15, bottom=0.11)
+savefig('../Figures/input_hrr_PDF.pdf')
+
+figure()
+hist(hrr, bins=20, normed=1, histtype='step', cumulative=True)
+xlabel('HRR (kW)', fontsize=20)
+ylabel('CDF', fontsize=20)
+ylim([0, 1])
+grid(True)
+ax = gca()
+for xlabel_i in ax.get_xticklabels():
+    xlabel_i.set_fontsize(16)
+for ylabel_i in ax.get_yticklabels():
+    ylabel_i.set_fontsize(16)
+gcf().subplots_adjust(left=0.15, bottom=0.11)
+savefig('../Figures/input_hrr_CDF.pdf')
+
 #  ==========================
 #  = Monte Carlo simulation =
 #  ==========================
@@ -67,12 +98,12 @@ for i in range(mc_iterations):
 
     # Time and HRR ramp, s, kW
     time_ramp = np.array([0, simulation_time])
-    hrr_ramp = np.array([fire_size[i], fire_size[i]])
+    hrr_ramp = np.array([hrr[i], hrr[i]])
     
     hgl_temp = external_cfast.run_case(x=x[i], y=y[i], z=z[i],
                                        door_height=door_height[i],
                                        door_width=door_width[i],
-                                       HoC=HoC[i],
+                                       hoc=hoc[i],
                                        tmp_a=tmp_a,
                                        time_ramp=time_ramp,
                                        hrr_ramp=hrr_ramp,
@@ -87,6 +118,33 @@ for i in range(mc_iterations):
 #  = Plot output distributions =
 #  =============================
 
+figure()
+hist(output_hgl_temps, bins=20, normed=1)
+xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
+ylabel('PDF', fontsize=20)
+grid(True)
+ax = gca()
+for xlabel_i in ax.get_xticklabels():
+    xlabel_i.set_fontsize(16)
+for ylabel_i in ax.get_yticklabels():
+    ylabel_i.set_fontsize(16)
+gcf().subplots_adjust(left=0.15, bottom=0.11)
+savefig('../Figures/output_hgl_temps_PDF.pdf')
+
+figure()
+hist(output_hgl_temps, bins=20, normed=1, histtype='step', cumulative=True)
+xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
+ylabel('CDF', fontsize=20)
+ylim([0, 1])
+grid(True)
+ax = gca()
+for xlabel_i in ax.get_xticklabels():
+    xlabel_i.set_fontsize(16)
+for ylabel_i in ax.get_yticklabels():
+    ylabel_i.set_fontsize(16)
+gcf().subplots_adjust(left=0.15, bottom=0.11)
+savefig('../Figures/output_hgl_temps_CDF.pdf')
+
 #  =================
 #  = Print results =
 #  =================
@@ -94,12 +152,6 @@ for i in range(mc_iterations):
 print 'HGL Temperatures:'
 print output_hgl_temps
 print
-print 'Minimum HGL Temperature:'
-print np.min(output_hgl_temps)
-print
-print 'Maximum HGL Temperature:'
-print np.max(output_hgl_temps)
-print
-print 'Mean HGL Temperature:'
-print np.mean(output_hgl_temps)
+print 'Minimum, Median, Mean, and Maximum HGL Temperatures:'
+print np.array([np.min(output_hgl_temps), np.median(output_hgl_temps), np.mean(output_hgl_temps), np.max(output_hgl_temps)])
 
