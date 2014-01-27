@@ -9,7 +9,7 @@ import numpy as np
 from pylab import *
 
 # Read in exp. data for each test
-fds = np.genfromtxt('FDS_Files/heat_flux_devc.csv', delimiter=',', names=True, skip_header=1)
+fds = np.genfromtxt('FDS_Output_Files/heat_flux_devc.csv', delimiter=',', names=True, skip_header=1)
 
 fig = figure()
 plot(fds['Time'], fds['INERTNET'], 'k-', marker='o', lw=2, label='Net Heat Flux', markevery=1)
