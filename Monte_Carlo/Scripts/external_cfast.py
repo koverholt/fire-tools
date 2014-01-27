@@ -126,7 +126,7 @@ def run_cfast(casename):
         p = subprocess.Popen(['../CFAST_Model/cfast6_osx_64', '../CFAST_Model/' + casename])
         p.wait()
     if op_sys == 'Windows':
-        p = subprocess.Popen(['../CFAST_Model/cfast6_win.exe', '../CFAST_Model/' + casename])
+        p = subprocess.Popen(['../CFAST_Model/cfast6_win_64.exe', '../CFAST_Model/' + casename])
         p.wait()
 
 
