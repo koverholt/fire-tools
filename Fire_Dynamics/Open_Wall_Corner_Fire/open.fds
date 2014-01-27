@@ -1,0 +1,36 @@
+&HEAD CHID='open', TITLE='Open burn'  / 
+
+&MESH IJK=30,30,60, XB=0,1.5,0,1.5,0,3 / 
+
+&TIME T_END=30.0 / 
+
+&REAC FUEL       = 'PROPANE'
+      SOOT_YIELD = 0.01 /
+
+&SURF ID='BURNER', HRRPUA=2222.222, COLOR='RASPBERRY' /
+
+&MATL ID            = 'GYPSUM PLASTER'
+      FYI           = 'Quintiere, Fire Behavior'
+      CONDUCTIVITY  = 0.48
+      SPECIFIC_HEAT = 0.84
+      DENSITY       = 1440. /
+
+&SURF ID             = 'WALL'
+      DEFAULT        = .TRUE.
+      RGB            = 200,200,200
+      MATL_ID        = 'GYPSUM PLASTER'
+      THICKNESS      = 0.012 /
+
+&VENT MB='XMIN', SURF_ID='OPEN' /
+&VENT MB='XMAX', SURF_ID='OPEN' /
+&VENT MB='YMIN', SURF_ID='OPEN' /
+&VENT MB='YMAX', SURF_ID='OPEN' /
+&VENT MB='ZMAX', SURF_ID='OPEN' /
+
+&VENT XB=0.6,0.9,0.6,0.9,0,0, SURF_ID='BURNER' /
+
+cOBST XB=0,1.5,0.9,1.0,0,3, SURF_ID='WALL' /
+cOBST XB=0.9,1.0,0,1.5,0,3, SURF_ID='WALL' /
+
+&TAIL /
+
