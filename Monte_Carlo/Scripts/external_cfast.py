@@ -2,44 +2,12 @@
 
 """Module for CFAST functions"""
 
-from functools import wraps
 import numpy as np
 import platform
 import subprocess
-import os
-import errno
-import signal
 
 # Detect operating system
 op_sys = platform.system()
-
-# ===========================================================
-# = Timeout structure for CFAST runs that hang (UNIX) only  =
-# ===========================================================
-
-
-class TimeoutError(Exception):
-    pass
-
-
-def timeout(seconds=5, error_message=os.strerror(errno.ETIME)):
-    """Check for CFAST timeout (stalled run)."""
-    def decorator(func):
-        def _handle_timeout(signum, frame):
-            raise TimeoutError(error_message)
-
-        def wrapper(*args, **kwargs):
-            signal.signal(signal.SIGALRM, _handle_timeout)
-            signal.setitimer(signal.ITIMER_REAL, seconds)
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                signal.alarm(0)
-            return result
-
-        return wraps(func)(wrapper)
-
-    return decorator
 
 
 def gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
@@ -147,26 +115,19 @@ HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
     return casename
 
 
-@timeout(5)
 def run_cfast(casename):
     """Run CFAST on case file."""
-    global hangerror
 
     # Run appropriate executable depending on operating system
-    try:
-        if op_sys == 'Linux':
-            p = subprocess.Popen(['../CFAST_Model/cfast6_linux_64', '../CFAST_Model/' + casename])
-            p.wait()
-        if op_sys == 'Darwin':
-            p = subprocess.Popen(['../CFAST_Model/cfast6_osx_64', '../CFAST_Model/' + casename])
-            p.wait()
-        if op_sys == 'Windows':
-            p = subprocess.Popen(['../CFAST_Model/cfast6_win.exe', '../CFAST_Model/' + casename])
-            p.wait()
-    except Exception:
-        hangerror = 1
-        p.kill()
-        print "CFAST has hung up!"
+    if op_sys == 'Linux':
+        p = subprocess.Popen(['../CFAST_Model/cfast6_linux_64', '../CFAST_Model/' + casename])
+        p.wait()
+    if op_sys == 'Darwin':
+        p = subprocess.Popen(['../CFAST_Model/cfast6_osx_64', '../CFAST_Model/' + casename])
+        p.wait()
+    if op_sys == 'Windows':
+        p = subprocess.Popen(['../CFAST_Model/cfast6_win.exe', '../CFAST_Model/' + casename])
+        p.wait()
 
 
 def read_cfast(casename):
