@@ -10,8 +10,8 @@ import subprocess
 op_sys = platform.system()
 
 
-def gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
-              time_ramp, hrr_ramp, num, door, wall, simulation_time, dt_data):
+def gen_input(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
+              simulation_time, dt_data):
     """
     Generate CFAST input file and initialize HRR arrays
 
@@ -21,8 +21,6 @@ def gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
     z -- z dimension of compartment
     time_ramp -- time portion of HRR curve of fire
     hrr_ramp -- heat release rate portion of HRR curve
-    num -- number index (ID) of fire in CFAST, 1 for a single fire
-    door -- status of door, Open or Closed
     simulation_time -- length of time to run the simulation
     dt_data -- Data sampling rate and CFAST output frequency
     """
@@ -31,11 +29,15 @@ def gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
     #  = CFAST input file template =
     #  =============================
 
+    # Original time and HRR ramp for Switchgear room case
+    # TIME,0,72,144,216,288,360,432,504,576,648,720,1200,1920,1930
+    # HRR,0,4640,18560,41760,74240.01,116000,167040,227360,296960,375840,464000,464000,0,0
+
     template = """VERSN,6,CFAST Simulation
 !!
 !!Scenario Configuration Keywords
 !!
-TIMES,%(simulation_time)s,-50,0,10,%(dt_data)s
+TIMES,%(simulation_time)s,-300,0,10,%(dt_data)s
 EAMB,%(t_ambient)s,101300,0
 TAMB,%(t_ambient)s,101300,0,50
 CJET,WALLS
@@ -43,25 +45,57 @@ WIND,0,10,0.16
 !!
 !!Material Properties
 !!
+MATL,CABSWConcrete,1.6,750,2400,0.5,0.9,Cabinet Switchgear Concrete Floor (user's guide)
+MATL,CABSWPVC,0.2,1500,2264,0.015,0.9,Cabinet Switchgear PVC-PE Cable (NUREG 1824)
+MATL,CABSWSteel,48,559,7854,0.0015,0.9,Cabinet Switchgear Steel Cabinet (user's guide)
+MATL,THIEF,0.2,1500,2150,0.015,0.8,Thief Cable (per NUREG CR 6931)
 MATL,FIBERBRD,0.041,2090,229,0.016,0.9,Fiber Insulating Board
 MATL,GYPSUM,0.16,900,790,0.016,0.9,Gypsum Board (5/8 in)
-MATL,METHANE,0.07,1090,930,0.0127,0.04,"Methane, a transparent gas (CH4)"
 !!
 !!Compartment keywords
 !!
-COMPA,Compartment 1,%(x)s,%(y)s,%(z)s,0,0,0,%(wall_matl)s
+COMPA,Switchgear Room,%(x)s,%(y)s,%(z)s,0,0,0,%(wall_matl)s
 !!
-%(door_open)s!!Fire keywords
-!!fire
-FIRE,%(num)s,1.8,1.2,0,1,1,0,0,0,1,fire
-CHEMI,6,10,5,0,0,0.37,%(hoc)s,METHANE
+!!Vent keywords
+!!
+HVENT,1,2,1,1.0922,0.013,0,1,15.0114,15.0114,4,1
+MVENT,2,1,1,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+MVENT,2,1,2,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+MVENT,2,1,3,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+MVENT,1,2,4,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+MVENT,1,2,5,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+MVENT,1,2,6,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
+!!
+!!Fire keywords
+!!
+!!PE_PVC 464 kW
+FIRE,1,8.3,9.5,2.4,1,1,0,0,0,1,PE_PVC 464 kW
+CHEMI,2,3.5,0,0,0.5,0.49,%(hoc)s,CABSWPVC
 TIME,%(time_ramp)s
 HRR,%(hrr_ramp)s
-SOOT,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015,0.015
-CO,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682,0.006171682
-TRACE,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-AREA,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5
-HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SOOT,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136
+CO,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147
+TRACE,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+AREA,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18
+HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+!!MCC Cable Tray Secondary Fire
+FIRE,1,8.3,9.5,3.8,1,1,480,0,0,1,MCC Cable Tray Secondary Fire
+CHEMI,2,3.5,0,0,0.5,0.49,2.09E+07,CABSWPVC
+TIME,0,150,300,450,600,750,900,1050,1200,1350,1500,1650,1800,1950,2100,2250,2400,2550,2700,2850,3000,3150,3300,3450,3600
+HRR,0,147000,326000,657000,1106000,1142000,1187000,1049000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000,678000
+SOOT,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136
+CO,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147
+TRACE,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+AREA,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+!!
+!!Target and detector keywords
+!!
+TARGET,1,8.3,7,2.4,0,1,0,CABSWSteel,EXPLICIT,PDE,0.5
+TARGET,1,8.3,12,2.4,0,-1,0,CABSWSteel,EXPLICIT,PDE,0.5
+TARGET,1,8.3,9.5,3.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
+TARGET,1,8.3,9.5,4.4,0,0,-1,THIEF,EXPLICIT,CYL,0.2
+TARGET,1,8.3,9.5,4.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
 """
 
     # Convert HRR from kW to W
@@ -75,36 +109,24 @@ HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     #  = Generate CFAST input file and fire object file =
     #  ==================================================
 
-    if wall == 'gypsum':
-        wall_matl = 'GYPSUM,OFF,GYPSUM'
+    if wall == 'concrete':
+        wall_matl = 'CABSWConcrete,CABSWConcrete,CABSWConcrete'
+    elif wall == 'gypsum':
+        wall_matl = 'GYPSUM,GYPSUM,GYPSUM'
     elif wall == 'fiberboard':
-        wall_matl = 'FIBERBRD,OFF,FIBERBRD'
+        wall_matl = 'FIBERBRD,GYPSUM,FIBERBRD'
 
-    door_vent = """!!Vent keywords
-!!
-HVENT,1,2,1,%(door_width)s,%(door_height)s,0,1,0,0,1,1
-""" % {'door_height':door_height, 'door_width':door_width}
-
-    if door == 'Closed':
-        outcase = template % {'simulation_time':simulation_time,
-                              'dt_data':dt_data, 't_ambient': tmp_a+273.15,
-                              'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
-                              'num':num, 'door_open':'', 'hoc':hoc*1000,
-                              'time_ramp':times_to_print,
-                              'hrr_ramp':hrrs_to_print}
-    elif door == 'Open':
-        outcase = template % {'simulation_time':simulation_time,
-                              'dt_data':dt_data, 't_ambient': tmp_a+273.15,
-                              'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
-                              'num':num, 'door_open':door_vent, 'hoc':hoc*1000,
-                              'time_ramp':times_to_print,
-                              'hrr_ramp':hrrs_to_print}
+    outcase = template % {'simulation_time':simulation_time,
+                          'dt_data':dt_data, 't_ambient': tmp_a+273.15,
+                          'x':x, 'y':y, 'z':z, 'wall_matl':wall_matl,
+                          'hoc':hoc*1000, 'time_ramp':times_to_print,
+                          'hrr_ramp':hrrs_to_print}
 
     #  =====================
     #  = Write CFAST files =
     #  =====================
 
-    casename = 'case'
+    casename = 'Cabinet Fire in Switchgear'
     filename = '../CFAST_Model/' + casename + '.in'
 
     # Opens a new file, writes the CFAST input file, and closes the file
@@ -148,16 +170,15 @@ def read_cfast(casename):
     return temps, outfile
 
 
-def run_case(x, y, z, door_height, door_width, tmp_a, hoc, time_ramp,
-             hrr_ramp, num, door, wall, simulation_time, dt_data):
+def run_case(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
+             simulation_time, dt_data):
     """
     Generate CFAST input file and call other functions
     """
 
     resulting_temps = np.array([])
 
-    casename = gen_input(x, y, z, door_height, door_width, tmp_a, hoc,
-                         time_ramp, hrr_ramp, num, door, wall,
+    casename = gen_input(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
                          simulation_time, dt_data)
 
     run_cfast(casename)

@@ -23,16 +23,12 @@ mc_iterations = 20
 # Normal distribution  - np.random.normal(mean, std, size)
 
 # x, y, z compartment dimensions, m
-x = np.repeat(3, mc_iterations)
-y = np.repeat(3, mc_iterations)
-z = np.repeat(2.4, mc_iterations)
-
-# Door height and width, m
-door_height = np.repeat(2, mc_iterations)
-door_width = np.repeat(1, mc_iterations)
+x = np.repeat(26.5, mc_iterations)
+y = np.repeat(18.5, mc_iterations)
+z = np.repeat(6.1, mc_iterations)
 
 # Gas phase heat of combustion, kJ/kg
-hoc = np.repeat(50000, mc_iterations)
+hoc = np.repeat(20900, mc_iterations)
 
 # Fire size, kW
 hrr = np.random.normal(500, 50, mc_iterations)
@@ -45,17 +41,11 @@ hrr = np.random.normal(500, 50, mc_iterations)
 tmp_a = 20
 
 # Simulation time and data dump frequency, s
-simulation_time = 1800
+simulation_time = 3600
 dt_data = 10
 
-# number index (ID) of fire in CFAST, 1 for a single fire
-num = 1
-
-# status of door, 'Open' or 'Closed'
-door = 'Open'
-
 # Wall material
-wall = 'gypsum'
+wall = 'concrete'
 
 #  ============================
 #  = Plot input distributions =
@@ -101,14 +91,10 @@ for i in range(mc_iterations):
     hrr_ramp = np.array([hrr[i], hrr[i]])
     
     hgl_temp = external_cfast.run_case(x=x[i], y=y[i], z=z[i],
-                                       door_height=door_height[i],
-                                       door_width=door_width[i],
                                        hoc=hoc[i],
                                        tmp_a=tmp_a,
                                        time_ramp=time_ramp,
                                        hrr_ramp=hrr_ramp,
-                                       num=num,
-                                       door=door,
                                        wall=wall,
                                        simulation_time=simulation_time,
                                        dt_data=dt_data)
