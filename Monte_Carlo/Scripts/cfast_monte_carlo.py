@@ -31,7 +31,7 @@ z = np.repeat(6.1, mc_iterations)
 hoc = np.repeat(20900, mc_iterations)
 
 # Fire size, kW
-hrr = np.random.normal(500, 50, mc_iterations)
+hrr = np.random.uniform(400, 600, mc_iterations)
 
 #  ====================
 #  = Fixed parameters =
@@ -46,6 +46,15 @@ dt_data = 10
 
 # Wall material
 wall = 'concrete'
+
+#  ================================
+#  = Model Bias and Uncertainty   =
+#  = from NUREG 1824 Supplement 1 =
+#  ================================
+
+# HGL Temperature Rise, Forced Ventilation (CFAST)
+delta = 1.15
+sigma_m = 0.20
 
 #  ============================
 #  = Plot input distributions =
@@ -98,6 +107,12 @@ for i in range(mc_iterations):
                                        wall=wall,
                                        simulation_time=simulation_time,
                                        dt_data=dt_data)
+
+    # Adjust for model bias and uncertainty
+    hgl_temp_rise = (hgl_temp - tmp_a)
+    mu_star = tmp_a + hgl_temp_rise / delta
+    sigma_star = sigma_m * hgl_temp_rise / delta
+
     output_hgl_temps = np.append(hgl_temp, output_hgl_temps)
 
 #  =============================
