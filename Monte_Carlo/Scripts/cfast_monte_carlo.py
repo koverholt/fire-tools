@@ -18,24 +18,34 @@ import external_cfast
 
 np.set_printoptions(precision=0)
 
+#  =====================
+#  = BEGIN USER INPUTS =
+#  =====================
+
 #  ==========================
 #  = Monte Carlo parameters =
 #  ==========================
 
+# Number of Monte Carlo iterations to run
 mc_iterations = 100
 
-# HRR, kW
+# Nominal HRR, kW
 hrr = 500
 
 # +/- percent to vary HRR
 variation = 0.20
 
+# Threshold HGL temperature for probability calculation, degrees C
+threshold_hgl_temp = 100
+
 #  ====================
 #  = Plotting options =
 #  ====================
 
+# Number of bins to use in PDF/CDF plots
 histogram_bins = 50
 
+# Upper y-axis limit for PDF plots
 y_pdf_upper = 0.05
 
 #  ====================
@@ -69,6 +79,11 @@ wall = 'concrete'
 delta = 1.15
 sigma_m = 0.20
 
+
+#  ======================
+#  = END OF USER INPUTS =
+#  ======================
+
 #  =====================
 #  = Varied parameters =
 #  =====================
@@ -77,9 +92,9 @@ sigma_m = 0.20
 # Uniform distribution - np.random.uniform(lower, upper, size)
 # Normal distribution  - np.random.normal(mean, std, size)
 
+# Initialize point value and parameter distribution
 hrr_lower = hrr - (hrr * variation)
 hrr_upper = hrr + (hrr * variation)
-
 hrr_point = hrr
 hrr_uniform = np.random.uniform(hrr_lower, hrr_upper, mc_iterations)
 
@@ -118,7 +133,7 @@ savefig('../Figures/input_CDF.pdf')
 #  = Monte Carlo simulation =
 #  ==========================
 
-# Case 1 - Only model bias/uncertainty
+### For Case 1 ###
 # Time and HRR ramp, s, kW
 time_ramp = np.array([0, simulation_time])
 hrr_ramp = np.array([hrr, hrr])
@@ -131,13 +146,12 @@ hgl_temp_point = external_cfast.run_case(x=x, y=y, z=z,
                                        simulation_time=simulation_time,
                                        dt_data=dt_data)
 
-# Adjust for model bias and uncertainty
+# Case 1 - Adjust for model bias and uncertainty
 hgl_temp_rise = (hgl_temp_point - tmp_a)
 mu_point = tmp_a + hgl_temp_rise / delta
 sigma_point = sigma_m * hgl_temp_rise / delta
 
-# Case 2 - Only input uncertainty
-# Case 3 - Combined model bias/uncertainty and input uncertainty
+### For Cases 2 and 3 ###
 output_hgl_temps = np.array([])
 output_hgl_temps_adjusted = np.array([])
 
@@ -158,7 +172,7 @@ for i in range(mc_iterations):
     # Case 2 - only input uncertainty
     output_hgl_temps = np.append(hgl_temp, output_hgl_temps)
 
-    # Adjust for model bias and uncertainty
+    # Case 3 - Adjust for model bias and uncertainty
     hgl_temp_rise = (hgl_temp - tmp_a)
     mu_star = tmp_a + hgl_temp_rise / delta
     sigma_star = sigma_m * hgl_temp_rise / delta
@@ -170,6 +184,7 @@ for i in range(mc_iterations):
 #  = Plot output distributions =
 #  =============================
 
+# Initialize plotting variables
 lower = mu_point - 4*sigma_point
 upper = mu_point + 4*sigma_point
 range = np.arange(lower , upper, 0.001)
@@ -271,13 +286,13 @@ savefig('../Figures/output_CDF_3_combined.pdf')
 print 'HGL Temperatures:'
 print output_hgl_temps
 print
-print 'HGL Temperatures (Adjusted):'
-print output_hgl_temps_adjusted
-print
 print 'Minimum, Median, Mean, and Maximum HGL Temperatures:'
 print np.array([np.min(output_hgl_temps), np.median(output_hgl_temps),
                 np.mean(output_hgl_temps), np.max(output_hgl_temps)])
-
+print
+print 'HGL Temperatures (Adjusted):'
+print output_hgl_temps_adjusted
+print
 print 'Adjusted Minimum, Median, Mean, and Maximum HGL Temperatures:'
 print np.array([np.min(output_hgl_temps_adjusted),
                 np.median(output_hgl_temps_adjusted),
