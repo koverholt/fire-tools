@@ -22,7 +22,7 @@ np.set_printoptions(precision=0)
 #  = Monte Carlo parameters =
 #  ==========================
 
-mc_iterations = 1000
+mc_iterations = 100
 
 # HRR, kW
 hrr = 500
