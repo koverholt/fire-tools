@@ -9,9 +9,12 @@ Case 3: Combined model bias/uncertainty and input uncertainty
 """
 
 import numpy as np
-from pylab import *
 from scipy.stats import norm
 import external_cfast
+
+import matplotlib
+matplotlib.use("Agg")
+from pylab import *
 
 np.set_printoptions(precision=0)
 
@@ -19,7 +22,7 @@ np.set_printoptions(precision=0)
 #  = Monte Carlo parameters =
 #  ==========================
 
-mc_iterations = 10000
+mc_iterations = 1000
 
 # HRR, kW
 hrr = 500
