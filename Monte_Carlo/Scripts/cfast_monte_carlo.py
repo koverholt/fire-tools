@@ -8,13 +8,13 @@ Case 2: Only input uncertainty
 Case 3: Combined model bias/uncertainty and input uncertainty
 """
 
-import numpy as np
-from scipy.stats import norm
-import external_cfast
-
 import matplotlib
 matplotlib.use("Agg")
 from pylab import *
+
+import numpy as np
+from scipy.stats import norm
+import external_cfast
 
 np.set_printoptions(precision=0)
 
