@@ -176,16 +176,14 @@ def run_case(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
     Generate CFAST input file and call other functions
     """
 
-    resulting_temps = np.array([])
-
     casename = gen_input(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
                          simulation_time, dt_data)
 
     run_cfast(casename)
     temps, outfile = read_cfast(casename)
     outfile.close()
-    hgl = temps[:,1]
-    resulting_temps = np.append(hgl[-1], resulting_temps)
+    # Get final HGL temperature
+    hgl = temps[:,1][-1]
 
-    return(resulting_temps)
+    return(hgl)
 
