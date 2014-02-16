@@ -28,7 +28,7 @@ np.set_printoptions(precision=0)
 #  ==========================
 
 # Number of Monte Carlo iterations to run
-mc_iterations = 100
+mc_iterations = 10000
 
 # Nominal HRR, kW
 hrr = 500
