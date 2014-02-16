@@ -8,16 +8,8 @@ Case 2: Only input uncertainty
 Case 3: Combined model bias/uncertainty and input uncertainty
 """
 
-import matplotlib
-matplotlib.use("Agg")
-from pylab import *
-
 import numpy as np
-import scipy as sp
-from scipy import stats
 import external_cfast
-
-np.set_printoptions(precision=0)
 
 #  =====================
 #  = BEGIN USER INPUTS =
@@ -28,26 +20,13 @@ np.set_printoptions(precision=0)
 #  ==========================
 
 # Number of Monte Carlo iterations to run
-mc_iterations = 10000
+mc_iterations = 100
 
 # Nominal HRR, kW
 hrr = 500
 
 # +/- percent to vary HRR
 variation = 0.20
-
-# Threshold HGL temperature for probability calculation, degrees C
-threshold_hgl_temp = 100
-
-#  ====================
-#  = Plotting options =
-#  ====================
-
-# Number of bins to use in PDF/CDF plots
-histogram_bins = 50
-
-# Upper y-axis limit for PDF plots
-y_pdf_upper = 0.05
 
 #  ====================
 #  = Fixed parameters =
@@ -80,6 +59,12 @@ wall = 'concrete'
 delta = 1.15
 sigma_m = 0.20
 
+#  ==============
+#  = File Paths =
+#  ==============
+
+results_dir = '../Model_Output/'
+
 #  ======================
 #  = END OF USER INPUTS =
 #  ======================
@@ -97,37 +82,6 @@ hrr_lower = hrr - (hrr * variation)
 hrr_upper = hrr + (hrr * variation)
 hrr_point = hrr
 hrr_uniform = np.random.uniform(hrr_lower, hrr_upper, mc_iterations)
-
-#  ============================
-#  = Plot input distributions =
-#  ============================
-
-figure()
-hist(hrr_uniform, bins=histogram_bins, normed=1)
-xlabel('HRR (kW)', fontsize=20)
-ylabel('PDF', fontsize=20)
-grid(True)
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/input_PDF.pdf')
-
-figure()
-hist(hrr_uniform, bins=histogram_bins, normed=1, histtype='step', cumulative=True)
-xlabel('HRR (kW)', fontsize=20)
-ylabel('CDF', fontsize=20)
-ylim([0, 1])
-grid(True)
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/input_CDF.pdf')
 
 #  =====================
 #  = Single simulation =
@@ -185,140 +139,27 @@ for i in range(mc_iterations):
     output_hgl_temps_adjusted = np.append(hgl_temp_adjusted,
                                           output_hgl_temps_adjusted)
 
-#  =============================
-#  = Plot output distributions =
-#  =============================
+#  ======================
+#  = Write data to disk =
+#  ======================
 
-# Initialize plotting variables
-lower = mu_point - 4*sigma_point
-upper = mu_point + 4*sigma_point
-case1_range = np.arange(lower, upper, 0.001)
+np.savetxt(results_dir + 'mu_point.txt.gz',
+           np.array([mu_point]),
+           fmt='%0.2f')
 
-figure()
-plot(case1_range, sp.stats.norm.pdf(case1_range, mu_point, sigma_point))
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('PDF', fontsize=20)
-grid(True)
-xlim([lower, upper])
-ylim([0, y_pdf_upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_PDF_1_model.pdf')
+np.savetxt(results_dir + 'sigma_point.txt.gz',
+           np.array([sigma_point]),
+           fmt='%0.2f')
 
-figure()
-hist(output_hgl_temps, bins=histogram_bins, normed=1)
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('PDF', fontsize=20)
-grid(True)
-xlim([lower, upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_PDF_2_input.pdf')
+np.savetxt(results_dir + 'hrr_uniform.txt.gz',
+           hrr_uniform,
+           fmt='%0.2f')
 
-figure()
-hist(output_hgl_temps_adjusted, bins=histogram_bins, normed=1)
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('PDF', fontsize=20)
-grid(True)
-xlim([lower, upper])
-ylim([0, y_pdf_upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_PDF_3_combined.pdf')
+np.savetxt(results_dir + 'output_hgl_temps.txt.gz',
+           output_hgl_temps,
+           fmt='%0.2f')
 
-figure()
-plot(case1_range, sp.stats.norm.cdf(case1_range, mu_point, sigma_point))
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('CDF', fontsize=20)
-ylim([0, 1])
-grid(True)
-xlim([lower, upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_CDF_1_model.pdf')
+np.savetxt(results_dir + 'output_hgl_temps_adjusted.txt.gz',
+           output_hgl_temps_adjusted,
+           fmt='%0.2f')
 
-figure()
-hist(output_hgl_temps, bins=histogram_bins,
-     normed=1, histtype='step', cumulative=True)
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('CDF', fontsize=20)
-ylim([0, 1])
-grid(True)
-xlim([lower, upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_CDF_2_input.pdf')
-
-figure()
-hist(output_hgl_temps_adjusted,
-     bins=histogram_bins, normed=1, histtype='step', cumulative=True)
-xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
-ylabel('CDF', fontsize=20)
-ylim([0, 1])
-grid(True)
-xlim([lower, upper])
-ax = gca()
-for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
-for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
-gcf().subplots_adjust(left=0.15, bottom=0.11)
-savefig('../Figures/output_CDF_3_combined.pdf')
-
-#  =================
-#  = Print results =
-#  =================
-
-print 'Mean HGL Temperature (Case 1):'
-print mu_point
-print 'Std. Dev. HGL Temperature (Case 1):'
-print sigma_point
-print
-print 'HGL Temperatures (Case 2):'
-print output_hgl_temps
-print
-print 'Minimum, Median, Mean, and Maximum HGL Temperatures:'
-print np.array([np.min(output_hgl_temps), np.median(output_hgl_temps),
-                np.mean(output_hgl_temps), np.max(output_hgl_temps)])
-print
-print 'HGL Temperatures (Case 3):'
-print output_hgl_temps_adjusted
-print
-print 'Adjusted Minimum, Median, Mean, and Maximum HGL Temperatures:'
-print np.array([np.min(output_hgl_temps_adjusted),
-                np.median(output_hgl_temps_adjusted),
-                np.mean(output_hgl_temps_adjusted),
-                np.max(output_hgl_temps_adjusted)])
-print
-print 'Probability of exceeding threshold temperature.'
-print 'Case 1 (Only model bias/uncertainty):'
-print 0.5 * sp.special.erfc(
-                (threshold_hgl_temp - mu_point) / (sigma_point * np.sqrt(2)))
-print
-print 'Case 2 (Only input uncertainty):'
-print (100 - sp.stats.percentileofscore(
-                 output_hgl_temps, threshold_hgl_temp)) / 100
-print
-print 'Case 3 (Combined model bias/uncertainty and input uncertainty):'
-print (100 - sp.stats.percentileofscore(
-                 output_hgl_temps_adjusted, threshold_hgl_temp)) / 100
