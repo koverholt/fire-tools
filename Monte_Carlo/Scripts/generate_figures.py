@@ -27,13 +27,13 @@ np.set_printoptions(precision=0)
 #  =======================
 
 # Nominal HRR, kW
-hrr = 500
+hrr = 1500
 
 # +/- percent to vary HRR
-variation = 0.20
+variation = 0.50
 
 # Threshold HGL temperature for probability calculation, degrees C
-threshold_hgl_temp = 100
+threshold_hgl_temp = 150
 
 #  ====================
 #  = Plotting options =
@@ -42,12 +42,10 @@ threshold_hgl_temp = 100
 # Number of bins to use in PDF/CDF plots
 histogram_bins = 1000
 
-# x-axis limits for output PDF/CDF plots
-x_lower = 0
-x_upper = 180
-
-# Upper y-axis limit for output PDF plots
-y_pdf_upper = 0.03
+# x-axis and y-axis limits for input/ouput PDF/CDF plots
+x_upper_input = 2500
+x_upper_output = 250
+y_upper_output = 0.03
 
 # Font size
 font_size = 16
@@ -99,7 +97,7 @@ hist(np.array([hrr_point]), bins=1, normed=1, color='k', lw=2)
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
-xlim([0, 1000])
+xlim([0, x_upper_input])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -115,7 +113,7 @@ xlabel('HRR (kW)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
 ylim([0, 1])
 grid(True)
-xlim([0, 1000])
+xlim([0, x_upper_input])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -130,7 +128,7 @@ hist(hrr_range, bins=1,
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
-xlim([0, 1000])
+xlim([0, x_upper_input])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -146,7 +144,7 @@ xlabel('HRR (kW)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
 ylim([0, 1])
 grid(True)
-xlim([0, 1000])
+xlim([0, x_upper_input])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -159,17 +157,17 @@ savefig(figures_dir + 'input_CDF.pdf')
 #  = Plot output distributions =
 #  =============================
 
-case1_range = np.arange(x_lower, x_upper, 0.001)
+case1_range = np.arange(0, x_upper_output, 0.001)
 
 figure()
 fill(case1_range, sp.stats.norm.pdf(case1_range, mu_point, sigma_point),
      ec='k', color='0.7')
-axvline(100, color='k', lw=3)
+axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
-xlim([x_lower, x_upper])
-ylim([0, y_pdf_upper])
+xlim([0, x_upper_output])
+ylim([0, y_upper_output])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -180,11 +178,11 @@ savefig(figures_dir + 'output_PDF_1_model.pdf')
 
 figure()
 hist(output_hgl_temps, bins=histogram_bins/125, normed=1, color='0.7')
-axvline(100, color='k', lw=3)
+axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
-xlim([x_lower, x_upper])
+xlim([0, x_upper_output])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -195,12 +193,12 @@ savefig(figures_dir + 'output_PDF_2_input.pdf')
 
 figure()
 hist(output_hgl_temps_adjusted, bins=histogram_bins/25, normed=1, color='0.7')
-axvline(100, color='k', lw=3)
+axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
-xlim([x_lower, x_upper])
-ylim([0, y_pdf_upper])
+xlim([0, x_upper_output])
+ylim([0, y_upper_output])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -214,7 +212,7 @@ plot(case1_range, sp.stats.norm.cdf(case1_range, mu_point, sigma_point),
      color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
-xlim([x_lower, x_upper])
+xlim([0, x_upper_output])
 ylim([0, 1])
 grid(True)
 ax = gca()
@@ -230,7 +228,7 @@ hist(output_hgl_temps, bins=histogram_bins/5,
      normed=1, histtype='step', cumulative=True, color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
-xlim([x_lower, x_upper])
+xlim([0, x_upper_output])
 ylim([0, 1])
 grid(True)
 ax = gca()
@@ -247,7 +245,7 @@ hist(output_hgl_temps_adjusted,
      color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
-xlim([x_lower, x_upper])
+xlim([0, x_upper_output])
 ylim([0, 1])
 grid(True)
 ax = gca()

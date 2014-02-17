@@ -23,10 +23,10 @@ import external_cfast
 mc_iterations = 100
 
 # Nominal HRR, kW
-hrr = 500
+hrr = 1500
 
 # +/- percent to vary HRR
-variation = 0.20
+variation = 0.50
 
 #  ====================
 #  = Fixed parameters =
