@@ -49,7 +49,7 @@ Previous work on Monte Carlo analyses.
 \section{Fire model scenario setup}
 \label{sec:fire_model_scenario_setup}
 
-Appendix B from NRC NUREG-1934~\cite{NUREG_1934} was selected. The Consolidated Model of Fire Growth and Smoke Transport (CFAST)~\cite{CFAST_Users_Guide_6} zone model was used. The compartment has dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time is 1~h. The wall and ceiling materials were specified as concrete with a thermal conductivity of XX~W/m-K, density of XX~kg/m$^3$, and specific heat of XX~J/g-K.
+Appendix B from NRC NUREG-1934~\cite{NUREG_1934} was selected for this example analysis. The Consolidated Model of Fire Growth and Smoke Transport (CFAST)~\cite{CFAST_Users_Guide_6} zone model was used. The compartment has dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time is 1~h. The wall and ceiling materials were specified as concrete with a thermal conductivity of XX~W/m-K, density of XX~kg/m$^3$, and specific heat of XX~J/g-K.
 
 
 \section{Uncertainty analysis}
@@ -57,6 +57,10 @@ Appendix B from NRC NUREG-1934~\cite{NUREG_1934} was selected. The Consolidated 
 
 Input: nominal HRR of 500~kW.
 Output: threshold HGL temperature of 100~$^\circ$C.
+
+
+\clearpage
+
 
 \subsection{Case 1: Model bias and uncertainty}
 
@@ -66,7 +70,25 @@ A HRR of 500~kW was selected as the input fire size.
 
 The model bias $\delta$ for forced ventilation for the CFAST zone model is 1.15, and the model relative standard deviation $\widetilde\sigma_M$ is 0.20.
 
-The results of Case 1 are shown in Fig.~\ref{fig:case_1_output_distributions}
+\begin{enumerate}
+\item Specify input HRR.
+\item Run CFAST to calculate HGL temperature.
+\item Calculate output (normal) distribution using model bias and relative standard deviation.
+\end{enumerate}
+
+
+\clearpage
+
+
+A PDF and CDF of the input HRR distribution is shown in Fig.~\ref{fig:case_2_input_distributions}.
+
+\begin{figure}[!ht]
+\includegraphics[width=2.6in]{Figures/input_PDF_point}
+\caption{PDF of input HRR distribution}
+\label{fig:case_1_input_distributions}
+\end{figure}
+
+The results of Case 1 are shown in Fig.~\ref{fig:case_1_output_distributions}.
 
 \begin{figure}[!ht]
 \includegraphics[width=2.6in]{Figures/output_PDF_1_model}
@@ -77,11 +99,29 @@ The results of Case 1 are shown in Fig.~\ref{fig:case_1_output_distributions}
 
 For Case 1, the probability of exceeding the critical HGL temperature of 100~$^\circ$C is calculated as XX.
 
+
+\clearpage
+
+
 \subsection{Case 2: Input parameter uncertainty}
 
 This case accounts for input parameter uncertainty.
 
-Consider an input parameter uncertainty of $\pm$20~\% for the HRR. This can be represented as a uniform distribution with a lower and upper bound of 400~kW and 600~kW, respectively. If more information was known about the input parameter, then another distribution could be considered, such as a normal or gamma distribution. A PDF and CDF of the input HRR distribution is shown in Fig.~\ref{fig:case_2_input_distributions}.
+Consider an input parameter uncertainty of $\pm$20~\% for the HRR. This can be represented as a uniform distribution with a lower and upper bound of 400~kW and 600~kW, respectively. If more information was known about the input parameter, then another distribution could be considered, such as a normal or gamma distribution.
+
+\begin{enumerate}
+\item Draw random sample from input distribution of HRRs.
+\label{itm:case_2_step_1}
+\item Run CFAST to calculate HGL temperature.
+\item Store value and return to Step~\ref{itm:case_2_step_1}.
+\end{enumerate}
+
+
+\clearpage
+
+
+A PDF and CDF of the input HRR distribution is shown in Fig.~\ref{fig:case_2_input_distributions}.
+
 \begin{figure}[!ht]
 \includegraphics[width=2.6in]{Figures/input_PDF}
 \includegraphics[width=2.6in]{Figures/input_CDF}
@@ -89,7 +129,7 @@ Consider an input parameter uncertainty of $\pm$20~\% for the HRR. This can be r
 \label{fig:case_2_input_distributions}
 \end{figure}
 
-The results of Case 2 are shown in Fig.~\ref{fig:case_2_output_distributions}
+The results of Case 2 are shown in Fig.~\ref{fig:case_2_output_distributions}.
 
 \begin{figure}[!ht]
 \includegraphics[width=2.6in]{Figures/output_PDF_2_input}
@@ -100,11 +140,29 @@ The results of Case 2 are shown in Fig.~\ref{fig:case_2_output_distributions}
 
 For Case 2, the probability of exceeding the critical HGL temperature of 100~$^\circ$C is calculated as XX.
 
+
+\clearpage
+
+
 \subsection{Case 3: Combined model and input parameter uncertainty}
 
 This case accounts for both model bias/uncertainty and input parameter uncertainty.
 
+\begin{enumerate}
+\item Draw random sample from input distribution of HRRs.
+\label{itm:case_3_step_1}
+\item Run CFAST to calculate HGL temperature.
+\item Calculate output (normal) distribution using model bias and relative standard deviation.
+\item Draw random sample from normal distribution.
+\item Store value and return to Step~\ref{itm:case_3_step_1}.
+\end{enumerate}
+
+
+\clearpage
+
+
 A PDF and CDF of the input HRR distribution is shown in Fig.~\ref{fig:case_3_input_distributions}.
+
 \begin{figure}[!ht]
 \includegraphics[width=2.6in]{Figures/input_PDF}
 \includegraphics[width=2.6in]{Figures/input_CDF}
@@ -112,7 +170,7 @@ A PDF and CDF of the input HRR distribution is shown in Fig.~\ref{fig:case_3_inp
 \label{fig:case_3_input_distributions}
 \end{figure}
 
-The results of Case 2 are shown in Fig.~\ref{fig:case_3_output_distributions}
+The results of Case 2 are shown in Fig.~\ref{fig:case_3_output_distributions}.
 
 \begin{figure}[!ht]
 \includegraphics[width=2.6in]{Figures/output_PDF_3_combined}
