@@ -39,6 +39,9 @@ histogram_bins = 50
 # Upper y-axis limit for PDF plots
 y_pdf_upper = 0.04
 
+# Font size
+font_size = 16
+
 #  ==============
 #  = File Paths =
 #  ==============
@@ -81,9 +84,9 @@ ylabel('PDF', fontsize=20)
 grid(True)
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_PDF.pdf')
 
@@ -96,9 +99,9 @@ ylim([0, 1])
 grid(True)
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_CDF.pdf')
 
@@ -112,7 +115,7 @@ upper = mu_point + 4*sigma_point
 case1_range = np.arange(lower, upper, 0.001)
 
 figure()
-plot(case1_range, sp.stats.norm.pdf(case1_range, mu_point, sigma_point))
+fill(case1_range, sp.stats.norm.pdf(case1_range, mu_point, sigma_point))
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('PDF', fontsize=20)
 grid(True)
@@ -120,23 +123,23 @@ xlim([lower, upper])
 ylim([0, y_pdf_upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_1_model.pdf')
 
 figure()
-hist(output_hgl_temps, bins=histogram_bins, normed=1)
+hist(output_hgl_temps, bins=histogram_bins/5, normed=1)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('PDF', fontsize=20)
 grid(True)
 xlim([lower, upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_2_input.pdf')
 
@@ -149,9 +152,9 @@ xlim([lower, upper])
 ylim([0, y_pdf_upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_3_combined.pdf')
 
@@ -164,14 +167,14 @@ grid(True)
 xlim([lower, upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_CDF_1_model.pdf')
 
 figure()
-hist(output_hgl_temps, bins=histogram_bins,
+hist(output_hgl_temps, bins=histogram_bins/5,
      normed=1, histtype='step', cumulative=True)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('CDF', fontsize=20)
@@ -180,9 +183,9 @@ grid(True)
 xlim([lower, upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_CDF_2_input.pdf')
 
@@ -196,9 +199,9 @@ grid(True)
 xlim([lower, upper])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
-    xlabel_i.set_fontsize(16)
+    xlabel_i.set_fontsize(font_size)
 for ylabel_i in ax.get_yticklabels():
-    ylabel_i.set_fontsize(16)
+    ylabel_i.set_fontsize(font_size)
 gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_CDF_3_combined.pdf')
 
