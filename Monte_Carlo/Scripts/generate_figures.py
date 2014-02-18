@@ -27,13 +27,13 @@ np.set_printoptions(precision=0)
 #  =======================
 
 # Nominal HRR, kW
-hrr = 1500
+hrr = 1000
 
 # +/- percent to vary HRR
 variation = 0.50
 
 # Threshold HGL temperature for probability calculation, degrees C
-threshold_hgl_temp = 150
+threshold_hgl_temp = 100
 
 #  ====================
 #  = Plotting options =
@@ -43,9 +43,9 @@ threshold_hgl_temp = 150
 histogram_bins = 1000
 
 # x-axis and y-axis limits for input/ouput PDF/CDF plots
-x_upper_input = 2500
-x_upper_output = 250
-y_upper_output = 0.03
+x_upper_input = 2000
+x_upper_output = 150
+y_upper_output = 0.04
 
 # Font size
 font_size = 16
@@ -177,7 +177,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_1_model.pdf')
 
 figure()
-hist(output_hgl_temps, bins=histogram_bins/125, normed=1, color='0.7')
+hist(output_hgl_temps, bins=histogram_bins/50, normed=1, color='0.7')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
