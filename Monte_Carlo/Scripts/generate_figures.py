@@ -26,11 +26,12 @@ np.set_printoptions(precision=0)
 #  = Analysis parameters =
 #  =======================
 
-# Nominal HRR, kW
-hrr = 1000
-
-# +/- percent to vary HRR
-variation = 0.50
+### Gamma distribution parameters for HRR ###
+# NUREG 6850, Volume 2, Table G-1
+# Vertical cabinets w/ unqualified cable, more than one bundle, open doors
+# HRR (75th percentile): 232 kW
+# HRR (98th percentile): 1002 kW
+hrr_gamma_parameters = np.array([0.46, 386])
 
 # Threshold HGL temperature for probability calculation, degrees C
 threshold_hgl_temp = 100
@@ -39,11 +40,16 @@ threshold_hgl_temp = 100
 #  = Plotting options =
 #  ====================
 
+# Upper and lower HRR bounds for plots
+hrr_lower = 0
+hrr_upper = 1200
+
 # Number of bins to use in PDF/CDF plots
 histogram_bins = 1000
 
 # x-axis and y-axis limits for input/ouput PDF/CDF plots
 x_upper_input = 2000
+y_upper_input = 0.01
 x_upper_output = 150
 y_upper_output = 0.04
 
@@ -62,11 +68,6 @@ figures_dir = '../Figures/'
 #  = END USER INPUTS =
 #  =====================
 
-# Initialize point value and parameter distribution
-hrr_lower = hrr - (hrr * variation)
-hrr_upper = hrr + (hrr * variation)
-hrr_point = hrr
-
 #  =======================
 #  = Read data from disk =
 #  =======================
@@ -77,8 +78,11 @@ mu_point = np.loadtxt(
 sigma_point = np.loadtxt(
         results_dir + 'sigma_point.txt.gz')
 
-hrr_uniform = np.loadtxt(
-        results_dir + 'hrr_uniform.txt.gz')
+hrr_point = np.loadtxt(
+        results_dir + 'hrr_point.txt.gz')
+
+hrr_distribution = np.loadtxt(
+        results_dir + 'hrr_distribution.txt.gz')
 
 output_hgl_temps = np.loadtxt(
         results_dir + 'output_hgl_temps.txt.gz')
@@ -90,7 +94,7 @@ output_hgl_temps_adjusted = np.loadtxt(
 #  = Plot input distributions =
 #  ============================
 
-hrr_range = np.arange(hrr_lower, hrr_upper, 0.01)
+hrr_range = np.arange(0, x_upper_input, 0.1)
 
 figure()
 hist(np.array([hrr_point]), bins=1, normed=1, color='k', lw=2)
@@ -123,12 +127,14 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_CDF_point.pdf')
 
 figure()
-hist(hrr_range, bins=1,
-     normed=1, color='0.7')
+plot(hrr_range, sp.stats.gamma.pdf(hrr_range,
+                                   hrr_gamma_parameters[0],
+                                   scale=hrr_gamma_parameters[1]))
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
 xlim([0, x_upper_input])
+ylim([0, y_upper_input])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -138,8 +144,9 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_PDF.pdf')
 
 figure()
-hist(hrr_range, bins=histogram_bins,
-     normed=1, histtype='step', cumulative=True, color='k', lw=2)
+plot(hrr_range, sp.stats.gamma.cdf(hrr_range,
+                                   hrr_gamma_parameters[0],
+                                   scale=hrr_gamma_parameters[1]))
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
 ylim([0, 1])
@@ -157,10 +164,8 @@ savefig(figures_dir + 'input_CDF.pdf')
 #  = Plot output distributions =
 #  =============================
 
-case1_range = np.arange(0, x_upper_output, 0.001)
-
 figure()
-fill(case1_range, sp.stats.norm.pdf(case1_range, mu_point, sigma_point),
+fill(hrr_range, sp.stats.norm.pdf(hrr_range, mu_point, sigma_point),
      ec='k', color='0.7')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
@@ -208,7 +213,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_3_combined.pdf')
 
 figure()
-plot(case1_range, sp.stats.norm.cdf(case1_range, mu_point, sigma_point),
+plot(hrr_range, sp.stats.norm.cdf(hrr_range, mu_point, sigma_point),
      color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)

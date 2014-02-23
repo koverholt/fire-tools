@@ -22,11 +22,15 @@ import external_cfast
 # Number of Monte Carlo iterations to run
 mc_iterations = 100
 
-# Nominal HRR, kW
-hrr = 1000
+### Gamma distribution parameters for HRR ###
+# NUREG 6850, Volume 2, Table G-1
+# Vertical cabinets w/ unqualified cable, more than one bundle, open doors
+# HRR (75th percentile): 232 kW
+# HRR (98th percentile): 1002 kW
+hrr_gamma_parameters = np.array([0.46, 386])
 
-# +/- percent to vary HRR
-variation = 0.50
+# HRR point estimate, kW
+hrr_point = 1002
 
 #  ====================
 #  = Fixed parameters =
@@ -76,12 +80,12 @@ results_dir = '../Model_Output/'
 # Fixed value          - np.repeat(value, size)
 # Uniform distribution - np.random.uniform(lower, upper, size)
 # Normal distribution  - np.random.normal(mean, std, size)
+# Gamma distribution   - np.random.gamma(shape, scale, size)
 
-# Initialize point value and parameter distribution
-hrr_lower = hrr - (hrr * variation)
-hrr_upper = hrr + (hrr * variation)
-hrr_point = hrr
-hrr_uniform = np.random.uniform(hrr_lower, hrr_upper, mc_iterations)
+# Initialize input parameter distribution
+hrr_distribution = np.random.gamma(hrr_gamma_parameters[0],
+                                   hrr_gamma_parameters[1],
+                                   mc_iterations)
 
 #  =====================
 #  = Single simulation =
@@ -91,7 +95,7 @@ hrr_uniform = np.random.uniform(hrr_lower, hrr_upper, mc_iterations)
 ### For Case 1 ###
 # Time and HRR ramp, s, kW
 time_ramp = np.array([0, simulation_time])
-hrr_ramp = np.array([hrr, hrr])
+hrr_ramp = np.array([hrr_point, hrr_point])
 hgl_temp_point = external_cfast.run_case(x=x, y=y, z=z,
                                        hoc=hoc,
                                        tmp_a=tmp_a,
@@ -117,7 +121,7 @@ output_hgl_temps_adjusted = np.array([])
 for i in range(mc_iterations):
     # Time and HRR ramp, s, kW
     time_ramp = np.array([0, simulation_time])
-    hrr_ramp = np.array([hrr_uniform[i], hrr_uniform[i]])
+    hrr_ramp = np.array([hrr_distribution[i], hrr_distribution[i]])
     
     hgl_temp = external_cfast.run_case(x=x, y=y, z=z,
                                        hoc=hoc,
@@ -151,8 +155,12 @@ np.savetxt(results_dir + 'sigma_point.txt.gz',
            np.array([sigma_point]),
            fmt='%0.2f')
 
-np.savetxt(results_dir + 'hrr_uniform.txt.gz',
-           hrr_uniform,
+np.savetxt(results_dir + 'hrr_point.txt.gz',
+           np.array([hrr_point]),
+           fmt='%0.2f')
+
+np.savetxt(results_dir + 'hrr_distribution.txt.gz',
+           hrr_distribution,
            fmt='%0.2f')
 
 np.savetxt(results_dir + 'output_hgl_temps.txt.gz',
