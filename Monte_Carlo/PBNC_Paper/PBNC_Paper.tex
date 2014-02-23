@@ -2,7 +2,25 @@
 \pdfobjcompresslevel=0
 
 \documentclass[12pt]{article}
-\pdfminorversion=4 % Makes output file Adobe-readable
+
+\usepackage{mathptmx,times}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{booktabs, ragged2e, array, dcolumn}
+\usepackage[font=small,format=plain,labelfont=bf,up]{caption}
+
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0.25in}
+\setlength{\headsep}{0.5in}
+\setlength{\parindent}{0.25in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0.0in}
+\setlength{\voffset}{-0.4in}
+\setlength{\footskip}{0.5in}
+\setlength{\marginparpush}{7pt}
+
 \usepackage{titlesec}
 \usepackage{graphicx}
 \usepackage{floatrow}
@@ -14,7 +32,7 @@
 \begin{document}
 
 \begin{flushright}
-PBNC2014-218
+\textbf{PBNC2014-218}
 \end{flushright}
 
 \begin{center}
@@ -23,7 +41,7 @@ PBNC2014-218
 \end{center}
 
 \begin{center}
-M. Clouthier\textsuperscript{1}, K. Overholt\textsuperscript{2}\\
+\textbf{M. Clouthier\textsuperscript{1}, K. Overholt\textsuperscript{2}}\\
 
 \textsuperscript{1}Clouthier Risk Engineering, Nova Scotia, Canada\\
 \textsuperscript{2}National Institute of Standards and Technology, Gaithersburg, MD, USA
@@ -42,12 +60,12 @@ In this paper, a Monte Carlo analysis is applied to a fire scenario involving po
 \section{Introduction}
 \label{sec:introduction}
 
-Model bias and uncertainty has been quantified in NRC NUREG-1824~\cite{NUREG_1824_Sup_1}. Each model input has some amount of uncertainty associated with it. These are addressed separately in NRC NUREG-1934~\cite{NUREG_1934}. In this paper, we demonstrate the calculation of three cases: 1) only considering model bias and uncertainty, 2) only considering input parameter uncertainty, and 3) combined analysis of model bias/uncertainty and input parameter uncertainty.
+\include{intro}
 
 \section{Previous work}
 \label{sec:previous_work}
 
-Previous work on Monte Carlo analyses.
+\include{previous_work}
 
 
 \section{Fire model scenario setup}
