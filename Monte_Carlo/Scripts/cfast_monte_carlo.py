@@ -137,7 +137,7 @@ for i in range(mc_iterations):
 
     # Case 3 - Adjust for model bias and uncertainty
     hgl_temp_rise = (hgl_temp - tmp_a)
-    # Set zero temperature rise to small number to avoid problems
+    # If hgl_temp_rise is zero, set it to a small number to avoid problems
     if hgl_temp_rise == 0:
       hgl_temp_rise = 0.0001
     mu_star = (hgl_temp_rise / delta) + tmp_a
