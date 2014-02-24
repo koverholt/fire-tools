@@ -129,7 +129,8 @@ savefig(figures_dir + 'input_CDF_point.pdf')
 figure()
 plot(hrr_range, sp.stats.gamma.pdf(hrr_range,
                                    hrr_gamma_parameters[0],
-                                   scale=hrr_gamma_parameters[1]))
+                                   scale=hrr_gamma_parameters[1]),
+     lw=2, color='k')
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
@@ -146,7 +147,8 @@ savefig(figures_dir + 'input_PDF.pdf')
 figure()
 plot(hrr_range, sp.stats.gamma.cdf(hrr_range,
                                    hrr_gamma_parameters[0],
-                                   scale=hrr_gamma_parameters[1]))
+                                   scale=hrr_gamma_parameters[1]),
+     lw=2, color='k')
 xlabel('HRR (kW)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
 ylim([0, 1])

@@ -84,7 +84,7 @@ The Python programming language was used as a wrapper to automate CFAST model ru
 \section{Uncertainty analysis}
 \label{sec:uncertainty_analysis}
 
-The model input parameter of interest is the HRR. The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. The model output quantity of interest is a threshold HGL temperature of 100~$^\circ$C.
+ To simplify this analysis and to present a clear example, the HRR was selected as the only model input parameter of interest. In reality, there is some amount of uncertainty associated with other input parameters. The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $k$ of 0.46 and a scale parameter $\theta$ of 386. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. The model output quantity of interest is the HGL temperature. A threshold (or critical) HGL temperature of 100~$^\circ$C was used in this analysis.
 
 Three cases are presented that account for different levels of uncertainty: Case 1 accounts for model bias and uncertainty, Case 2 accounts for input parameter uncertainty, and Case 3 accounts for both model bias/uncertainty and input parameter uncertainty. For Case 1, a HRR of 1002~kW is considered, which is the 98th percentile HRR value. For Cases 2 and 3, the gamma distribution is used directly. These three cases are described in more detail in the following sections.
 
@@ -150,7 +150,7 @@ This case only accounts for input parameter uncertainty. The probability of exce
 
 \textbf{Step 1}: Specify the input HRR distribution.
 
-The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. This distribution has a shape parameter $k$ of 0.46 and a scale parameter $\theta$ of 386. Other distributions could be used to represent the amount of uncertainty in the input parameter, such as a uniform or normal distribution.
+The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. Other distributions could be used to represent the amount of uncertainty in the input parameter, such as a uniform or normal distribution.
 
 The Monte Carlo method can be used to propagate the distribution of the input parameter (HRR) through a fire model to calculate the resulting distribution of output quantities (HGL temperature). For this case, 50,000 Monte Carlo iterations were performed. The PDF and CDF of the input HRR distribution are shown in Fig.~\ref{fig:case_2_input_distributions}.
 
