@@ -52,7 +52,7 @@ dt_data = 10
 hoc = 20900
 
 # Wall material
-wall = 'concrete'
+wall = 'CABSWConcrete'
 
 #  ================================
 #  = Model Bias and Uncertainty   =

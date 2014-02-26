@@ -19,10 +19,13 @@ def gen_input(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
     x -- x dimension of compartment
     y -- y dimension of compartment
     z -- z dimension of compartment
-    time_ramp -- time portion of HRR curve of fire
-    hrr_ramp -- heat release rate portion of HRR curve
-    simulation_time -- length of time to run the simulation
-    dt_data -- Data sampling rate and CFAST output frequency
+    t_a -- ambient temperature (C)
+    hoc -- heat of combustion (kJ/kg)
+    time_ramp -- time portion of HRR curve of fire (s)
+    hrr_ramp -- heat release rate portion of HRR curve (kW)
+    wall -- wall material (string)
+    simulation_time -- length of time to run the simulation (s)
+    dt_data -- Data sampling rate and CFAST output frequency (s)
     """
 
     #  =============================
@@ -49,8 +52,6 @@ MATL,CABSWConcrete,1.6,750,2400,0.5,0.9,Cabinet Switchgear Concrete Floor (user'
 MATL,CABSWPVC,0.2,1500,2264,0.015,0.9,Cabinet Switchgear PVC-PE Cable (NUREG 1824)
 MATL,CABSWSteel,48,559,7854,0.0015,0.9,Cabinet Switchgear Steel Cabinet (user's guide)
 MATL,THIEF,0.2,1500,2150,0.015,0.8,Thief Cable (per NUREG CR 6931)
-MATL,FIBERBRD,0.041,2090,229,0.016,0.9,Fiber Insulating Board
-MATL,GYPSUM,0.16,900,790,0.016,0.9,Gypsum Board (5/8 in)
 !!
 !!Compartment keywords
 !!
@@ -68,13 +69,13 @@ MVENT,1,2,6,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
 !!
 !!Fire keywords
 !!
-!!PE_PVC 464 kW
-FIRE,1,8.3,9.5,2.4,1,1,0,0,0,1,PE_PVC 464 kW
-CHEMI,2,3.5,0,0,0.5,0.49,%(hoc)s,CABSWPVC
+!!PE_PVC
+FIRE,1,8.3,9.5,2.4,1,1,0,0,0,1,PE_PVC
+CHEMI,1,4,0,0,0,0.49,%(hoc)s,CABSWPVC
 TIME,%(time_ramp)s
 HRR,%(hrr_ramp)s
-SOOT,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136,0.136
-CO,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147,0.147
+SOOT,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11
+CO,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11
 TRACE,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 AREA,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18
 HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -82,7 +83,7 @@ HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 !!Target and detector keywords
 !!
 TARGET,1,8.3,7,2.4,0,1,0,CABSWSteel,EXPLICIT,PDE,0.5
-TARGET,1,8.3,12,2.4,0,-1,0,CABSWSteel,EXPLICIT,PDE,0.5
+TARGET,1,8.3,12,2.4,0,-1,0,CABSWSteel,IMPLICIT,PDE,0.5
 TARGET,1,8.3,9.5,3.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
 TARGET,1,8.3,9.5,4.4,0,0,-1,THIEF,EXPLICIT,CYL,0.2
 TARGET,1,8.3,9.5,4.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
@@ -99,12 +100,8 @@ TARGET,1,8.3,9.5,4.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
     #  = Generate CFAST input file and fire object file =
     #  ==================================================
 
-    if wall == 'concrete':
+    if wall == 'CABSWConcrete':
         wall_matl = 'CABSWConcrete,CABSWConcrete,CABSWConcrete'
-    elif wall == 'gypsum':
-        wall_matl = 'GYPSUM,GYPSUM,GYPSUM'
-    elif wall == 'fiberboard':
-        wall_matl = 'FIBERBRD,GYPSUM,FIBERBRD'
 
     outcase = template % {'simulation_time':simulation_time,
                           'dt_data':dt_data, 't_ambient': tmp_a+273.15,
