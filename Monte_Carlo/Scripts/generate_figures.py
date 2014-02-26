@@ -34,7 +34,7 @@ np.set_printoptions(precision=0)
 hrr_gamma_parameters = np.array([0.46, 386])
 
 # Threshold HGL temperature for probability calculation, degrees C
-threshold_hgl_temp = 80
+threshold_hgl_temp = 100
 
 #  ====================
 #  = Plotting options =
@@ -51,7 +51,7 @@ histogram_bins = 1000
 x_upper_input = 2000
 y_upper_input = 0.01
 x_upper_output = 150
-y_upper_output = 0.15
+y_upper_output = 0.12
 
 # Font size
 font_size = 16
@@ -94,7 +94,7 @@ output_hgl_temps_adjusted = np.loadtxt(
 #  = Plot input distributions =
 #  ============================
 
-plot_range = np.arange(0, x_upper_input, 1)
+plot_range = np.arange(0, x_upper_input, 0.1)
 
 figure()
 hist(np.array([hrr_point]), bins=1, normed=1, color='k', lw=2)
@@ -167,8 +167,8 @@ savefig(figures_dir + 'input_CDF.pdf')
 #  =============================
 
 figure()
-plot(plot_range, sp.stats.norm.pdf(plot_range, mu_point, sigma_point),
-     color='k')
+fill(plot_range, sp.stats.norm.pdf(plot_range, mu_point, sigma_point),
+     ec='k', color='0.7')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
