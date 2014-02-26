@@ -158,7 +158,7 @@ The Monte Carlo method can be used to propagate the distribution of the input pa
 
 Figure~\ref{fig:case_2_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
-\textbf{Step 3}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was calculated using the Monte Carlo method, we can numerically integrate over the resulting distribution to determine the probability of exceeding the threshold HGL temperature.
+\textbf{Step 3}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was approximated using the Monte Carlo method, we can numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
 
 For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.012. Note that this estimate is based only on input parameter uncertainty.
 
@@ -198,9 +198,9 @@ The input distribution for the HRR is the same as in Case 2, a gamma distributio
 
 \textbf{Step 4}: Referring to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15, and the adjusted model prediction is calculated. Referring again to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20, and the standard deviation of the distribution is calculated.
 
-A random HGL temperature value from the resulting normal distribution is drawn. This HGL temperature value is stored, then we return to Step~1 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached. Figure~\ref{fig:case_3_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
+\textbf{Step 5}: Draw a random HGL temperature value from the normal distribution that results from Step 4. This HGL temperature value is stored, then we return to Step~1 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached. Figure~\ref{fig:case_3_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
-\textbf{Step 5}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was calculated using the Monte Carlo method, we can numerically integrate over the resulting distribution to determine the probability of exceeding the threshold HGL temperature.
+\textbf{Step 6}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was approximated using the Monte Carlo method, we can numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
 
 For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.008. Note that this estimate is based on the combined effect of model bias and uncertainty.
 
