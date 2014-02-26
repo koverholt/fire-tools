@@ -76,15 +76,15 @@ In this paper, a Monte Carlo analysis is applied to a fire scenario involving po
 \section{Fire model scenario and computational setup}
 \label{sec:fire_model_scenario_setup}
 
-The Consolidated Model of Fire Growth and Smoke Transport (CFAST)~\cite{CFAST_Users_Guide_6} zone model was used. The ``Cabinet Fire in Switchgear Room'' scenario in Appendix B of NRC NUREG-1934~\cite{NUREG_1934} was selected for this uncertainty analysis. The compartment has dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time is 1~h (3600~s). The wall and ceiling materials were specified as concrete with a thermal conductivity of 1.6~W/m-K, density of 2400~kg/m$^3$, and specific heat of 0.75~J/g-K. For the purposes of this uncertainty analysis, the fire was considered as the input parameter of interest and was specified as a constant HRR, which is described in more detail in the following section.
+The Consolidated Model of Fire Growth and Smoke Transport (CFAST)~\cite{CFAST_Users_Guide_6} zone model was used to predict hot gas layer (HGL) temperatures for a given heat release rate (HRR). The ``Cabinet Fire in Switchgear Room'' scenario in Appendix~B of NRC NUREG-1934~\cite{NUREG_1934} was selected for this uncertainty analysis. The compartment had dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time was 1~h (3600~s). The wall and ceiling materials were specified as concrete with a thermal conductivity of 1.6~W/m-K, density of 2400~kg/m$^3$, and specific heat of 0.75~J/g-K. For the purposes of this uncertainty analysis, the fire was considered as the input parameter of interest and was specified as a constant HRR, which is described in more detail in the following section. The fire properties were the same as the Appendix~B example case, a PE-PVC cabinet switchgear cable with a heat of combustion of 20,900~kJ/kg, soot yield of 0.136~kg/kg, and radiative fraction of 0.49.
 
-The Python programming language was used as a wrapper to automate CFAST model runs, collect the output from the CFAST model, run the Monte Carlo simulation, calculate probabilities of exceeding the threshold temperature, and generate the plots. Python is a high-level, flexible, and powerful programming language that is well-suited to scientific and engineering applications~\cite{Oliphant:2007}. Additional modules that were used with Python include NumPy~\cite{oliphant2006guide}, SciPy~\cite{Jones:2001fk}, and matplotlib~\cite{Hunter:2007}. The source code of the scripts that were used for these examples is open source and freely available for download.\footnote{\url{https://code.google.com/p/fire-tools/}}
+For the uncertainty analysis, the Python programming language was used as a wrapper to automate CFAST model runs, collect the output from the CFAST model, run the Monte Carlo simulation, calculate probabilities of exceeding the threshold temperature, and generate the plots. Python is a high-level, flexible, and powerful programming language that is well-suited to scientific and engineering applications~\cite{Oliphant:2007}. Additional modules that were used with Python include NumPy~\cite{oliphant2006guide}, SciPy~\cite{Jones:2001fk}, and matplotlib~\cite{Hunter:2007}. The source code of the scripts that were used for these examples is open source and freely available for download.\footnote{\url{https://code.google.com/p/fire-tools/}}
 
 
 \section{Uncertainty analysis}
 \label{sec:uncertainty_analysis}
 
- To simplify this analysis and to present a clear example, the HRR was selected as the only model input parameter of interest. In reality, there is some amount of uncertainty associated with other input parameters. The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $k$ of 0.46 and a scale parameter $\theta$ of 386. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. The model output quantity of interest is the HGL temperature. A threshold (or critical) HGL temperature of 100~$^\circ$C was used in this analysis.
+ To simplify this analysis and to present a clear example, the HRR was selected as the only model input parameter of interest. In reality, there is some amount of uncertainty associated with other input parameters. The input distribution for the HRR is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. The model output quantity of interest is the HGL temperature. A threshold (or critical) HGL temperature of 100~$^\circ$C was used in this analysis.
 
 Three cases are presented that account for different levels of uncertainty: Case 1 accounts for model bias and uncertainty, Case 2 accounts for input parameter uncertainty, and Case 3 accounts for both model bias/uncertainty and input parameter uncertainty. For Case 1, a HRR of 1002~kW is considered, which is the 98th percentile HRR value. For Cases 2 and 3, the gamma distribution is used directly. These three cases are described in more detail in the following sections.
 
@@ -129,14 +129,14 @@ For Case 1, the probability of exceeding the threshold HGL temperature of 100~$^
 \begin{figure}[p]
 \includegraphics[width=2.6in]{Figures/input_PDF_point}
 \includegraphics[width=2.6in]{Figures/input_CDF_point}
-\caption{PDF and CDF of input HRR distribution; case with model bias and uncertainty.}
+\caption{PDF and CDF of input HRR distribution; case with model bias and uncertainty. This case used only one input HRR value, which corresponds to the 98th percentile HRR value of 1002~kW.}
 \label{fig:case_1_input_distributions}
 \end{figure}
 
 \begin{figure}[p]
 \includegraphics[width=2.6in]{Figures/output_PDF_1_model}
 \includegraphics[width=2.6in]{Figures/output_CDF_1_model}
-\caption{PDF and CDF of output HGL temperature distribution; case with model bias and uncertainty.}
+\caption{PDF and CDF of output HGL temperature distribution; case with model bias and uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_1_output_distributions}
 \end{figure}
 
@@ -176,7 +176,7 @@ For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^
 \begin{figure}[p]
 \includegraphics[width=2.6in]{Figures/output_PDF_2_input}
 \includegraphics[width=2.6in]{Figures/output_CDF_2_input}
-\caption{PDF and CDF of output HGL temperature distribution; case with input parameter uncertainty.}
+\caption{PDF and CDF of output HGL temperature distribution; case with input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_2_output_distributions}
 \end{figure}
 
@@ -218,7 +218,7 @@ For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^
 \begin{figure}[p]
 \includegraphics[width=2.6in]{Figures/output_PDF_3_combined}
 \includegraphics[width=2.6in]{Figures/output_CDF_3_combined}
-\caption{PDF and CDF of output HGL temperature distribution; case with combined model bias/uncertainty and input parameter uncertainty.}
+\caption{PDF and CDF of output HGL temperature distribution; case with combined model bias/uncertainty and input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_3_output_distributions}
 \end{figure}
 
