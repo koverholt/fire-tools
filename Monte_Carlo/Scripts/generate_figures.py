@@ -34,7 +34,7 @@ np.set_printoptions(precision=0)
 hrr_gamma_parameters = np.array([0.46, 386])
 
 # Threshold HGL temperature for probability calculation, degrees C
-threshold_hgl_temp = 100
+threshold_hgl_temp = 80
 
 #  ====================
 #  = Plotting options =
@@ -51,7 +51,7 @@ histogram_bins = 1000
 x_upper_input = 2000
 y_upper_input = 0.01
 x_upper_output = 150
-y_upper_output = 0.04
+y_upper_output = 0.15
 
 # Font size
 font_size = 16
@@ -94,7 +94,7 @@ output_hgl_temps_adjusted = np.loadtxt(
 #  = Plot input distributions =
 #  ============================
 
-hrr_range = np.arange(0, x_upper_input, 0.1)
+plot_range = np.arange(0, x_upper_input, 1)
 
 figure()
 hist(np.array([hrr_point]), bins=1, normed=1, color='k', lw=2)
@@ -127,7 +127,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_CDF_point.pdf')
 
 figure()
-plot(hrr_range, sp.stats.gamma.pdf(hrr_range,
+plot(plot_range, sp.stats.gamma.pdf(plot_range,
                                    hrr_gamma_parameters[0],
                                    scale=hrr_gamma_parameters[1]),
      lw=2, color='k')
@@ -145,7 +145,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'input_PDF.pdf')
 
 figure()
-plot(hrr_range, sp.stats.gamma.cdf(hrr_range,
+plot(plot_range, sp.stats.gamma.cdf(plot_range,
                                    hrr_gamma_parameters[0],
                                    scale=hrr_gamma_parameters[1]),
      lw=2, color='k')
@@ -167,8 +167,8 @@ savefig(figures_dir + 'input_CDF.pdf')
 #  =============================
 
 figure()
-fill(hrr_range, sp.stats.norm.pdf(hrr_range, mu_point, sigma_point),
-     ec='k', color='0.7')
+plot(plot_range, sp.stats.norm.pdf(plot_range, mu_point, sigma_point),
+     color='k')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
@@ -184,12 +184,13 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_1_model.pdf')
 
 figure()
-hist(output_hgl_temps, bins=histogram_bins/50, normed=1, color='0.7')
+hist(output_hgl_temps, bins=histogram_bins/25, normed=1, color='0.7')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
 grid(True)
 xlim([0, x_upper_output])
+ylim([0, y_upper_output])
 ax = gca()
 for xlabel_i in ax.get_xticklabels():
     xlabel_i.set_fontsize(font_size)
@@ -199,7 +200,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_2_input.pdf')
 
 figure()
-hist(output_hgl_temps_adjusted, bins=histogram_bins/25, normed=1, color='0.7')
+hist(output_hgl_temps_adjusted, bins=histogram_bins/22, normed=1, color='0.7')
 axvline(threshold_hgl_temp, color='k', lw=3)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Probability Density Function', fontsize=20)
@@ -215,7 +216,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_PDF_3_combined.pdf')
 
 figure()
-plot(hrr_range, sp.stats.norm.cdf(hrr_range, mu_point, sigma_point),
+plot(plot_range, sp.stats.norm.cdf(plot_range, mu_point, sigma_point),
      color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
@@ -231,7 +232,7 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_CDF_1_model.pdf')
 
 figure()
-hist(output_hgl_temps, bins=histogram_bins/5,
+hist(output_hgl_temps, bins=histogram_bins,
      normed=1, histtype='step', cumulative=True, color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
@@ -247,8 +248,8 @@ gcf().subplots_adjust(left=0.15, bottom=0.11)
 savefig(figures_dir + 'output_CDF_2_input.pdf')
 
 figure()
-hist(output_hgl_temps_adjusted,
-     bins=histogram_bins, normed=1, histtype='step', cumulative=True,
+hist(output_hgl_temps_adjusted, bins=histogram_bins, 
+     normed=1, histtype='step', cumulative=True,
      color='k', lw=2)
 xlabel(r'HGL Temperature ($^\circ$C)', fontsize=20)
 ylabel('Cumulative Density Function', fontsize=20)
