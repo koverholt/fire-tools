@@ -30,7 +30,7 @@ mc_iterations = 100
 hrr_gamma_parameters = np.array([0.46, 386])
 
 # HRR point estimate, kW
-hrr_point = 75
+hrr_point = 1002
 
 #  ====================
 #  = Fixed parameters =
