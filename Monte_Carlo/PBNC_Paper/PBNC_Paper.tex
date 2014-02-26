@@ -106,11 +106,11 @@ For an input HRR of 1002~kW, the CFAST model predicts an HGL temperature of 90.7
 M = 90.7~^\circ\textrm{C} - 20~^\circ\textrm{C} = 70.7~^\circ\textrm{C}
 \end{equation}
 
-\textbf{Step 3}: Referring to Table XX of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction is calculated as
+\textbf{Step 3}: Referring to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction is calculated as
 \begin{equation}
 \mu = \frac{M}{\delta} = \frac{70.7~^\circ\textrm{C}}{1.15} \approx 81.5~^\circ\textrm{C}
 \end{equation}
-Referring again to Table XX of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20. The standard deviation of the distribution is calculated as
+Referring again to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20. The standard deviation of the distribution is calculated as
 \begin{equation}
 \sigma = \widetilde\sigma_M \left( \frac{M}{\delta} \right) = 0.20 \left( \frac{70.7}{1.15} \right) \approx 12.3~^\circ\textrm{C}
 \end{equation}
@@ -120,7 +120,7 @@ Figure~\ref{fig:case_1_output_distributions} shows the PDF and CDF of the adjust
 \begin{equation}
 \textrm{P}(T > 100~^\circ\textrm{C}) = \frac{1}{2} \textrm{erfc} \left( \frac{T - \mu}{\sigma \sqrt{2}} \right) = \frac{1}{2} \textrm{erfc} \left( \frac{100~^\circ\textrm{C} - 81.5~^\circ\textrm{C}}{12.3~^\circ\textrm{C} \sqrt{2}} \right) \approx 0.07
 \end{equation}
-For Case 1, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.07. Note that this estimate is based only on model bias and uncertainty.
+For Case 1, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.066. Note that this estimate is based only on model bias and uncertainty.
 
 
 \clearpage
@@ -160,7 +160,7 @@ Figure~\ref{fig:case_2_output_distributions} shows the PDF and CDF of the result
 
 \textbf{Step 3}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was calculated using the Monte Carlo method, we can numerically integrate over the resulting distribution to determine the probability of exceeding the threshold HGL temperature.
 
-For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as XX. Note that this estimate is based only on input parameter uncertainty.
+For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.012. Note that this estimate is based only on input parameter uncertainty.
 
 
 \clearpage
@@ -196,13 +196,13 @@ The input distribution for the HRR is the same as in Case 2, a gamma distributio
 
 \textbf{Step 3}: For the sample in Step~2, subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise.
 
-\textbf{Step 4}: Referring to Table XX of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15, and the adjusted model prediction is calculated. Referring again to Table XX of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20, and the standard deviation of the distribution is calculated.
+\textbf{Step 4}: Referring to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15, and the adjusted model prediction is calculated. Referring again to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20, and the standard deviation of the distribution is calculated.
 
 A random HGL temperature value from the resulting normal distribution is drawn. This HGL temperature value is stored, then we return to Step~1 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached. Figure~\ref{fig:case_3_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
 \textbf{Step 5}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was calculated using the Monte Carlo method, we can numerically integrate over the resulting distribution to determine the probability of exceeding the threshold HGL temperature.
 
-For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as XX. Note that this estimate is based on the combined effect of model bias and uncertainty.
+For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.008. Note that this estimate is based on the combined effect of model bias and uncertainty.
 
 
 \clearpage
