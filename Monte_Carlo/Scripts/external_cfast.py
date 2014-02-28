@@ -32,10 +32,6 @@ def gen_input(x, y, z, tmp_a, hoc, time_ramp, hrr_ramp, wall,
     #  = CFAST input file template =
     #  =============================
 
-    # Original time and HRR ramp for Switchgear room case
-    # TIME,0,72,144,216,288,360,432,504,576,648,720,1200,1920,1930
-    # HRR,0,4640,18560,41760,74240.01,116000,167040,227360,296960,375840,464000,464000,0,0
-
     template = """VERSN,6,CFAST Simulation
 !!
 !!Scenario Configuration Keywords
@@ -71,19 +67,19 @@ MVENT,1,2,6,H,5.6,0.3,H,5.6,0.3,0.472,200,300,1
 !!
 !!PE_PVC
 FIRE,1,8.3,9.5,2.4,1,1,0,0,0,1,PE_PVC
-CHEMI,1,4,0,0,0,0.49,%(hoc)s,CABSWPVC
+CHEMI,2,3.5,0,0,0.5,0.49,%(hoc)s,CABSWPVC
 TIME,%(time_ramp)s
 HRR,%(hrr_ramp)s
-SOOT,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11
-CO,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11,0.11
-TRACE,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-AREA,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18
-HEIGH,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+SOOT,0.136,0.136
+CO,0.147,0.147
+TRACE,0,0
+AREA,0.18,0.18
+HEIGH,0,0
 !!
 !!Target and detector keywords
 !!
 TARGET,1,8.3,7,2.4,0,1,0,CABSWSteel,EXPLICIT,PDE,0.5
-TARGET,1,8.3,12,2.4,0,-1,0,CABSWSteel,IMPLICIT,PDE,0.5
+TARGET,1,8.3,12,2.4,0,-1,0,CABSWSteel,EXPLICIT,PDE,0.5
 TARGET,1,8.3,9.5,3.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
 TARGET,1,8.3,9.5,4.4,0,0,-1,THIEF,EXPLICIT,CYL,0.2
 TARGET,1,8.3,9.5,4.9,0,0,-1,THIEF,EXPLICIT,CYL,0.2
