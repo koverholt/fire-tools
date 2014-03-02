@@ -56,11 +56,9 @@
 \textbf{Abstract}
 \end{center}
 
-Quantitative fire risk analysis is used in conducting safety assessments at nuclear facilities to evaluate the potential consequences of postulated fire scenarios.
+Quantitative fire risk analysis is used in conducting safety assessments at nuclear facilities to evaluate the potential consequences of postulated fire scenarios that can potentially damage nuclear safety structures, systems, and components. Some limitations exist when using point estimates or when conducting bounding analysis to determine pass/fail criteria for a given scenario. Specifically, these methods do not take into account probability distributions of input parameters. Therefore, in some cases, a more robust methodology for uncertainty analysis is needed, and the effect of different types of uncertainty should be considered in a quantitative analysis.
 
-In fire modelling applications, the key phenomena that influence the predicted figure of merit (i.e., the specific objective of the analysis) are known; however, in some cases the existing state of knowledge and the adequacy of existing modelling tools to predict a given phenomenon is in need of improvement. It is therefore necessary to consider relevant uncertainties in a rational quantitative manner.
-
-In this paper, a Monte Carlo analysis is applied to a fire scenario involving potential damage to nuclear safety structures, systems, and components. The effect of deterministic peak heat release rate and fire growth on the predicted hot gas layer is studied. The results of the case study are presented to demonstrate an improved method to develop a design basis fire.
+The purpose of this paper is to present an uncertainty analysis for a single scenario that accounts for different types of uncertainty. Three cases are presented that account for the effect of different types of uncertainty on the probability of exceeding a specified criteria: model bias and uncertainty, input parameter uncertainty, and a combinationg of model bias/uncertainty and input parameter uncertainty. For this uncertainty analysis, the heat release rate (HRR) was selected as the uncertain input parameter of interest, and the HGL temperature was selected as the model output quantity of interest. The Consolidated Model of Fire Growth and Smoke Transport (CFAST) zone model was used to predict hot gas layer temperatures for a given input HRR.
 
 \section{Introduction}
 \label{sec:introduction}
@@ -76,7 +74,9 @@ In this paper, a Monte Carlo analysis is applied to a fire scenario involving po
 \section{Fire model scenario and computational setup}
 \label{sec:fire_model_scenario_setup}
 
-The Consolidated Model of Fire Growth and Smoke Transport (CFAST)~\cite{CFAST_Users_Guide_6} zone model version 6.3.0 (SVN revision number 1462) was used to predict hot gas layer (HGL) temperatures for a given heat release rate (HRR). The ``Cabinet Fire in Switchgear Room'' scenario in Appendix~B of NRC NUREG-1934~\cite{NUREG_1934} was selected for this uncertainty analysis. The compartment had dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time was 1~h (3600~s). The wall and ceiling materials were specified as concrete with a thermal conductivity of 1.6~W/m-K, density of 2400~kg/m$^3$, and specific heat of 0.75~J/g-K. For the purposes of this uncertainty analysis, the fire was considered as the uncertain input parameter of interest and was specified as a constant HRR, which is described in more detail in the following section. The fire properties were the same as the Appendix~B example case, a PE-PVC cabinet switchgear cable with a heat of combustion of 20,900~kJ/kg, soot yield of 0.136~kg/kg, and radiative fraction of 0.49.
+For this uncertainty analysis, the Consolidated Model of Fire Growth and Smoke Transport (CFAST) zone model~\cite{CFAST_Users_Guide_6} version 6.3.0 (SVN revision number 1462) was used to predict hot gas layer (HGL) temperatures for a given input heat release rate (HRR). The ``Cabinet Fire in Switchgear Room'' scenario in Appendix~B of NRC NUREG-1934~\cite{NUREG_1934} was selected for this uncertainty analysis. The compartment had dimensions of 26.5~m by 18.5~m by 6.1~m. The ambient temperature was specified as 20~$^\circ$C. The simulation time was 1~h (3600~s). The ceiling, wall, and floor materials were specified as concrete with a thickness of 0.5~m and a thermal conductivity of 1.6~W/m-K, density of 2400~kg/m$^3$, and specific heat of 0.75~J/g-K.
+
+The HRR was selected as the uncertain input parameter of interest, and the distribution of HRRs is described in more detail in the following section. The HGL temperature was selected as the model output quantity of interest. The fuel properties were the same as the NRC NUREG-1934 Appendix~B example case: polyethylene (PE) insulated, polyvinyl chloride (PVC) jacketed cables with a heat of combustion of 20,900~kJ/kg, soot yield of 0.136~kg/kg, carbon monoxide yield of 0.147~kg/kg, and radiative fraction of 0.49.
 
 For the uncertainty analysis, the Python programming language was used as a wrapper to automate CFAST model runs, collect the output from the CFAST model, run the Monte Carlo simulation, calculate probabilities of exceeding the threshold temperature, and generate the plots. Python is a high-level, flexible, and powerful programming language that is well-suited to scientific and engineering applications~\cite{Oliphant:2007}. Additional modules that were used with Python include NumPy~\cite{oliphant2006guide}, SciPy~\cite{Jones:2001fk}, and matplotlib~\cite{Hunter:2007}. The source code of the scripts that were used for these examples is open source and freely available for download.\footnote{\url{https://code.google.com/p/fire-tools/}}
 
@@ -84,9 +84,9 @@ For the uncertainty analysis, the Python programming language was used as a wrap
 \section{Uncertainty analysis}
 \label{sec:uncertainty_analysis}
 
- To simplify this analysis and to present a concise example, the HRR was selected as the only uncertain model input parameter. The other input parameters were considered to be fixed scenario parameters. In reality, there is some amount of uncertainty associated with the other input parameters. The HRR is held constant throughout the simulation. The probability distribution for the HRR input parameter is assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850}, which has a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. The model output quantity of interest is the HGL temperature. A threshold (or critical) HGL temperature of 100~$^\circ$C was used in this analysis.
+ To simplify this uncertainty analysis and to present a concise example, the HRR was selected as the only uncertain model input parameter. The other input parameters were considered to be fixed scenario parameters. In reality, there is some amount of uncertainty associated with the other input parameters. The HRR was held constant throughout the simulation. For the probability distribution of the HRR input parameter, a gamma distribution from NRC NUREG-6850~\cite{NUREG_6850} was selected, which has a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle, with open doors. The HGL temperature was selected as the model output quantity of interest. A threshold (or critical) HGL temperature of 100~$^\circ$C was selected for this analysis, and the results will include a calculation of the probability of exceeding this threshold HGL temperature.
 
-Three cases are presented that account for different levels of uncertainty: Case 1 accounts for model bias and uncertainty, Case 2 accounts for input parameter uncertainty, and Case 3 accounts for both model bias/uncertainty and input parameter uncertainty. For Case 1, a HRR of 1002~kW is considered, which is the 98th percentile HRR value. For Cases 2 and 3, the gamma distribution is used directly. These three cases are described in more detail in the following sections.
+The following sections present three cases that account for the effect of different types of uncertainty on the probability of exceeding the threshold HGL temperature. Case~1 accounts for the effect of model bias and uncertainty, Case~2 accounts for the effect of input parameter uncertainty, and Case~3 accounts for the combined effect of model bias/uncertainty and input parameter uncertainty. For Case~1, a HRR of 1002~kW is considered, which corresponds to the the 98th percentile HRR value of the gamma distribution. For Cases 2 and 3, the gamma distribution is used directly.
 
 
 
@@ -95,48 +95,50 @@ Three cases are presented that account for different levels of uncertainty: Case
 
 \subsection{Case 1: Effect of model bias and uncertainty}
 
-This case only accounts for model bias and uncertainty. A HRR of 1002~kW was selected as the input fire size, which represents the 98th percentile HRR. The probability density function (PDF) and cumulative distribution function (CDF) of the input HRR distribution are shown in Fig.~\ref{fig:case_1_input_distributions}. The probability of exceeding the threshold HGL temperature can be calculated following the procedure described in NUREG~1934~\cite{NUREG_1934}.
+This case accounts for the effect of model bias and uncertainty on the probability of exceeding the threshold HGL temperature. A HRR of 1002~kW was selected as the input fire size, which represents the 98th percentile HRR value of the gamma distribution. The probability density function (PDF) and cumulative distribution function (CDF) of the input HRR distribution are shown in Fig.~\ref{fig:case_1_input_distributions}. The probability of exceeding the threshold HGL temperature can be calculated following the procedure described in Section~4.3 (``Calculation of Model Uncertainty'') of NRC NUREG-1934~\cite{NUREG_1934}.
 
 \textbf{Step 1}: Specify the input HRR and run CFAST to calculate the resulting HGL temperature.
 
-For an input HRR of 1002~kW, the CFAST model predicts an HGL temperature of 90.7~$^\circ$C.
+For an input HRR of 1002~kW, the CFAST model predicts an HGL temperature of 90.7~$^\circ$C at a time of 3600~s (1 h).
 
-\textbf{Step 2}: Subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise.
+\textbf{Step 2}: Subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise as
 \begin{equation}
 M = 90.7~^\circ\textrm{C} - 20~^\circ\textrm{C} = 70.7~^\circ\textrm{C}
 \end{equation}
 
-\textbf{Step 3}: Referring to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction is calculated as
+\textbf{Step 3}: Calculate the mean and standard deviation of the HGL temperature distribution.
+
+Refer to Table 5-1 of NRC NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction of the HGL temperature is calculated as
 \begin{equation}
 \mu = \frac{M}{\delta} = \frac{70.7~^\circ\textrm{C}}{1.15} \approx 81.5~^\circ\textrm{C}
 \end{equation}
-Referring again to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20. The standard deviation of the distribution is calculated as
+Refer again to Table 5-1 of NRC NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that the model relative standard deviation $\widetilde\sigma_M$ is 0.20. The standard deviation of the resulting distribution is calculated as
 \begin{equation}
 \sigma = \widetilde\sigma_M \left( \frac{M}{\delta} \right) = 0.20 \left( \frac{70.7}{1.15} \right) \approx 12.3~^\circ\textrm{C}
 \end{equation}
-Figure~\ref{fig:case_1_output_distributions} shows the PDF and CDF of the adjusted HGL temperature distribution.
+Figure~\ref{fig:case_1_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
 \textbf{Step 4}: Calculate the probability that the actual HGL temperature will exceed 100~$^\circ$C as
 \begin{equation}
-\textrm{P}(T > 100~^\circ\textrm{C}) = \frac{1}{2} \textrm{erfc} \left( \frac{T - \mu}{\sigma \sqrt{2}} \right) = \frac{1}{2} \textrm{erfc} \left( \frac{100~^\circ\textrm{C} - 81.5~^\circ\textrm{C}}{12.3~^\circ\textrm{C} \sqrt{2}} \right) \approx 0.07
+\textrm{P}(T > 100~^\circ\textrm{C}) = \frac{1}{2} \textrm{erfc} \left( \frac{T - \mu}{\sigma \sqrt{2}} \right) = \frac{1}{2} \textrm{erfc} \left( \frac{100~^\circ\textrm{C} - 81.5~^\circ\textrm{C}}{12.3~^\circ\textrm{C} \sqrt{2}} \right) \approx 0.066
 \end{equation}
-For Case 1, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.066. Note that this estimate is based only on model bias and uncertainty.
+For Case~1, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.066. Note that this estimate is based only on model bias and uncertainty.
 
 
 \clearpage
 
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/input_PDF_point}
-\includegraphics[width=2.6in]{Figures/input_CDF_point}
-\caption{PDF and CDF of input HRR distribution; case with model bias and uncertainty. This case used only one input HRR value, which corresponds to the 98th percentile HRR value of 1002~kW.}
+\includegraphics[width=3.2in]{Figures/input_PDF_point}
+\includegraphics[width=3.2in]{Figures/input_CDF_point}
+\caption{PDF and CDF of input HRR distribution for the case with model bias and uncertainty. This case used only one input HRR value, which corresponds to the 98th percentile HRR value of 1002~kW.}
 \label{fig:case_1_input_distributions}
 \end{figure}
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/output_PDF_1_model}
-\includegraphics[width=2.6in]{Figures/output_CDF_1_model}
-\caption{PDF and CDF of output HGL temperature distribution; case with model bias and uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
+\includegraphics[width=3.2in]{Figures/output_PDF_1_model}
+\includegraphics[width=3.2in]{Figures/output_CDF_1_model}
+\caption{PDF and CDF of output HGL temperature distribution for the case with model bias and uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_1_output_distributions}
 \end{figure}
 
@@ -146,37 +148,41 @@ For Case 1, the probability of exceeding the threshold HGL temperature of 100~$^
 
 \subsection{Case 2: Effect of input parameter uncertainty}
 
-This case only accounts for input parameter uncertainty. The probability of exceeding the threshold HGL temperature can be calculated following the procedure described in NUREG~1934~\cite{NUREG_1934}.
+This case accounts for the effect of input parameter uncertainty on the probability of exceeding the threshold HGL temperature. The probability of exceeding the threshold HGL temperature can be calculated following the procedure described in Section 4.4.1 (``Parameter Uncertainty Propagation'') of NRC NUREG-1934~\cite{NUREG_1934}.
 
 \textbf{Step 1}: Specify the input HRR distribution.
 
-The probability distribution for the HRR input parameter was assumed to be a gamma distribution from NUREG 6850~\cite{NUREG_6850} with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This corresponds to the case of vertical cabinets with unqualified cable, fire in more than one cable bundle open doors. Other distributions could be used to represent the amount of uncertainty in the input parameter, such as a uniform or normal distribution.
+For the probability distribution of the HRR input parameter, a gamma distribution from NRC NUREG-6850~\cite{NUREG_6850} was selected, which has a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle, with open doors. Other distributions could be used to represent the amount of uncertainty in the input parameter, such as a uniform or normal distribution, depending on the application and the amount of information that is available.
 
-The Monte Carlo method was used to propagate the distribution of the input parameter (HRR) through a fire model to calculate the resulting distribution of output quantities (HGL temperature). For this case, 50,000 Monte Carlo iterations were performed. The PDF and CDF of the input HRR distribution are shown in Fig.~\ref{fig:case_2_input_distributions}.
+The Monte Carlo method was used to propagate the distribution of the input parameter (HRR) through the CFAST zone model to calculate the resulting distribution of the output quantity (HGL temperature). For this case, 50,000 Monte Carlo iterations were performed. The PDF and CDF of the input HRR distribution are shown in Fig.~\ref{fig:case_2_input_distributions}.
 
-\textbf{Step 2}: Draw a random sample from input HRR distribution and run CFAST to calculate the HGL temperature. The HGL temperature value is stored, then we return to Step~1 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached.
+\textbf{Step 2}: Simulate the output HGL temperature distribution using the Monte Carlo method.
+
+Draw a random sample from the input HRR distribution and run CFAST to calculate the HGL temperature. The HGL temperature value at a time of 3600~s (1 h) is stored. Step~2 is repeated to continue drawing samples from the input HRR distribution and calculating output HGL temperatures until the specified number of Monte Carlo iterations is reached.
 
 Figure~\ref{fig:case_2_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
-\textbf{Step 3}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was approximated using the Monte Carlo method, we can numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
+\textbf{Step 3}: Calculate the probability of exceeding the threshold HGL temperature.
 
-For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.012. Note that this estimate is based only on input parameter uncertainty.
+Because the output HGL distribution was approximated using the Monte Carlo method, numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
+
+For Case~2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.012. Note that this estimate is based only on input parameter uncertainty.
 
 
 \clearpage
 
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/input_PDF}
-\includegraphics[width=2.6in]{Figures/input_CDF}
-\caption{PDF and CDF of input HRR distribution; case with input parameter uncertainty.}
+\includegraphics[width=3.2in]{Figures/input_PDF}
+\includegraphics[width=3.2in]{Figures/input_CDF}
+\caption{PDF and CDF of input HRR distribution for the case with input parameter uncertainty.}
 \label{fig:case_2_input_distributions}
 \end{figure}
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/output_PDF_2_input}
-\includegraphics[width=2.6in]{Figures/output_CDF_2_input}
-\caption{PDF and CDF of output HGL temperature distribution; case with input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
+\includegraphics[width=3.2in]{Figures/output_PDF_2_input}
+\includegraphics[width=3.2in]{Figures/output_CDF_2_input}
+\caption{PDF and CDF of output HGL temperature distribution for the case with input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_2_output_distributions}
 \end{figure}
 
@@ -186,39 +192,39 @@ For Case 2, the probability of exceeding the threshold HGL temperature of 100~$^
 
 \subsection{Case 3: Combined effect of model bias/uncertainty and input parameter uncertainty}
 
-This case accounts for both model bias/uncertainty and input parameter uncertainty. Therefore, this case uses a combination of steps from Cases 1 and 2.
+This case accounts for the combined effect of model bias/uncertainty and input parameter uncertainty on the probability of exceeding the threshold HGL temperature. Therefore, this case uses a combination of steps from Cases 1 and 2.
 
 \textbf{Step 1}: Specify the input HRR distribution.
 
-The probability distribution for the HRR input parameter was the same as in Case 2: a gamma distribution from NUREG 6850~\cite{NUREG_6850} with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. As in Case 2, 50,000 Monte Carlo iterations were performed. The PDF and CDF of the input HRR distribution are shown in Fig.~\ref{fig:case_3_input_distributions}.
+The probability distribution for the HRR input parameter was the same as in Case~2: a gamma distribution from NRC NUREG-6850~\cite{NUREG_6850} with a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. As in Case~2, 50,000 Monte Carlo iterations were performed. The PDF and CDF of the input HRR distribution are shown in Fig.~\ref{fig:case_3_input_distributions}.
 
-\textbf{Step 2}: Draw a random sample from input HRR distribution and run CFAST to calculate the HGL temperature.
+\textbf{Step 2}: Draw a random sample from input HRR distribution and run CFAST to calculate the HGL temperature at 3600~s (1 h).
 
-\textbf{Step 3}: For the sample in Step~2, subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise.
+\textbf{Step 3}: For the resulting HGL temperature in Step~2, subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise.
 
-\textbf{Step 4}: Referring to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15, and the adjusted model prediction is calculated. Referring again to Table 5-1 of NUREG 1824 Supplement 1~\cite{NUREG_1824_Sup_1}, the model relative standard deviation $\widetilde\sigma_M$ is 0.20, and the standard deviation of the distribution is calculated.
+\textbf{Step 4}: Calculate the mean and standard deviation of the HGL temperature distribution using the model bias factor $\delta$ of 1.15 and model relative standard deviation $\widetilde\sigma_M$ of 0.20 from Table 5-1 of NRC NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}.
 
-\textbf{Step 5}: Draw a random HGL temperature value from the normal distribution that results from Step 4. This HGL temperature value is stored, then we return to Step~1 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached. Figure~\ref{fig:case_3_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
+\textbf{Step 5}: Draw a random HGL temperature value from the normal distribution that results from Step~4. This HGL temperature value is stored, then return to Step~2 to continue drawing samples from the HRR distribution until the specified number of Monte Carlo iterations is reached. Figure~\ref{fig:case_3_output_distributions} shows the PDF and CDF of the resulting HGL temperature distribution.
 
-\textbf{Step 6}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was approximated using the Monte Carlo method, we can numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
+\textbf{Step 6}: Calculate the probability that the HGL temperature will exceed the threshold HGL temperature. Because the output HGL distribution was approximated using the Monte Carlo method, numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
 
-For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.008. Note that this estimate is based on the combined effect of model bias and uncertainty.
+For Case~3, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.008. Note that this estimate is based on the combined effect of model bias and uncertainty.
 
 
 \clearpage
 
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/input_PDF}
-\includegraphics[width=2.6in]{Figures/input_CDF}
-\caption{PDF and CDF of input HRR distribution; case with combined model bias/uncertainty and input parameter uncertainty.}
+\includegraphics[width=3.2in]{Figures/input_PDF}
+\includegraphics[width=3.2in]{Figures/input_CDF}
+\caption{PDF and CDF of input HRR distribution for the case with combined model bias/uncertainty and input parameter uncertainty.}
 \label{fig:case_3_input_distributions}
 \end{figure}
 
 \begin{figure}[p]
-\includegraphics[width=2.6in]{Figures/output_PDF_3_combined}
-\includegraphics[width=2.6in]{Figures/output_CDF_3_combined}
-\caption{PDF and CDF of output HGL temperature distribution; case with combined model bias/uncertainty and input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
+\includegraphics[width=3.2in]{Figures/output_PDF_3_combined}
+\includegraphics[width=3.2in]{Figures/output_CDF_3_combined}
+\caption{PDF and CDF of output HGL temperature distribution for the case with combined model bias/uncertainty and input parameter uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_3_output_distributions}
 \end{figure}
 
@@ -228,6 +234,10 @@ For Case 3, the probability of exceeding the threshold HGL temperature of 100~$^
 
 \section{Conclusions}
 \label{sec:conclusions}
+
+Three cases were presented that account for the effect of different types of uncertainty on the probability of exceeding the threshold HGL temperature. Case~1 accounted for the effect of model bias and uncertainty, Case~2 accounted for the effect of input parameter uncertainty, and Case~3 accounted for the combined effect of model bias/uncertainty and input parameter uncertainty, the probability of exceeding the threshold of . The probability of exceeding the threshold HGL temperature of 100$^\circ$C was 0.066, 0.012, and 0.008 for Cases 1, 2, and 3, respectively.
+
+Although Cases~2 and 3 used the same input HRR distribution, the probability in Case~3 was less than the probability in Case~2. This is most likely due to the model bias factor that was greater than 1, which tends to shift the adjusted model predictions to a lower HGL temperature value. Note that these results are scenario dependent and are not to be considered representative of a general uncertainty analysis. The purpose of this uncertainty analysis was to demonstrate the effect of different types of uncertainty (model uncertainty, input parameter uncertainty, and combined uncertainty) on the calculated probability. The use of probability distributions in uncertainty analyses allows for a more thorough examination of the impact of the choice of input parameters on the model predictions.
 
 
 \bibliographystyle{unsrt}
