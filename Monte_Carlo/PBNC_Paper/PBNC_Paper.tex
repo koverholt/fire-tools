@@ -27,6 +27,8 @@
 \usepackage{graphicx}
 \usepackage{floatrow}
 
+\usepackage{lineno}
+
 \titlelabel{\thetitle.\quad}
 \titleformat*{\section}{\bf\normalsize}
 \titleformat*{\subsection}{\bf\normalsize}
@@ -55,9 +57,11 @@
 \textbf{Abstract}
 \end{center}
 
+\linenumbers 
+ 
 Quantitative fire risk analysis is used in conducting safety assessments at nuclear facilities to evaluate the potential consequences of postulated fire scenarios that can potentially damage nuclear safety structures, systems, and components. Some limitations exist when using point estimates or when conducting bounding analysis to determine pass/fail criteria for a given scenario. Specifically, these methods do not take into account probability distributions of input parameters. Therefore, in some cases, a more robust methodology for uncertainty analysis is needed, and the effect of different types of uncertainty should be considered in a quantitative analysis.
 
-The purpose of this paper is to present an uncertainty analysis for a single scenario that accounts for different types of uncertainty. Three cases are presented that account for the effect of different types of uncertainty on the probability of exceeding a specified criteria: model bias and uncertainty, input parameter uncertainty, and a combinationg of model bias/uncertainty and input parameter uncertainty. For this uncertainty analysis, the heat release rate (HRR) was selected as the uncertain input parameter of interest, and the HGL temperature was selected as the model output quantity of interest. The Consolidated Model of Fire Growth and Smoke Transport (CFAST) zone model was used to predict hot gas layer temperatures for a given input HRR.
+The purpose of this paper is to present an uncertainty analysis for a single fire scenario that accounts for different types of uncertainty. Three cases are presented that account for the effect of different types of uncertainty on the probability of exceeding a specified criterion: model bias and uncertainty, input parameter uncertainty, and a combination of model bias/uncertainty and input parameter uncertainty. For this uncertainty analysis, the heat release rate (HRR) was selected as the uncertain input parameter of interest, and the HGL temperature was selected as the model output quantity of interest. The Consolidated Model of Fire Growth and Smoke Transport (CFAST) zone model was used to predict hot gas layer temperatures for a given input HRR.
 
 \section{Introduction}
 \label{sec:introduction}
@@ -83,7 +87,7 @@ For the uncertainty analysis, the Python programming language was used as a wrap
 \section{Uncertainty analysis}
 \label{sec:uncertainty_analysis}
 
- To simplify this uncertainty analysis and to present a concise example, the HRR was selected as the only uncertain model input parameter. The other input parameters were considered to be fixed scenario parameters. In reality, there is some amount of uncertainty associated with the other input parameters. The HRR was held constant throughout the simulation. For the probability distribution of the HRR input parameter, a gamma distribution from NRC NUREG-6850~\cite{NUREG_6850} was selected, which has a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle, with open doors. The HGL temperature was selected as the model output quantity of interest. A threshold (or critical) HGL temperature of 100~$^\circ$C was selected for this analysis, and the results will include a calculation of the probability of exceeding this threshold HGL temperature.
+ To simplify this uncertainty analysis and to present a concise example, the HRR was selected as the only uncertain model input parameter. The other input parameters were considered to be fixed scenario parameters. In reality, there is some amount of uncertainty associated with the other input parameters. The HRR was held constant throughout the simulation. For the probability distribution of the HRR input parameter, a gamma distribution from NRC NUREG-6850~\cite{NUREG_6850} was selected, which has a 75th percentile HRR of 232~kW and a 98th percentile HRR of 1002~kW. This distribution has a shape parameter $\alpha$ of 0.46 and a scale parameter $\beta$ of 386. This corresponds to the HRR distribution of vertical cabinets with unqualified cable, fire in more than one cable bundle, with open doors. The HGL temperature was selected as the model output quantity of interest. A threshold (or critical) HGL temperature of 100~$^\circ$C was selected for this analysis, and the results included a calculation of the probability of exceeding this threshold HGL temperature.
 
 The following sections present three cases that account for the effect of different types of uncertainty on the probability of exceeding the threshold HGL temperature. Case~1 accounts for the effect of model bias and uncertainty, Case~2 accounts for the effect of input parameter uncertainty, and Case~3 accounts for the combined effect of model bias/uncertainty and input parameter uncertainty. For Case~1, a HRR of 1002~kW is considered, which corresponds to the the 98th percentile HRR value of the gamma distribution. For Cases 2 and 3, the gamma distribution is used directly.
 
