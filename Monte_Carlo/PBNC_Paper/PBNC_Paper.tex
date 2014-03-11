@@ -112,10 +112,7 @@ For the uncertainty analysis, the Python programming language was used as a wrap
 
 The following sections present three cases that account for the effect of different types of uncertainty on the probability of exceeding the threshold HGL temperature. Case~1 accounts for the effect of model bias and uncertainty, Case~2 accounts for the effect of input parameter uncertainty, and Case~3 accounts for the combined effect of model bias/uncertainty and input parameter uncertainty. For Case~1, a HRR of 1002~kW is considered, which corresponds to the the 98th percentile HRR value of the gamma distribution. For Cases 2 and 3, the gamma distribution is used directly.
 
-
-
 \clearpage
-
 
 \subsection{Case 1: Effect of model bias and uncertainty}
 
@@ -148,9 +145,7 @@ Figure~\ref{fig:case_1_output_distributions} shows the PDF and CDF of the result
 \end{equation}
 For Case~1, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.066. Note that this estimate is based only on model bias and uncertainty.
 
-
 \clearpage
-
 
 \begin{figure}[p]
 \includegraphics[width=3.2in]{Figures/input_PDF_point}
@@ -165,7 +160,6 @@ For Case~1, the probability of exceeding the threshold HGL temperature of 100~$^
 \caption{PDF and CDF of output HGL temperature distribution for the case with model bias and uncertainty. The vertical dashed line indicates the threshold HGL temperature of 100~$^\circ$C.}
 \label{fig:case_1_output_distributions}
 \end{figure}
-
 
 \clearpage
 
@@ -191,7 +185,6 @@ Figure~\ref{fig:case_2_output_distributions} shows the PDF and CDF of the result
 Because the output HGL distribution was approximated using the Monte Carlo method, numerically integrate over the resulting distribution to calculate the probability of exceeding the threshold HGL temperature.
 
 For Case~2, the probability of exceeding the threshold HGL temperature of 100~$^\circ$C was calculated as 0.012. Note that this estimate is based only on input parameter uncertainty.
-
 
 \clearpage
 
