@@ -116,16 +116,16 @@ This case accounts for the effect of model bias and uncertainty on the probabili
 
 For an input HRR of 1002~kW, the CFAST model predicts an HGL temperature of 90.7~$^\circ$C at a time of 3600~s (1 h).
 
-\textbf{Step 2}: Subtract the ambient value of the HGL temperature (20~$^\circ$C) to determine the predicted temperature rise as
+\textbf{Step 2}: Subtract the ambient value of the HGL temperature ($T_\infty = 20~^\circ$C) to determine the predicted temperature rise $M$ as
 \begin{equation}
 M = 90.7~^\circ\textrm{C} - 20~^\circ\textrm{C} = 70.7~^\circ\textrm{C}
 \end{equation}
 
-\textbf{Step 3}: Calculate the mean and standard deviation of the HGL temperature distribution.
+\textbf{Step 3}: Calculate the mean $\mu$ and standard deviation $\sigma$ of the HGL temperature distribution.
 
-Refer to Table 5-1 of NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction of the HGL temperature is calculated as
+Refer to Table 5-1 of NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that, on average, CFAST overpredicts HGL temperatures in forced ventilation scenarios with a model bias factor $\delta$ of 1.15. The adjusted model prediction $\mu$ of the HGL temperature is calculated as
 \begin{equation}
-\mu = \frac{M}{\delta} = \frac{70.7~^\circ\textrm{C}}{1.15} \approx 81.5~^\circ\textrm{C}
+\mu = \left( \frac{M}{\delta} \right) + T_\infty = \frac{70.7~^\circ\textrm{C}}{1.15} + 20~^\circ\textrm{C} \approx 81.5~^\circ\textrm{C}
 \end{equation}
 Refer again to Table 5-1 of NUREG-1824 Supplement 1~\cite{NUREG_1824_Sup_1}, which indicates that the model relative standard deviation $\widetilde\sigma_M$ is 0.20. The standard deviation of the resulting distribution is calculated as
 \begin{equation}
