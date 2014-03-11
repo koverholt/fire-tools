@@ -1,44 +1,16 @@
 % !TEX root = PBNC_Paper.tex
 
-THIS SECTION PRESENTLY BEING COMPLETED BY MPC
+The subject of model uncertainty and input parameter uncertainty and sensitivity has been covered extensively in the literature \cite{Spiegel, Vose, Kumamoto, Haimes}.  And there are numerous studies specific to fire modelling \cite{Notarianni:SFPE,  NUREG_1824, McGrattan2011a, Notarianni:1999, Lundin, Hostikka:2003a, Upadhyay2008, FDS_Validation_Guide}.  
 
-The subject of model uncertainty and input parameter uncertainty and sensitivity has been covered extensively in the literature \cite{Spiegel, Vose, Kumamoto, Haimes}.  There are numerous studies specific to fire modelling.  
+Researchers have explored different methods for assessing uncertainty and sensitivity in complex models. In terms of sensitivity of output parameters to input values, Iman and Helton \cite{Iman:1988} concluded that Monte Carlo sampling offered the best overall performance compared to other methods such as differential analysis or response surface replacements.
 
 Hostikka and Rahkonen \cite{Hostikka:2003a} used Monte Carlo simulation and CFAST to evaluate model sensitivity to numerous  input parameters such as fire power and growth rate, compartment geometry, and ventilation. This work estimated probabilities in terms of time to failure of electric cables in a tunnel fire, and hot gas layer development  in a compartment due to an electrical cabinet fire. 
 
-A technique for calculating the uncertainty in model outputs resulting  from input parameter uncertainty is provided in Volume 2 of NUREG-1824. This method involves quantifying the functional dependence of the input parameters, based on the governing mathematical equations or simple algebraic correlations. This method is also presented in the Fire Dynamics Simulator (FDS) Technical Reference Guide Volume 3: Validation.
+A technique for calculating the sensitivity in model outputs resulting  from input parameter uncertainty is provided in Volume 2 of NUREG-1824. This method, which is also described in the Fire Dynamics Simulator (FDS) Technical Reference Guide \cite{FDS_Validation_Guide}, involves quantifying the functional dependence of the input parameters, based on the governing mathematical equations or simple algebraic correlations. 
 
-A method for calculating model uncertainty is derived in \cite{McGrattan2011a} and summarized in the FDS Technical Reference Guide. This method involves comparisons of model predictions with experimental measurements. The paper derives formulae to calculate  a bias factor and a relative standard deviation for a given model.  The results of the application of this technique for a number of fire models are presented in NUREG-1824.
+A method for calculating model uncertainty is derived by McGrattan and Toman \cite{McGrattan2011a} and summarized in \cite{FDS_Validation_Guide}. This method involves comparisons of model predictions with experimental measurements. The work by McGrattan and Toman \cite{McGrattan2011a} presents a derivation of formulae to calculate  a bias factor and a relative standard deviation for a given model. Key assumptions are: (1) Experimental measurements are normally distributed about the ``true'' values, and there is no associated experimental systematic bias; and, (2)  model predictions are normally distributed about the true values multiplied by a bias factor. This methodology was applied for a number of fire models and the results of the study are presented in NUREG-1824.
 
-
-OTHER PAPERS TO DISCUSS:
-
-LUNDIN, NOTARIANNI, UPADHYAY, KONG
-
-
-
-
-
-
-
-
-
-%Outline
-%
-%Monte Carlo analyses, sensitivity analyses and uncertainty analyses have been done a lot in modelling. In fire modelling, some of the papers that have done this include Hostika (four or five papers).
-% 
-% Hostikka et al : say what they addressed. sensitivity? model uncertainty and bias? combined?
-% what model did they use, what did they address. what did they vary,  two or three sentences for each.
-% 
-% Four or five references, including Simo's and a good sensitivity study. 1934, FDS guide
-%  one or two sentences for each
-% 
-% ours is going to be a worked example but there are many much other work,
-% 
-% ours is a  worked example specific for nuclear power plant applications for a consistent scenario
-% 
-% back to intro
- 
+In this work, the approach taken to evaluate the affect of model uncertainty follows the method developed by McGrattan and Toman and uses the results provided for CFAST in NUREG-1824 \cite{NUREG_1824_Sup_1}. The Monte Carlo method was used to evaluate model input parameter uncertainty for a single parameter. This paper presents a worked example of model and input parameter uncertainty analysis for a consistent fire scenario at a  nuclear power plant.  Initially, input parameter and model uncertainty are considered separately. Then, a combined approach is taken where both kinds of uncertainty are treated together.
  
  
  
