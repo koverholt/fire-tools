@@ -1,4 +1,4 @@
-&HEAD CHID='Sippola_Test_01', TITLE='Validation of aerosol deposition in a square duct, 15 cm by 15 cm, SVN $Revision$'/
+&HEAD CHID='Sippola_Test_16', TITLE='Validation of aerosol deposition in a square duct, 15 cm by 15 cm, SVN $Revision$'/
 
 &MESH IJK=500,15,15, XB=-3.0,2.0,0.0,0.15,0.0,0.15 /
 
@@ -9,15 +9,15 @@
 &MISC GRAVITATIONAL_DEPOSITION  = .TRUE.
       THERMOPHORETIC_DEPOSITION = .TRUE.
       TURBULENT_DEPOSITION      = .TRUE.
-      TMPA = 22.0 /
+      TMPA = 25.9 /
 
 &SPEC ID            = 'AEROSOL'
       AEROSOL       = .TRUE.
-      MEAN_DIAMETER = 1.0E-6
-      DENSITY_SOLID = 1350 /
+      MEAN_DIAMETER = 15.0E-6
+      DENSITY_SOLID = 950 /
 
 &SURF ID               = 'INLET'
-      VEL              = -2.2
+      VEL              = -9.1
       COLOR            = 'BLUE'
       SPEC_ID(1)       = 'AEROSOL'
       MASS_FRACTION(1) = 8.3e-5 /

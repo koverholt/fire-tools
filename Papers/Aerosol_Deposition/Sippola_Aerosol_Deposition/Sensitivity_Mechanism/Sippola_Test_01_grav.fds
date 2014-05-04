@@ -1,4 +1,4 @@
-&HEAD CHID='Sippola_Test_01', TITLE='Validation of aerosol deposition in a square duct, 15 cm by 15 cm, SVN $Revision$'/
+&HEAD CHID='Sippola_Test_01_grav', TITLE='Validation of aerosol deposition in a square duct, 15 cm by 15 cm, SVN $Revision$'/
 
 &MESH IJK=500,15,15, XB=-3.0,2.0,0.0,0.15,0.0,0.15 /
 
@@ -7,8 +7,8 @@
 &DUMP DT_DEVC=1, SIG_FIGS=4, SIG_FIGS_EXP=2 /
 
 &MISC GRAVITATIONAL_DEPOSITION  = .TRUE.
-      THERMOPHORETIC_DEPOSITION = .TRUE.
-      TURBULENT_DEPOSITION      = .TRUE.
+      THERMOPHORETIC_DEPOSITION = .FALSE.
+      TURBULENT_DEPOSITION      = .FALSE.
       TMPA = 22.0 /
 
 &SPEC ID            = 'AEROSOL'
