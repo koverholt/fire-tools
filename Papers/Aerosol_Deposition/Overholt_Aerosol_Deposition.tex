@@ -61,8 +61,8 @@
 \usepackage[bookmarks,hidelinks]{hyperref} % Enables table of content in PDF viewers; hide link boxes
 
 % Line numbering for review
-\usepackage{lineno}
-\linenumbers
+% \usepackage{lineno}
+% \linenumbers
 
 %
 % please place your own definitions here and don't use \def but
@@ -140,9 +140,9 @@ In fire models, the accurate prediction of aerosol/soot concentrations in the ga
 
 Relatively simple parameterizations of soot chemistry and transport are incorporated into most computational fluid dynamics (CFD) fire models. Soot production is typically specified by means of a fixed soot yield for a given fuel. This assumption typically holds for well-ventilated fire scenarios in the open but has limitations in vitiated conditions and for potential advances in soot production modeling.
 
-The underprediction of soot deposition on walls and surfaces in compartment fire scenarios can result in an overprediction of smoke concentrations in the gas phase~\cite{Floyd:Interflam2010}. Soot deposition to walls can reduce the gas-phase soot concentration, which will tend to delay smoke detector activation and improve visibility. However, gravitational settling can result in increased obscuration in the lower layer. Gas-phase measurements of soot volume fraction used to parameterize soot generation models may be in error if significant deposition occurs. By not explicitly accounting for soot deposition on walls and surfaces, errors in soot concentration predictions in the gas phase can impact the calibration parameters for soot models. Errors in predicted quantities related to soot can affect life safety design decisions and can have adverse effects on performance goals related to both occupant safety and property protection~\cite{Cohan:Masters,Riahi:2011}. Soot deposition can also be used to reproduce fire and smoke patterns on surfaces, which can be beneficial in forensic fire reconstruction exercises.
+The underprediction of soot deposition on walls and surfaces in compartment fire scenarios can result in an overprediction of smoke concentrations in the gas phase~\cite{Butler:2004p433,Hamins:SP1013-1}. Soot deposition to walls can reduce the gas-phase soot concentration, which will tend to delay smoke detector activation and improve visibility. However, gravitational settling can result in increased obscuration in the lower layer. Gas-phase measurements of soot volume fraction used to parameterize soot generation models may be in error if significant deposition occurs. By not explicitly accounting for soot deposition on walls and surfaces, errors in soot concentration predictions in the gas phase can impact the calibration parameters for soot models. Errors in predicted quantities related to soot can affect life safety design decisions and can have adverse effects on performance goals related to both occupant safety and property protection~\cite{Cohan:Masters,Riahi:2011}. Soot deposition can also be used to reproduce fire and smoke patterns on surfaces, which can be beneficial in forensic fire reconstruction exercises.
 
-Various aerosol/soot deposition mechanisms, including thermophoretic deposition (where temperature gradients push the aerosol towards or away from the surface), gravitational settling, molecular and turbulent diffusion (where the aerosols move along the boundary layer concentration gradient or deposit due to a turbulent boundary layer), and electrophoretic deposition can reduce the soot particle concentration in the gas phase by depositing soot on surfaces such as walls and ceilings. Soot agglomeration can increase the size of soot particles and affect soot deposition rates. As a first approach of quantifying aerosol deposition predictions under non-reacting flow conditions, this study identifies important parameters and physics related to aerosol deposition under various flow conditions. Aerosol deposition mechanisms will be compared, and predicted aerosol deposition rates will be compared to experimentally measured data. Because the experiments considered in this study were conducted under isothermal conditions, there is not an evaluation of the role of thermophoretic deposition in the total amount of deposited aerosol mass. Rather, this validation work focuses on the role of turbulent deposition and gravitational settling rather than thermophoretic deposition or soot agglomeration.
+Various aerosol/soot deposition mechanisms, including thermophoretic deposition (where temperature gradients push the aerosol towards or away from the surface), gravitational settling, molecular and turbulent diffusion (where the aerosols move along the boundary layer concentration gradient or deposit due to a turbulent boundary layer), and electrophoretic deposition can reduce the soot particle concentration in the gas phase by depositing soot on surfaces such as walls and ceilings. Soot agglomeration occurs at different scales and can increase the size of soot particles and affect soot deposition rates in both the flaming region and the post-flame environment~\cite{Butler:2004p433,mulholland1977coagulation}. As a first approach of quantifying aerosol deposition predictions under non-reacting flow conditions, this study identifies important parameters and physics related to aerosol deposition under various flow conditions. Aerosol deposition mechanisms will be compared, and predicted aerosol deposition rates will be compared to experimentally measured data. Because the experiments considered in this study were conducted under isothermal conditions, there is not an evaluation of the role of thermophoretic deposition in the total amount of deposited aerosol mass. Rather, this validation work focuses on the role of turbulent deposition and gravitational settling rather than thermophoretic deposition or soot agglomeration.
 
 \section{Background}
 \label{sec:Background}
@@ -331,9 +331,9 @@ Number    &  Speed   &  Diameter  &  Density     &  Temperature  \\
 \section{Computational Setup}
 \label{sec:Computational Setup}
 
-Figure~\ref{fig:Sippola_Diagram_1} shows a schematic of the experimental setup and the 5~m duct section that was modeled (blue shaded section). In the model, 3~m of duct section (equal to 20~duct diameters) was included upstream of the instrumented portion of the duct (Section~2) to allow for the flow to become fully developed.
+Figure~\ref{fig:Sippola_Diagram_1} shows a schematic of the experimental setup and the 5~m duct section that was modeled (blue shaded section). In the model, an additional 3~m of duct section (equal to 20~duct diameters) was included upstream of the instrumented portion of the duct (Section~2) to allow for the flow to become fully developed.
 
-In the numerical simulations, the grid cell size was 1~cm on all sides. The air velocity in the duct was specified for each test as an upstream inlet boundary condition, and the outlet was specified as an open boundary condition (open to ambient conditions). The duct walls were specified as a 1-mm thick, smooth material. All of the experiments were isothermal, and thus this validation will focus on the accuracy of the aerosol deposition results with respect to the gravitational settling and turbulent deposition mechanisms.
+In the numerical simulations, the grid cell size was 1~cm on all sides. The air velocity in the duct was specified for each test as an upstream inlet boundary condition, and the outlet was specified as an open boundary condition (open to ambient conditions). The duct walls were specified as a 1-mm thick, smooth material. The wall thickness did not impact the aerosol deposition rate, but is a required input parameter and is included for completeness and reproducibility. All of the experiments were isothermal, and thus this validation will focus on the accuracy of the aerosol deposition results with respect to the gravitational settling and turbulent deposition mechanisms.
 
 In the simulations, the aerosol species was tracked explicitly, and all of the aerosol deposition mechanisms were enabled. The measured aerosol concentrations were not given in the test reports; therefore, an aerosol concentration of 100~mg/m$^3$ was specified at the inlet (upstream) duct boundary.
 
@@ -422,21 +422,23 @@ Figure~\ref{fig:Sippola_Aerosol_Deposition_Concentration} shows the predicted ae
 \centering
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Velocity.pdf}
-\caption[Transverse air velocity profile, Sippola Aerosol Deposition]
-{Transverve air velocity profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 2.2~m/s case (solid line) and Test~16, 9.1~m/s case (dashed line), Sippola Aerosol Deposition.}
+\caption[Vertical air velocity profile, Sippola Aerosol Deposition]
+{Vertical air velocity profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 2.2~m/s case (solid line) and Test~16, 9.1~m/s case (dashed line), Sippola Aerosol Deposition.}
 \label{fig:Sippola_Transverse_Velocity}
 \end{figure}
 
 The velocity in Test~1 was approximately 3.0~m/s near the duct centerline and 1.5~m/s near the duct walls. The velocity in Test~16 was approximately 11.8~m/s near the duct centerline and 6.8~m/s near the duct walls.
 
-\noindent Figure~\ref{fig:Sippola_Transverse_Concentration} shows the predicted vertical aerosol concentration profile in the duct for Tests~1 and 16 at a downstream location of 0.75~m in the 1.5~m instrumented duct section. In this figure, it is evident that there is a change in aerosol concentration along the length of the duct section that was considered. This change in concentration is more prominent for larger particle sizes. The aerosol concentration in Test~1 was approximately 98~mg/m$^3$ near the duct ceiling and 99~mg/m$^3$ near the duct floor. The aerosol concentration in Test~16 was approximately 56~mg/m$^3$ near the duct ceiling and 82~mg/m$^3$ near the duct floor. The asymmetric shape of the aerosol concentration gradient for Test~16 indicates stratification of the aerosol near the duct floor due to gravitational settling.
+\noindent Figure~\ref{fig:Sippola_Transverse_Concentration} shows the predicted vertical aerosol concentration profile in the duct for Tests~1 and 16 at a downstream location of 0.75~m in the 1.5~m instrumented duct section. In this figure, it is evident that there is a change in aerosol concentration along the length of the duct section that was considered. This change in concentration is more prominent for larger particle sizes. The aerosol concentration in Test~1 was approximately 98~mg/m$^3$ near the duct ceiling and 99~mg/m$^3$ near the duct floor. The aerosol concentration in Test~16 was approximately 56~mg/m$^3$ near the duct ceiling and 82~mg/m$^3$ near the duct floor.
+
+In Test~1, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. In Test~16, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. Therefore, the increased aerosol concentration near the floor is mostly due to gravitational settling, which results in the asymmetric shape (i.e., stratification) of the aerosol concentration gradient for Test~16. The increased aerosol deposition velocity in Test~16 (compared to Test~1) is also mostly due to the increased contribution of gravitational settling to the overall aerosol deposition rate.
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf}
-\caption[Transverse aerosol concentration profile, Sippola Aerosol Deposition]
-{Transverve aerosol concentration profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 1~$\mu$m, 2.2~m/s case (solid line) and Test~16, 16~$\mu$m, 9.1~m/s case (dashed line).}
+\caption[Vertical aerosol concentration profile, Sippola Aerosol Deposition]
+{Vertical aerosol concentration profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 1~$\mu$m, 2.2~m/s case (solid line) and Test~16, 16~$\mu$m, 9.1~m/s case (dashed line).}
 \label{fig:Sippola_Transverse_Concentration}
 \end{figure}
 

@@ -7,7 +7,9 @@ matplotlib.use("Agg")
 
 import numpy as np
 from pylab import *
-from collections import OrderedDict
+
+from matplotlib import rcParams
+rcParams.update({'figure.autolayout': True})
 
 #  =======================================
 #  = Sippola aerosol deposition velocity =
@@ -15,14 +17,14 @@ from collections import OrderedDict
 
 # Read in exp. data for each test
 data_exp_1 = np.genfromtxt((
-    '/Volumes/kjo/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
+    '/Users/koverholt/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
     'Experimental_Data/Sippola_deposition_velocity.csv'),
     delimiter=',', names=True,
     usecols=(0, 1, 2, 3, 4, 5, 6, 7, 8))
 
 # Read in exp. data for each test
 data_exp_2 = np.genfromtxt((
-    '/Volumes/kjo/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
+    '/Users/koverholt/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
     'Experimental_Data/Sippola_deposition_velocity.csv'),
     delimiter=',', names=True, skip_footer=1,
     usecols=(9,  10, 11, 12, 13, 14, 15, 16, 17,
@@ -33,14 +35,14 @@ data_exp_2 = np.genfromtxt((
 
 # Read in FDS data
 data_FDS_1 = np.genfromtxt((
-    '/Volumes/kjo/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
+    '/Users/koverholt/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
     'FDS_Output_Files/Sippola_All_Tests.csv'),
     delimiter=',', names=True,
     usecols=(0, 1, 2, 3, 4, 5, 6, 7, 8))
 
 # Read in FDS data
 data_FDS_2 = np.genfromtxt((
-    '/Volumes/kjo/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
+    '/Users/koverholt/FDS-SMV/Validation/Sippola_Aerosol_Deposition/'
     'FDS_Output_Files/Sippola_All_Tests.csv'),
     delimiter=',', names=True, skip_footer=1,
     usecols=(9,  10, 11, 12, 13, 14, 15, 16, 17,
@@ -318,7 +320,7 @@ test_names = (['01', '02', '03', '04', '05', '06', '07', '08',
 for test in test_names:
     # Read in FDS data for each test
     data_FDS[test] = np.genfromtxt((
-        'Sippola/Sippola_Test_' + test + '_line.csv'),
+        'Sippola_Aerosol_Deposition/Downstream_Concentration_Gradients/Sippola_Test_' + test + '_line.csv'),
         delimiter=',', names=True, skip_header=1)
 
 
@@ -358,3 +360,119 @@ grid(True)
 xticks(fontsize=16)
 yticks(fontsize=16)
 savefig('Fig_Sippola_Aerosol_Deposition_Soot_Concentration_All.pdf')
+
+#  ============================================================
+#  = Sippola aerosol deposition velocity transverse gradients =
+#  ============================================================
+
+# Read in FDS data
+data_FDS_1_um = np.genfromtxt((
+    'Sippola_Aerosol_Deposition/Traverse_Concentration/' +
+    'Sippola_Test_01_devc.csv'),
+    delimiter=',', names=True, skip_header=1)
+
+# Read in FDS data
+data_FDS_16_um = np.genfromtxt((
+    'Sippola_Aerosol_Deposition/Traverse_Concentration/' +
+    'Sippola_Test_16_devc.csv'),
+    delimiter=',', names=True, skip_header=1)
+
+text(0.05, 0.90, 'Aerosol Deposition Velocity',
+     transform=ax.transAxes,
+     size=16)
+
+z = np.arange(0,0.16,0.01)
+vel_1_um = np.array([data_FDS_1_um['Vel_0'][-1],
+                     data_FDS_1_um['Vel_1'][-1],
+                     data_FDS_1_um['Vel_2'][-1],
+                     data_FDS_1_um['Vel_3'][-1],
+                     data_FDS_1_um['Vel_4'][-1],
+                     data_FDS_1_um['Vel_5'][-1],
+                     data_FDS_1_um['Vel_6'][-1],
+                     data_FDS_1_um['Vel_7'][-1],
+                     data_FDS_1_um['Vel_8'][-1],
+                     data_FDS_1_um['Vel_9'][-1],
+                     data_FDS_1_um['Vel_10'][-1],
+                     data_FDS_1_um['Vel_11'][-1],
+                     data_FDS_1_um['Vel_12'][-1],
+                     data_FDS_1_um['Vel_13'][-1],
+                     data_FDS_1_um['Vel_14'][-1],
+                     data_FDS_1_um['Vel_15'][-1]])
+
+vel_16_um = np.array([data_FDS_16_um['Vel_0'][-1],
+                      data_FDS_16_um['Vel_1'][-1],
+                      data_FDS_16_um['Vel_2'][-1],
+                      data_FDS_16_um['Vel_3'][-1],
+                      data_FDS_16_um['Vel_4'][-1],
+                      data_FDS_16_um['Vel_5'][-1],
+                      data_FDS_16_um['Vel_6'][-1],
+                      data_FDS_16_um['Vel_7'][-1],
+                      data_FDS_16_um['Vel_8'][-1],
+                      data_FDS_16_um['Vel_9'][-1],
+                      data_FDS_16_um['Vel_10'][-1],
+                      data_FDS_16_um['Vel_11'][-1],
+                      data_FDS_16_um['Vel_12'][-1],
+                      data_FDS_16_um['Vel_13'][-1],
+                      data_FDS_16_um['Vel_14'][-1],
+                      data_FDS_16_um['Vel_15'][-1]])
+
+conc_1_um = np.array([data_FDS_1_um['Soot_0'][-1],
+                      data_FDS_1_um['Soot_1'][-1],
+                      data_FDS_1_um['Soot_2'][-1],
+                      data_FDS_1_um['Soot_3'][-1],
+                      data_FDS_1_um['Soot_4'][-1],
+                      data_FDS_1_um['Soot_5'][-1],
+                      data_FDS_1_um['Soot_6'][-1],
+                      data_FDS_1_um['Soot_7'][-1],
+                      data_FDS_1_um['Soot_8'][-1],
+                      data_FDS_1_um['Soot_9'][-1],
+                      data_FDS_1_um['Soot_10'][-1],
+                      data_FDS_1_um['Soot_11'][-1],
+                      data_FDS_1_um['Soot_12'][-1],
+                      data_FDS_1_um['Soot_13'][-1],
+                      data_FDS_1_um['Soot_14'][-1],
+                      data_FDS_1_um['Soot_15'][-1]])
+
+conc_16_um = np.array([data_FDS_16_um['Soot_0'][-1],
+                       data_FDS_16_um['Soot_1'][-1],
+                       data_FDS_16_um['Soot_2'][-1],
+                       data_FDS_16_um['Soot_3'][-1],
+                       data_FDS_16_um['Soot_4'][-1],
+                       data_FDS_16_um['Soot_5'][-1],
+                       data_FDS_16_um['Soot_6'][-1],
+                       data_FDS_16_um['Soot_7'][-1],
+                       data_FDS_16_um['Soot_8'][-1],
+                       data_FDS_16_um['Soot_9'][-1],
+                       data_FDS_16_um['Soot_10'][-1],
+                       data_FDS_16_um['Soot_11'][-1],
+                       data_FDS_16_um['Soot_12'][-1],
+                       data_FDS_16_um['Soot_13'][-1],
+                       data_FDS_16_um['Soot_14'][-1],
+                       data_FDS_16_um['Soot_15'][-1]])
+
+fig = figure()
+plot(vel_1_um, z, 'k-', lw=2, label='FDS (1 um particles, u$_0$ = 2.2 m/s)')
+plot(vel_16_um, z, 'r--', lw=2, label='FDS (16 um particles, u$_0$ = 9.1 m/s)')
+# legend(loc='lower right', numpoints=1)
+xlim([0, 12])
+ylim([0, 0.15])
+xlabel('Velocity (m/s)', fontsize=20)
+ylabel('Duct Height (m)', fontsize=20)
+grid(True)
+xticks(fontsize=16)
+yticks(fontsize=16)
+savefig('Fig_Sippola_Aerosol_Deposition_Transverse_Velocity.pdf')
+
+fig = figure()
+plot(conc_1_um*1e6, z, 'k-', lw=2, label='FDS (1 um particles, u$_0$ = 2.2 m/s)')
+plot(conc_16_um*1e6, z, 'r--', lw=2, label='FDS (16 um particles, u$_0$ = 9.1 m/s)')
+# legend(loc='lower right', numpoints=1)
+xlim([0, 140])
+ylim([0, 0.15])
+xlabel('Aerosol Concentration (mg/m$^3$)', fontsize=20)
+ylabel('Duct Height (m)', fontsize=20)
+grid(True)
+xticks(fontsize=16)
+yticks(fontsize=16)
+savefig('Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf')
+
