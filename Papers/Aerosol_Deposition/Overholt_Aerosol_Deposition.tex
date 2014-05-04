@@ -50,6 +50,11 @@
 %
 \usepackage{graphicx}
 
+% Center all figures
+\makeatletter
+\g@addto@macro\@floatboxreset\centering
+\makeatother
+
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -132,7 +137,6 @@ In fire models, the accurate prediction of aerosol/soot concentrations in the ga
 In fire models, the accurate prediction of aerosol/soot concentrations in the gas phase and aerosol/soot deposition thicknesses in the condensed phase is important for a wide range of applications~\cite{Butler:2004p433}, including human egress calculations, heat transfer in compartment fires, forensic reconstructions of fires. During a fire, in addition to soot transport by advection and diffusion, a significant amount of soot can be deposited on surfaces due to various mechanisms, and soot can agglomerate to form large particles. These soot transport, deposition, and agglomeration mechanisms are summarized in Fig.~\ref{fig:particle_processes}.
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=5.0in]{Fig_Particle_Processes.pdf}
 \caption[Soot transport, deposition, and agglomeration processes]{Soot transport, deposition, and agglomeration processes. Adapted from Friedlander~\cite{friedlander2000smoke}.}
 \label{fig:particle_processes}
@@ -154,7 +158,6 @@ Soot formation and growth processes within a flame involve a range of different 
 In soot transport algorithms, it is important to track a meaningful representation of the soot particle size because soot deposition and agglomeration mechanisms are dependent upon the size and stopping distance of the particles. The description and evolution of a detailed soot particle size distribution can be computationally expensive. A soot particle size distribution is shown in Fig.~\ref{fig:particle_size_distribution}. In this figure, $d\sb{p}$ is the particle size and $n(d\sb{p})$ is the number of particles in a given size bin. Rather than transporting detailed information about the particle size distribution (left side of Fig.~\ref{fig:particle_size_distribution}), the mean soot diameter $d\sb{p, mean}$ can be used to approximately describe and evolve the full soot particle size distribution (right side of Fig.~\ref{fig:particle_size_distribution}).
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=5.0in]{Fig_Particle_Size_Distribution.pdf}
 \caption[Detailed soot particle size distribution and mean particle size]
 {Detailed particle size distribution (left) represented by mean particle size (right).}
@@ -264,7 +267,6 @@ where $k$ is the Boltzmann constant~($1.38 \times 10^{-23}$~J/K), $T$ is the gas
 In summary, the velocity in the convective term in Eq.~\ref{eq:species_transport} for a tracked aerosol species was modified in FDS version 6.0.0 to include the gravitational settling velocity $u\sb{g}$. For soot deposition to surfaces, the FDS source code for gas-phase cells adjacent to walls was modified to include gravitational, thermophoretic, and turbulent deposition mechanisms as a boundary flux condition using Eqs.~\ref{eq:soot_deposition_bc} and~\ref{eq:total_soot_deposition}. A schematic of soot transport in FDS for various deposition mechanisms in a compartment is shown in Fig.~\ref{fig:soot_deposition_schematic}. For computational cells near the ceiling or wall, the aerosol deposition velocity includes thermophoretic and turbulent mechanisms. For computational cells near the floor, the aerosol deposition velocity includes gravitational, thermophoretic, and turbulent mechanisms. For computational cells that are not near surfaces, the aerosol velocity includes the gas velocity and the gravitational settling velocity. These modifications allow for the removal of soot from the gas phase and the accumulation of soot on surfaces due to the deposition and settling of aerosols.
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=5.0in]{Fig_Soot_Deposition_Schematic.pdf}
 \caption[Soot deposition in FDS via various mechanisms]{Soot deposition in a simplified compartment via various mechanisms. Representative computational cells are shown in four different locations: one in the middle of the compartment, and three others near the ceiling, wall, and floor.}
 \label{fig:soot_deposition_schematic}
@@ -282,7 +284,6 @@ Twelve panels measuring 20~cm by 10~cm were cut from an instrumented duct sectio
 Figure~\ref{fig:Sippola_Diagram_1} shows a schematic of the experimental setup. Figure~\ref{fig:Sippola_Diagram_2} shows a detailed view of Section~2 in the duct and the panels that were used to collect the deposited aerosol and calculate the aerosol deposition velocity. A summary of the 16 aerosol deposition tests is shown in Table~\ref{tab:Sippola_Aerosol_Deposition_Summary}.
 
 \begin{figure}[!ht]
-\centering
 \subfloat[Overview of experimental setup. The shaded region was modeled in FDS.]{\label{fig:Sippola_Diagram_1}
 \includegraphics[width=5.0in]{Fig_Sippola_Diagram.png}}
 \qquad
@@ -294,7 +295,6 @@ Figure~\ref{fig:Sippola_Diagram_1} shows a schematic of the experimental setup. 
 \end{figure}
 
 \begin{table}[!ht]
-\centering
 \caption[Summary of Sippola aerosol deposition experiments]
 {Summary of Sippola aerosol deposition experiments performed in a duct.}
 \begin{tabular}{ccccc}
@@ -359,7 +359,6 @@ where $\Delta m\sb{d}$ is the change in mass on the duct panel (kg), $A\sb{d}$ i
 Figures~\ref{fig:Sippola_Aerosol_Deposition_Velocity_1} through~\ref{fig:Sippola_Aerosol_Deposition_Velocity_3} show comparisons of the measured and predicted aerosol deposition velocities for the ceiling, wall, and floor surfaces. Figure~\ref{fig:Summary_Aerosol_Deposition_Velocity} shows a summary of the measured and predicted results for all of the particle sizes, duct velocities, and surfaces that were considered. The model generally underpredicts the measured aerosol deposition velocity by 45~\%, on average.
 
 \begin{figure}[p]
-\centering
 \includegraphics[width=3.8in]{Fig_Sippola_Aerosol_Deposition_Legend.pdf} \\
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Ceiling_Deposition.pdf}
 \caption[Ceiling aerosol deposition velocities]
@@ -368,7 +367,6 @@ Figures~\ref{fig:Sippola_Aerosol_Deposition_Velocity_1} through~\ref{fig:Sippola
 \end{figure}
 
 \begin{figure}[p]
-\centering
 \includegraphics[width=3.8in]{Fig_Sippola_Aerosol_Deposition_Legend.pdf} \\
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Wall_Deposition.pdf}
 \caption[Wall aerosol deposition velocities]
@@ -377,7 +375,6 @@ Figures~\ref{fig:Sippola_Aerosol_Deposition_Velocity_1} through~\ref{fig:Sippola
 \end{figure}
 
 \begin{figure}[p]
-\centering
 \includegraphics[width=3.8in]{Fig_Sippola_Aerosol_Deposition_Legend.pdf} \\
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Floor_Deposition.pdf}
 \caption[Floor aerosol deposition velocities]
@@ -386,7 +383,6 @@ Figures~\ref{fig:Sippola_Aerosol_Deposition_Velocity_1} through~\ref{fig:Sippola
 \end{figure}
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Velocity_Scatter.pdf} \\
 \caption[Summary of aerosol deposition velocities]
 {Summary of aerosol deposition velocities.}
@@ -408,7 +404,6 @@ The remaining cases that used other particle sizes and duct velocities represent
 Figure~\ref{fig:Sippola_Aerosol_Deposition_Concentration} shows the predicted aerosol concentration along the centerline of the duct where the measurements were made. The results indicate that the aerosol concentration for the 1~$\mu$m particles remains nearly constant at approximately 98~mg/m$^3$. The aerosol concentration for the 16~$\mu$m particles at the highest air velocity decreases from approximately 92~mg/m$^3$ to 78~mg/m$^3$ because the larger particle size and higher air velocity result in a higher aerosol deposition velocity.
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=2.4in]{Fig_Sippola_Aerosol_Deposition_Legend_Lines.pdf} \\
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Soot_Concentration_All.pdf}
 \caption[Predicted aerosol concentration, Sippola Aerosol Deposition]
@@ -419,7 +414,6 @@ Figure~\ref{fig:Sippola_Aerosol_Deposition_Concentration} shows the predicted ae
 \noindent Figure~\ref{fig:Sippola_Transverse_Velocity} shows the predicted vertical air velocity profile in the duct for Tests~1 and 16 at a downstream location of 0.75~m, which is the midpoint in the 1.5~m instrumented section of the duct.
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Velocity.pdf}
 \caption[Vertical air velocity profile, Sippola Aerosol Deposition]
@@ -434,7 +428,6 @@ The velocity in Test~1 was approximately 3.0~m/s near the duct centerline and 1.
 In Test~1, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. In Test~16, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. Therefore, the increased aerosol concentration near the floor is mostly due to gravitational settling, which results in the asymmetric shape (i.e., stratification) of the aerosol concentration gradient for Test~16. The increased aerosol deposition velocity in Test~16 (compared to Test~1) is also mostly due to the increased contribution of gravitational settling to the overall aerosol deposition rate.
 
 \begin{figure}[!ht]
-\centering
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf}
 \caption[Vertical aerosol concentration profile, Sippola Aerosol Deposition]

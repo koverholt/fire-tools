@@ -76,7 +76,7 @@ semilogy(data_exp_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_exp_2['Air_Velocity_16_um_ms'],
          data_exp_2['Ceiling_Deposition_Velocity_16_um_ms'],
-         'cp', ms=7, mec='c', mew=1.5)
+         'cv', ms=7, mec='c', mew=1.5)
 
 semilogy(data_FDS_1['Air_Velocity_1_um_ms'],
          data_FDS_1['Ceiling_Deposition_Velocity_1_um_ms'],
@@ -96,14 +96,14 @@ semilogy(data_FDS_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_FDS_2['Air_Velocity_16_um_ms'],
          data_FDS_2['Ceiling_Deposition_Velocity_16_um_ms'],
-         'wp', ms=7, mec='c', mew=1.5)
+         'wv', ms=7, mec='c', mew=1.5)
 
 text(0.05, 0.90, 'Sippola Aerosol Deposition, Ceiling',
      transform=ax.transAxes,
      size=16)
 
 xlim([0, 10])
-ylim([1e-8, 10])
+ylim([1e-7, 1e-1])
 xlabel('Air Velocity (m/s)', fontsize=20)
 ylabel('Deposition Velocity (m/s)', fontsize=20)
 grid(True)
@@ -133,7 +133,7 @@ semilogy(data_exp_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_exp_2['Air_Velocity_16_um_ms'],
          data_exp_2['Wall_Deposition_Velocity_16_um_ms'],
-         'cp', ms=7, mec='c', mew=1.5)
+         'cv', ms=7, mec='c', mew=1.5)
 
 semilogy(data_FDS_1['Air_Velocity_1_um_ms'],
          data_FDS_1['Wall_Deposition_Velocity_1_um_ms'],
@@ -153,14 +153,14 @@ semilogy(data_FDS_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_FDS_2['Air_Velocity_16_um_ms'],
          data_FDS_2['Wall_Deposition_Velocity_16_um_ms'],
-         'wp', ms=7, mec='c', mew=1.5)
+         'wv', ms=7, mec='c', mew=1.5)
 
 text(0.05, 0.90, 'Sippola Aerosol Deposition, Wall',
      transform=ax.transAxes,
      size=16)
 
 xlim([0, 10])
-ylim([1e-8, 10])
+ylim([1e-7, 1e-1])
 xlabel('Air Velocity (m/s)', fontsize=20)
 ylabel('Deposition Velocity (m/s)', fontsize=20)
 grid(True)
@@ -190,7 +190,7 @@ semilogy(data_exp_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_exp_2['Air_Velocity_16_um_ms'],
          data_exp_2['Floor_Deposition_Velocity_16_um_ms'],
-         'cp', ms=7, mec='c', mew=1.5)
+         'cv', ms=7, mec='c', mew=1.5)
 
 semilogy(data_FDS_1['Air_Velocity_1_um_ms'],
          data_FDS_1['Floor_Deposition_Velocity_1_um_ms'],
@@ -210,14 +210,14 @@ semilogy(data_FDS_2['Air_Velocity_9_um_ms'],
 
 semilogy(data_FDS_2['Air_Velocity_16_um_ms'],
          data_FDS_2['Floor_Deposition_Velocity_16_um_ms'],
-         'wp', ms=7, mec='c', mew=1.5)
+         'wv', ms=7, mec='c', mew=1.5)
 
 text(0.05, 0.90, 'Sippola Aerosol Deposition, Floor',
      transform=ax.transAxes,
      size=16)
 
 xlim([0, 10])
-ylim([1e-8, 10])
+ylim([1e-7, 1e-1])
 xlabel('Air Velocity (m/s)', fontsize=20)
 ylabel('Deposition Velocity (m/s)', fontsize=20)
 grid(True)
