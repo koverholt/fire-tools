@@ -1,0 +1,4 @@
+* We identified important parameters for aerosol deposition in various flow conditions
+* Predicted aerosol deposition quantities are compared to experimentally measured data
+* We considered gravitational settling, thermophoresis, and turbulent deposition
+* Deposition mechanisms were implemented in a computational fluid dynamics model
