@@ -476,3 +476,96 @@ ax = gca()
 ax.yaxis.set_major_locator(MaxNLocator(12))
 savefig('Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf')
 
+#  ==============================================
+#  = Calculate Sippola Aerosol Deposition Rates =
+#  ==============================================
+
+FDS_Output_Files = 'Sippola_Aerosol_Deposition/'
+
+filenames = np.array(['Sensitivity_Concentration/Sippola_Test_01_50_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_01_100_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_01_200_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_01_1000_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_16_50_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_16_100_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_16_200_devc.csv',
+                     'Sensitivity_Concentration/Sippola_Test_16_1000_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_01_0p5_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_01_0p75_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_01_1_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_01_2_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_16_0p5_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_16_0p75_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_16_1_cm_devc.csv',
+                     'Sensitivity_Grid/Sippola_Test_16_2_cm_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_01_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_01_grav_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_01_turb_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_05_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_05_grav_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_05_turb_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_12_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_12_grav_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_12_turb_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_16_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_16_grav_devc.csv',
+                     'Sensitivity_Mechanism/Sippola_Test_16_turb_devc.csv'])
+
+# Friction velocity (m/s) for 16 test cases
+friction_velocities = np.array([0.12, 0.12, 0.12, 0.13, 0.12, 0.28,
+                                0.26, 0.26, 0.27, 0.28, 0.28, 0.45,
+                                0.42, 0.44, 0.46, 0.45])
+
+# Air velocity (m/s)
+air_velocities = np.array([2.2, 2.2, 2.1, 2.2, 2.2, 5.3,
+                           5.2, 5.2, 5.4, 5.3, 5.3, 9.0,
+                           9.0, 8.8, 9.2, 9.1])
+            
+# Particle Diameter (m)
+particle_diameters = np.array([1.0e-6, 2.8e-6, 5.2e-6, 9.1e-6, 16.e-6, 1.0e-6,
+                               1.0e-6, 3.1e-6, 5.2e-6, 9.8e-6, 16.e-6, 1.0e-6,
+                               3.1e-6, 5.4e-6, 8.7e-6, 15e-6])
+                 
+# Exp. deposition sampling area (m^2)
+depo_area = 0.1 * 0.2
+
+# Simulation time (s)
+time = 100
+                 
+# Primary calculations
+for case in filenames:
+    test = np.genfromtxt(FDS_Output_Files + case, delimiter=',', names=True, skip_header=1)
+    print case
+
+    upstream_concentration   = test['Soot_Concentration_Upstream'][-1]
+    downstream_concentration = test['Soot_Concentration_Downstream'][-1]
+    avg_concentration = (upstream_concentration + downstream_concentration) / 2
+    
+    J1_ceiling = test['Ceiling_Panel_1'][-1]
+    J2_ceiling = test['Ceiling_Panel_2'][-1]
+    J3_ceiling = test['Ceiling_Panel_3'][-1]
+    J4_ceiling = test['Ceiling_Panel_4'][-1]
+    
+    J1_wall = test['Wall_Panel_1'][-1]
+    J2_wall = test['Wall_Panel_2'][-1]
+    J3_wall = test['Wall_Panel_3'][-1]
+    J4_wall = test['Wall_Panel_4'][-1]
+    
+    J1_floor = test['Floor_Panel_1'][-1]
+    J2_floor = test['Floor_Panel_2'][-1]
+    J3_floor = test['Floor_Panel_3'][-1]
+    J4_floor = test['Floor_Panel_4'][-1]
+    
+    J_sum_ceiling = J1_ceiling + J2_ceiling + J3_ceiling + J4_ceiling
+    J_sum_wall    = J1_wall    + J2_wall    + J3_wall    + J4_wall
+    J_sum_floor   = J1_floor   + J2_floor   + J3_floor   + J4_floor
+    
+    V_d_ceiling = (J_sum_ceiling / (depo_area * time)) / (4 * avg_concentration)
+    V_d_wall    = (J_sum_wall    / (depo_area * time)) / (4 * avg_concentration)
+    V_d_floor   = (J_sum_floor   / (depo_area * time)) / (4 * avg_concentration)
+
+    print 'Ceiling: {0:0.2e} m/s'.format(V_d_ceiling)
+    print 'Wall: {0:0.2e} m/s'.format(V_d_wall)
+    print 'Floor: {0:0.2e} m/s'.format(V_d_floor)
+
+    print
