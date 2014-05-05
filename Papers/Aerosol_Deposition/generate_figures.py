@@ -381,9 +381,8 @@ text(0.05, 0.90, 'Aerosol Deposition Velocity',
      transform=ax.transAxes,
      size=16)
 
-z = np.arange(0,0.16,0.01)
-vel_1_um = np.array([data_FDS_1_um['Vel_0'][-1],
-                     data_FDS_1_um['Vel_1'][-1],
+z = np.arange(0.005, 0.155, 0.01)
+vel_1_um = np.array([data_FDS_1_um['Vel_1'][-1],
                      data_FDS_1_um['Vel_2'][-1],
                      data_FDS_1_um['Vel_3'][-1],
                      data_FDS_1_um['Vel_4'][-1],
@@ -399,8 +398,7 @@ vel_1_um = np.array([data_FDS_1_um['Vel_0'][-1],
                      data_FDS_1_um['Vel_14'][-1],
                      data_FDS_1_um['Vel_15'][-1]])
 
-vel_16_um = np.array([data_FDS_16_um['Vel_0'][-1],
-                      data_FDS_16_um['Vel_1'][-1],
+vel_16_um = np.array([data_FDS_16_um['Vel_1'][-1],
                       data_FDS_16_um['Vel_2'][-1],
                       data_FDS_16_um['Vel_3'][-1],
                       data_FDS_16_um['Vel_4'][-1],
@@ -416,8 +414,7 @@ vel_16_um = np.array([data_FDS_16_um['Vel_0'][-1],
                       data_FDS_16_um['Vel_14'][-1],
                       data_FDS_16_um['Vel_15'][-1]])
 
-conc_1_um = np.array([data_FDS_1_um['Soot_0'][-1],
-                      data_FDS_1_um['Soot_1'][-1],
+conc_1_um = np.array([data_FDS_1_um['Soot_1'][-1],
                       data_FDS_1_um['Soot_2'][-1],
                       data_FDS_1_um['Soot_3'][-1],
                       data_FDS_1_um['Soot_4'][-1],
@@ -433,8 +430,7 @@ conc_1_um = np.array([data_FDS_1_um['Soot_0'][-1],
                       data_FDS_1_um['Soot_14'][-1],
                       data_FDS_1_um['Soot_15'][-1]])
 
-conc_16_um = np.array([data_FDS_16_um['Soot_0'][-1],
-                       data_FDS_16_um['Soot_1'][-1],
+conc_16_um = np.array([data_FDS_16_um['Soot_1'][-1],
                        data_FDS_16_um['Soot_2'][-1],
                        data_FDS_16_um['Soot_3'][-1],
                        data_FDS_16_um['Soot_4'][-1],
@@ -461,6 +457,8 @@ ylabel('Duct Height (m)', fontsize=20)
 grid(True)
 xticks(fontsize=16)
 yticks(fontsize=16)
+ax = gca()
+ax.yaxis.set_major_locator(MaxNLocator(12))
 savefig('Fig_Sippola_Aerosol_Deposition_Transverse_Velocity.pdf')
 
 fig = figure()
@@ -474,5 +472,7 @@ ylabel('Duct Height (m)', fontsize=20)
 grid(True)
 xticks(fontsize=16)
 yticks(fontsize=16)
+ax = gca()
+ax.yaxis.set_major_locator(MaxNLocator(12))
 savefig('Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf')
 
