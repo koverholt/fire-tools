@@ -169,8 +169,7 @@ In soot transport algorithms, it is important to track a meaningful representati
 \end{figure}
 
 \section{Governing Equations}
-\label{sec:Governing Equations}
-
+\label{sec:Governing_Equations}
 
 \subsection{Soot Transport in Gas-Phase Cells}
 
@@ -277,7 +276,7 @@ In summary, the velocity in the convective term in Eq.~\ref{eq:species_transport
 \end{figure}
 
 \section{Experimental Setup}
-\label{sec:Experimental Setup}
+\label{sec:Experimental_Setup}
 
 To assess the accuracy of the aerosol deposition model under simplified (non-fire) conditions, model predictions will be compared to experiments conducted in a nonreacting flow system. Experimental data measured by Sippola~\cite{Sippola:2002,Sippola:2010} were identified as a suitable candidate for model validation because the tests had well-characterized geometry and flow conditions, monodisperse aerosol sizes, and separate measurements of the ceiling, wall, and floor deposition velocities.
 
@@ -333,18 +332,18 @@ Number    &  Speed   &  Diameter  &  Density     &  Temperature  \\
 
 
 \section{Computational Setup}
-\label{sec:Computational Setup}
+\label{sec:Computational_Setup}
 
 Figure~\ref{fig:Sippola_Diagram_1} shows a schematic of the experimental setup and the 5~m duct section that was modeled (blue shaded section). In the model, an additional 3~m of duct section (equal to 20~duct diameters) was included upstream of the instrumented portion of the duct (Section~2) to allow for the flow to become fully developed.
 
-In the numerical simulations, the grid cell size was 1~cm on all sides. The air velocity in the duct was specified for each test as an upstream inlet boundary condition, and the outlet was specified as an open boundary condition (open to ambient conditions). The duct walls were specified as a 1-mm thick, smooth material. The wall thickness did not impact the aerosol deposition rate, but is a required input parameter and is included for completeness and reproducibility. All of the experiments were isothermal, and thus this validation will focus on the accuracy of the aerosol deposition results with respect to the gravitational settling and turbulent deposition mechanisms.
+In the numerical simulations, the grid cell size was 1~cm on all sides. The sensitivity of the aerosol deposition rate to the grid cell resolution is discussed in Section~\ref{sec:Grid_Sensitivity}. The air velocity in the duct was specified for each test as an upstream inlet boundary condition, and the outlet was specified as an open boundary condition (open to ambient conditions). The duct walls were specified as a 1-mm thick, smooth material. The wall thickness did not impact the aerosol deposition rate, but is a required input parameter and is included for completeness and reproducibility. All of the experiments were isothermal, and thus this validation will focus on the accuracy of the aerosol deposition results with respect to the gravitational settling and turbulent deposition mechanisms.
 
-In the simulations, the aerosol species was tracked explicitly, and all of the aerosol deposition mechanisms were enabled. The measured aerosol concentrations were not given in the test reports; therefore, an aerosol concentration of 100~mg/m$^3$ was specified at the inlet (upstream) duct boundary.
+In the simulations, the aerosol species was tracked explicitly, and all of the aerosol deposition mechanisms were enabled. The measured aerosol concentrations were not given in the test reports; therefore, an aerosol concentration of 100~mg/m$^3$ was specified at the inlet (upstream) duct boundary. The sensitivity of the aerosol deposition rate to the inlet aerosol concentration is discussed in Section~\ref{sec:Concentration_Sensitivity}.
 
 \section{Results}
 \label{sec:Results}
 
-\subsection{Aerosol Deposition Velocity}
+\subsection{Calculation of Aerosol Deposition Velocity}
 
 In the experimental setup, there was only one upstream and one downstream concentration measurement available. Therefore, to make an accurate comparison between the measured and predicted deposition velocities, we will use the same data reduction technique as Sippola~\cite{Sippola:2002,Sippola:2010}.
 
@@ -359,6 +358,62 @@ J = \frac{\Delta m\sb{d}}{A\sb{d} \; \Delta t}
 \label{eq:sippola_deposition_flux}
 \end{equation}
 where $\Delta m\sb{d}$ is the change in mass on the duct panel (kg), $A\sb{d}$ is the area of the duct panel (m$^2$), $\Delta t$ is the duration over which the aerosol deposits on the panel~(s), and $C\sb{avg}$ is the average of the upstream and downstream aerosol concentration in the duct test section (kg/m$^3$).
+
+\subsection{Grid Sensitivity}
+\label{sec:Grid_Sensitivity}
+
+To assess the impact of different grid resolutions, multiple simluations were run with grid cell sizes of 0.5~cm, 0.75~cm, 1~cm, and 2~cm. The aerosol deposition rates for each case are shown in Table~\ref{tab:Grid_Sensitivity}.
+
+\begin{table}[!ht]
+\caption[Sensitivity of aerosol deposition rate to grid cell resolution]
+{Sensitivity of aerosol deposition rate to grid cell resolution.}
+\begin{tabular}{ccccc}
+\hline\noalign{\smallskip}
+Test      &  Air     &  Particle  &  Grid Cell  &  Aerosol Deposition  \\
+Number    &  Speed   &  Diameter  &  Size       &  Velocity            \\
+          &  (m/s)   &  ($\mu$m)  &  (cm)       &  (m/s)               \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+1         &  2.2     &  1.0       &  0.5        &  XX                  \\
+1         &  2.2     &  1.0       &  0.75       &  XX                  \\
+1         &  2.2     &  1.0       &  1.0        &  XX                  \\
+1         &  2.2     &  1.0       &  2.0        &  XX                  \\
+16        &  9.1     &  15        &  0.5        &  XX                  \\
+16        &  9.1     &  15        &  0.75       &  XX                  \\
+16        &  9.1     &  15        &  1.0        &  XX                  \\
+16        &  9.1     &  15        &  2.0        &  XX                  \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\label{tab:Grid_Sensitivity}
+\end{table}
+
+\subsection{Inlet Concentration Sensitivity}
+\label{sec:Concentration_Sensitivity}
+
+To assess the impact of different inlet aerosol concentrations, multiple simluations were run with inlet aerosol concentrations of 50~mg/m$^3$, 100~mg/m$^3$, 200~mg/m$^3$, and 1000~mg/m$^3$. The aerosol deposition rates for each case are shown in Table~\ref{tab:Concentration_Sensitivity}.
+
+\begin{table}[!ht]
+\caption[Sensitivity of aerosol deposition rate to inlet aerosol concentration]
+{Sensitivity of aerosol deposition rate to inlet aerosol concentration.}
+\begin{tabular}{ccccc}
+\hline\noalign{\smallskip}
+Test      &  Air     &  Particle  &  Aerosol Inlet  &  Aerosol Deposition  \\
+Number    &  Speed   &  Diameter  &  Concentration  &  Velocity            \\
+          &  (m/s)   &  ($\mu$m)  &  (mg/m$^3$)     &  (m/s)               \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+1         &  2.2     &  1.0       &  50             &  XX                  \\
+1         &  2.2     &  1.0       &  100            &  XX                  \\
+1         &  2.2     &  1.0       &  200            &  XX                  \\
+1         &  2.2     &  1.0       &  1000           &  XX                  \\
+16        &  9.1     &  15        &  50             &  XX                  \\
+16        &  9.1     &  15        &  100            &  XX                  \\
+16        &  9.1     &  15        &  200            &  XX                  \\
+16        &  9.1     &  15        &  1000           &  XX                  \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\label{tab:Concentration_Sensitivity}
+\end{table}
+
+\subsection{Model Predictions of Aerosol Deposition Velocity}
 
 Figures~\ref{fig:Sippola_Aerosol_Deposition_Velocity_1} through~\ref{fig:Sippola_Aerosol_Deposition_Velocity_3} show comparisons of the measured and predicted aerosol deposition velocities for the ceiling, wall, and floor surfaces. Figure~\ref{fig:Summary_Aerosol_Deposition_Velocity} shows a summary of the measured and predicted results for all of the particle sizes, duct velocities, and surfaces that were considered. The model generally underpredicts the measured aerosol deposition velocity by 45~\%, on average.
 
@@ -401,7 +456,7 @@ The cases that exhibited the largest error in the predicted aerosol deposition v
 
 Consider the case with the lowest air velocity (2.2~m/s). For an aerosol concentration of 100~mg/m$^3$ and a time period of 100~s, a total of 495~mg of aerosol mass flows through the duct. Using Eqs.~\ref{eq:sippola_deposition_velocity} and~\ref{eq:sippola_deposition_flux} with an aerosol deposition velocity of $1 \times 10^{-5}$~m/s and representative values from the Sippola experiments (aerosol concentration of 100~mg/m$^3$, deposition area of 0.02~m$^2$, and time of 100~s) results in only 0.002~mg of deposited aerosol mass out of the 495~mg of total aerosol mass that flowed through the duct. Therefore, errors in the relatively small deposition velocities (on the order of $1 \times 10^{-5}$~m/s) would not result in a significant amount of error in the deposited aerosol mass.
 
-The remaining cases that used other particle sizes and duct velocities represent our best current ability to predict aerosol deposition velocities for the Sippola Aerosol Deposition experiments using FDS. In the following section, we will explore predicted quantities that were not measured in the experiments to understand some of the more detailed aerosol physics that might affect deposition rates.
+The remaining cases that used other particle sizes and duct velocities represent our best current ability to predict aerosol deposition velocities for the Sippola aerosol deposition experiments using FDS. In the following section, we will explore predicted quantities that were not measured in the experiments to understand some of the more detailed aerosol physics that might affect deposition rates.
 
 \subsection{Velocity and Aerosol Concentration Gradients}
 
@@ -410,8 +465,8 @@ Figure~\ref{fig:Sippola_Aerosol_Deposition_Concentration} shows the predicted ae
 \begin{figure}[!ht]
 \includegraphics[width=2.4in]{Fig_Sippola_Aerosol_Deposition_Legend_Lines.pdf} \\
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Soot_Concentration_All.pdf}
-\caption[Predicted aerosol concentration, Sippola Aerosol Deposition]
-{Predicted aerosol concentration along the instrumented section of the duct (3~m downstream of the duct inlet), Sippola Aerosol Deposition.}
+\caption[Predicted aerosol concentration]
+{Predicted aerosol concentration along the instrumented section of the duct (3~m downstream of the duct inlet).}
 \label{fig:Sippola_Aerosol_Deposition_Concentration}
 \end{figure}
 
@@ -420,8 +475,8 @@ Figure~\ref{fig:Sippola_Aerosol_Deposition_Concentration} shows the predicted ae
 \begin{figure}[!ht]
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Velocity.pdf}
-\caption[Vertical air velocity profile, Sippola Aerosol Deposition]
-{Vertical air velocity profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 2.2~m/s case (solid line) and Test~16, 9.1~m/s case (dashed line), Sippola Aerosol Deposition.}
+\caption[Vertical air velocity profile]
+{Vertical air velocity profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 2.2~m/s case (solid line) and Test~16, 9.1~m/s case (dashed line).}
 \label{fig:Sippola_Transverse_Velocity}
 \end{figure}
 
@@ -434,7 +489,7 @@ In Test~1, gravitational settling and turbulent deposition accounted for about X
 \begin{figure}[!ht]
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}
 \includegraphics[width=5.0in]{Fig_Sippola_Aerosol_Deposition_Transverse_Concentration.pdf}
-\caption[Vertical aerosol concentration profile, Sippola Aerosol Deposition]
+\caption[Vertical aerosol concentration profile]
 {Vertical aerosol concentration profile 0.75~m downstream in the 1.5~m instrumented section of the duct for Test~1, 1~$\mu$m, 2.2~m/s case (solid line) and Test~16, 16~$\mu$m, 9.1~m/s case (dashed line).}
 \label{fig:Sippola_Transverse_Concentration}
 \end{figure}
