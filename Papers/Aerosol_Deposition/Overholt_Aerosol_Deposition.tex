@@ -148,7 +148,7 @@ The underprediction of soot deposition on walls and surfaces in compartment fire
 
 Various aerosol/soot deposition mechanisms, including thermophoretic deposition (where temperature gradients push the aerosol towards or away from the surface), gravitational settling, molecular and turbulent diffusion (where the aerosols move along the boundary layer concentration gradient or deposit due to a turbulent boundary layer), and electrophoretic deposition can reduce the soot particle concentration in the gas phase by depositing soot on surfaces such as walls and ceilings.
 
-Soot agglomeration occurs at different scales and can increase the size of soot particles and affect soot deposition rates in both the flaming region and the post-flame environment~\cite{Butler:2004p433,mulholland1977coagulation}. In a fire, the largest particle number densities will be located in the flaming region and in the near field plume, and particle number densities will decrease as air is entrained (particle mass density decreases) and as particles agglomerate. Aerosol deposition mechanisms are similarly affected. Specifically, thermophoretic forces on a particle are greatest for small particles in high temperature conditions, and gravitational settling forces are greatest as the average particle size increases due to agglomeration.
+Soot agglomeration occurs at different scales and can increase the size of soot particles and affect soot deposition rates in both the flaming region and the post-flame environment~\cite{Butler:2004p433,mulholland1977coagulation}. In a fire, the largest particle number densities will be located in the flaming region and in the near-field plume, and particle number densities will decrease as air is entrained (particle mass density decreases) and as particles agglomerate. In far-field region, soot agglomeration continues to occur at any location where aerosol particles are present. Aerosol deposition mechanisms are similarly affected. Specifically, thermophoretic forces on a particle are greatest for small particles in high temperature conditions, and gravitational settling forces are greatest as the average particle size increases due to agglomeration.
 
 As a first approach of quantifying aerosol deposition predictions under non-reacting flow conditions, this study identifies important parameters and physics related to aerosol deposition under various flow conditions. Aerosol deposition mechanisms will be compared, and predicted aerosol deposition rates will be compared to experimentally measured data. Because the experiments considered in this study were conducted under isothermal conditions, there is not an evaluation of the role of thermophoretic deposition in the total amount of deposited aerosol mass. Rather, this validation work focuses on the role of turbulent deposition and gravitational settling rather than thermophoretic deposition or soot agglomeration.
 
@@ -362,56 +362,64 @@ where $\Delta m\sb{d}$ is the change in mass on the duct panel (kg), $A\sb{d}$ i
 \subsection{Grid Sensitivity}
 \label{sec:Grid_Sensitivity}
 
-To assess the impact of different grid resolutions, multiple simluations were run with grid cell sizes of 0.5~cm, 0.75~cm, 1~cm, and 2~cm. The aerosol deposition rates for each case are shown in Table~\ref{tab:Grid_Sensitivity}.
+To assess the impact of different grid resolutions, multiple simluations were run with grid cell sizes of 0.5~cm, 0.75~cm, 1~cm, and 2~cm at the smallest and largest air speeds and particle diameters.. The aerosol deposition rates for each case are shown in Table~\ref{tab:Grid_Sensitivity}.
 
 \begin{table}[!ht]
 \caption[Sensitivity of aerosol deposition rate to grid cell resolution]
 {Sensitivity of aerosol deposition rate to grid cell resolution.}
-\begin{tabular}{ccccc}
+\begin{tabular}{ccccccc}
 \hline\noalign{\smallskip}
-Test      &  Air     &  Particle  &  Grid Cell  &  Aerosol Deposition  \\
-Number    &  Speed   &  Diameter  &  Size       &  Velocity            \\
-          &  (m/s)   &  ($\mu$m)  &  (cm)       &  (m/s)               \\
+Test      &  Air     &  Particle  &  Grid Cell  &  Aerosol                &  Aerosol                &  Aerosol                \\
+Number    &  Speed   &  Diameter  &  Size       &  Deposition             &  Deposition             &  Deposition             \\
+          &          &            &             &  Velocity               &  Velocity               &  Velocity               \\
+          &          &            &             &  (Ceiling)              &  (Wall)                 &  (Floor)                \\
+          &  (m/s)   &  ($\mu$m)  &  (cm)       &  (m/s)                  &  (m/s)                  &  (m/s)                  \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
-1         &  2.2     &  1.0       &  0.5        &  XX                  \\
-1         &  2.2     &  1.0       &  0.75       &  XX                  \\
-1         &  2.2     &  1.0       &  1.0        &  XX                  \\
-1         &  2.2     &  1.0       &  2.0        &  XX                  \\
-16        &  9.1     &  15        &  0.5        &  XX                  \\
-16        &  9.1     &  15        &  0.75       &  XX                  \\
-16        &  9.1     &  15        &  1.0        &  XX                  \\
-16        &  9.1     &  15        &  2.0        &  XX                  \\
+1         &  2.2     &  1.0       &  0.50       &  $8.96 \times 10^{-7}$  &  $9.00 \times 10^{-7}$  &  $4.64 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  0.75       &  $8.54 \times 10^{-7}$  &  $8.57 \times 10^{-7}$  &  $4.60 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  1.0        &  $8.64 \times 10^{-7}$  &  $8.68 \times 10^{-7}$  &  $4.67 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  2.0        &  $9.16 \times 10^{-7}$  &  $9.17 \times 10^{-7}$  &  $4.39 \times 10^{-5}$  \\
+16        &  9.1     &  15        &  0.50       &  $4.41 \times 10^{-3}$  &  $5.08 \times 10^{-3}$  &  $1.01 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  0.75       &  $4.62 \times 10^{-3}$  &  $5.24 \times 10^{-3}$  &  $1.05 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  1.0        &  $5.97 \times 10^{-3}$  &  $6.53 \times 10^{-3}$  &  $1.20 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  2.0        &  $7.74 \times 10^{-3}$  &  $8.11 \times 10^{-3}$  &  $1.36 \times 10^{-2}$  \\
 \noalign{\smallskip}\hline
 \end{tabular}
 \label{tab:Grid_Sensitivity}
 \end{table}
 
+The baseline case had a grid cell resolution of 1~cm, and the following results compare the predicted aerosol deposition velocity for cases with different grid cell sizes compared to the baseline case. For the fine grid resolution, a grid cell size of 0.50~cm (50~\% decrease) resulted in a maximum change in the aerosol deposition velocity of about 4~\% for the 2.2~m/s air speed and 26~\% for the 9.1~m/s air speed. A grid cell size of 0.75~cm (25~\% decrease) resulted in a maximum change in the aerosol deposition velocity of about 1.5~\% for the 2.2~m/s air speed and 23~\% for the 9.1~m/s air speed. For the coarse grid resolution, a grid cell size of 2~cm (100~\% increase) resulted in a maximum change in the aerosol deposition velocity of about 0.6~\% for the 2.2~m/s air speed and 30~\% for the 9.1~m/s air speed. As expected, the predicted aerosol deposition velocity changes along with the grid resolution because the velocity profile is resolved differently at different grid cell sizes.
+
 \subsection{Inlet Concentration Sensitivity}
 \label{sec:Concentration_Sensitivity}
 
-To assess the impact of different inlet aerosol concentrations, multiple simluations were run with inlet aerosol concentrations of 50~mg/m$^3$, 100~mg/m$^3$, 200~mg/m$^3$, and 1000~mg/m$^3$. The aerosol deposition rates for each case are shown in Table~\ref{tab:Concentration_Sensitivity}.
+To assess the impact of different inlet aerosol concentrations, multiple simluations were run with inlet aerosol concentrations of 50~mg/m$^3$, 100~mg/m$^3$, 200~mg/m$^3$, and 1000~mg/m$^3$ at the smallest and largest air speeds and particle diameters. The aerosol deposition rates at the ceiling, wall, and floor for each case are shown in Table~\ref{tab:Concentration_Sensitivity}.
 
 \begin{table}[!ht]
 \caption[Sensitivity of aerosol deposition rate to inlet aerosol concentration]
 {Sensitivity of aerosol deposition rate to inlet aerosol concentration.}
-\begin{tabular}{ccccc}
+\begin{tabular}{ccccccc}
 \hline\noalign{\smallskip}
-Test      &  Air     &  Particle  &  Aerosol Inlet  &  Aerosol Deposition  \\
-Number    &  Speed   &  Diameter  &  Concentration  &  Velocity            \\
-          &  (m/s)   &  ($\mu$m)  &  (mg/m$^3$)     &  (m/s)               \\
+Test      &  Air     &  Particle  &  Aerosol        &  Aerosol                &  Aerosol                &  Aerosol                \\
+Number    &  Speed   &  Diameter  &  Inlet          &  Deposition             &  Deposition             &  Deposition             \\
+          &          &            &  Concentration  &  Velocity               &  Velocity               &  Velocity               \\
+          &          &            &                 &  (Ceiling)              &  (Wall)                 &  (Floor)                \\
+          &  (m/s)   &  ($\mu$m)  &  (mg/m$^3$)     &  (m/s)                  &  (m/s)                  &  (m/s)                  \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
-1         &  2.2     &  1.0       &  50             &  XX                  \\
-1         &  2.2     &  1.0       &  100            &  XX                  \\
-1         &  2.2     &  1.0       &  200            &  XX                  \\
-1         &  2.2     &  1.0       &  1000           &  XX                  \\
-16        &  9.1     &  15        &  50             &  XX                  \\
-16        &  9.1     &  15        &  100            &  XX                  \\
-16        &  9.1     &  15        &  200            &  XX                  \\
-16        &  9.1     &  15        &  1000           &  XX                  \\
+1         &  2.2     &  1.0       &  50             &  $8.66 \times 10^{-7}$  &  $8.68 \times 10^{-7}$  &  $4.67 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  100            &  $8.64 \times 10^{-7}$  &  $8.68 \times 10^{-7}$  &  $4.67 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  200            &  $8.65 \times 10^{-7}$  &  $8.68 \times 10^{-7}$  &  $4.67 \times 10^{-5}$  \\
+1         &  2.2     &  1.0       &  1000           &  $8.68 \times 10^{-7}$  &  $8.68 \times 10^{-7}$  &  $4.67 \times 10^{-5}$  \\
+16        &  9.1     &  15        &  50             &  $5.93 \times 10^{-3}$  &  $6.58 \times 10^{-3}$  &  $1.20 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  100            &  $5.97 \times 10^{-3}$  &  $6.53 \times 10^{-3}$  &  $1.20 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  200            &  $5.97 \times 10^{-3}$  &  $6.51 \times 10^{-3}$  &  $1.20 \times 10^{-2}$  \\
+16        &  9.1     &  15        &  1000           &  $5.95 \times 10^{-3}$  &  $6.56 \times 10^{-3}$  &  $1.20 \times 10^{-2}$  \\
 \noalign{\smallskip}\hline
 \end{tabular}
 \label{tab:Concentration_Sensitivity}
 \end{table}
+
+The baseline case had a specified inlet aerosol concentration of 100~mg/m$^3$, and the following results compare the predicted aerosol deposition velocity for cases with different inlet aerosol concentrations compared to the baseline case.. An inlet aerosol concentration of 50~mg/m$^3$ (50~\% decrease) resulted in a 0~\% to 0.8~\% change in the aerosol deposition velocity. An inlet aerosol concentration of 200~mg/m$^3$ (100~\% increase) resulted in a 0~\% to 0.3~\% change in the aerosol deposition velocity. An inlet aerosol concentration of 1000~mg/m$^3$ (1000~\% increase) resulted in a 0~\% to 0.5~\% change in the aerosol deposition velocity. In summary, the effect of different inlet aerosol concentrations on the predicted aerosol deposition velocity is relatively small because the aerosol deposition rates are a linear function of the aerosol concentration.
 
 \subsection{Model Predictions of Aerosol Deposition Velocity}
 
@@ -484,7 +492,7 @@ The velocity in Test~1 was approximately 3.0~m/s near the duct centerline and 1.
 
 \noindent Figure~\ref{fig:Sippola_Transverse_Concentration} shows the predicted vertical aerosol concentration profile in the duct for Tests~1 and 16 at a downstream location of 0.75~m in the 1.5~m instrumented duct section. In this figure, it is evident that there is a change in aerosol concentration along the length of the duct section that was considered. This change in concentration is more prominent for larger particle sizes. The aerosol concentration in Test~1 was approximately 98~mg/m$^3$ near the duct ceiling and 99~mg/m$^3$ near the duct floor. The aerosol concentration in Test~16 was approximately 56~mg/m$^3$ near the duct ceiling and 82~mg/m$^3$ near the duct floor.
 
-In Test~1, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. In Test~16, gravitational settling and turbulent deposition accounted for about XX~\% and XX~\% of the the total aerosol deposition velocity, respectively. Therefore, the increased aerosol concentration near the floor is mostly due to gravitational settling, which results in the asymmetric shape (i.e., stratification) of the aerosol concentration gradient for Test~16. The increased aerosol deposition velocity in Test~16 (compared to Test~1) is also mostly due to the increased contribution of gravitational settling to the overall aerosol deposition rate.
+In the simulation of Test~1, gravitational settling and turbulent deposition accounted for about 98~\% and 2~\% of the the total aerosol deposition velocity to the floor, respectively. In the simulation of Test~5, gravitational settling and turbulent deposition accounted for about 100~\% and 0~\% of the the total aerosol deposition velocity to the floor, respectively. In the simulation of Test~12, gravitational settling and turbulent deposition accounted for about 93~\% and 7~\% of the the total aerosol deposition velocity to the floor, respectively. In the simulation of Test~16, gravitational settling and turbulent deposition accounted for about 49~\% and 51~\% of the the total aerosol deposition velocity to the floor, respectively. In general, the increased aerosol concentration near the floor in these cases is mostly due to gravitational settling. In Fig~\ref{fig:Sippola_Transverse_Concentration}, the asymmetric shape (i.e., stratification) of the aerosol concentration gradient for Test~16 is a result of the increased contribution of gravitational settling to the overall aerosol deposition rate.
 
 \begin{figure}[!ht]
 \includegraphics[width=3.5in]{Fig_Sippola_Aerosol_Deposition_Transverse_Legend.pdf}

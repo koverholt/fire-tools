@@ -529,11 +529,15 @@ particle_diameters = np.array([1.0e-6, 2.8e-6, 5.2e-6, 9.1e-6, 16.e-6, 1.0e-6,
 # Exp. deposition sampling area (m^2)
 depo_area = 0.1 * 0.2
 
-# Simulation time (s)
-time = 100
+# Simulation time (s).
+# 100 s for full cases, and less than 100 s for cases with long
+# runtimes that were stopped before the full runtime was complete.
+times = np.array([100, 100, 100, 100, 100, 100, 100, 100, 89,  100,
+                  100, 100, 21,  82,  100, 100, 100, 100, 100, 100,
+                  100, 100, 100, 100, 100, 100, 100, 100, ])
                  
 # Primary calculations
-for case in filenames:
+for case, time in zip(filenames, times):
     test = np.genfromtxt(FDS_Output_Files + case, delimiter=',', names=True, skip_header=1)
     print case
 
