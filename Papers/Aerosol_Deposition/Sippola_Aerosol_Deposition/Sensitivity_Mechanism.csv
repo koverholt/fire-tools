@@ -1,0 +1,16 @@
+Test,Mechanism,Deposition Velocity (m/s),Contribution (%)
+1,Total,4.67E-005,100.00%
+1,Gravitational,4.58E-005,98.14%
+1,Turbulent,8.67E-007,1.86%
+,,,
+5,Total,7.20E-003,100.00%
+5,Gravitational,7.22E-003,99.83%
+5,Turbulent,1.26E-005,0.17%
+,,,
+12,Total,4.95E-005,100.00%
+12,Gravitational,4.61E-005,93.26%
+12,Turbulent,3.33E-006,6.74%
+,,,
+16,Total,1.20E-002,100.00%
+16,Gravitational,6.37E-003,49.11%
+16,Turbulent,6.60E-003,50.89%

@@ -1,0 +1,9 @@
+Test,Particle Size (um),Velocity (m/s),Grid Resolution (cm),Aerosol Deposition Velocity (Ceiling) (m/s),Aerosol Deposition Velocity (Wall) (m/s),Aerosol Deposition Velocity (Floor) (m/s), Diff Aerosol Deposition Velocity (Ceiling) (m/s),Diff Aerosol Deposition Velocity (Wall) (m/s),Diff Aerosol Deposition Velocity (Floor) (m/s)
+1,1,2.2,0.5,8.96E-7,9.00E-7,4.64E-5,-3.70%,-3.69%,0.64%
+1,1,2.2,0.75,8.54E-7,8.57E-7,4.60E-5,1.16%,1.27%,1.50%
+1,1,2.2,1,8.64E-7,8.68E-7,4.67E-5,0.00%,0.00%,0.00%
+1,1,2.2,2,9.16E-7,9.17E-7,4.39E-5,-6.02%,-5.65%,6.00%
+16,15,9.1,0.5,4.41E-3,5.08E-3,1.01E-2,26.13%,22.21%,15.83%
+16,15,9.1,0.75,4.62E-3,5.24E-3,1.05E-2,22.61%,19.75%,12.50%
+16,15,9.1,1,5.97E-3,6.53E-3,1.20E-2,0.00%,0.00%,0.00%
+16,15,9.1,2,7.74E-3,8.11E-3,1.36E-2,-29.65%,-24.20%,-13.33%
