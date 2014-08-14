@@ -65,12 +65,12 @@ def print_html_header():
 def print_html_body():
     HTML_INPUTS = """    
     <label>Chemical formula of fuel </label>
-    <input class="input-small" name="sel_formula" type="text" size="4" value="C3H8"><br/><br/>
+    <input class="input-small" name="input_formula" type="text" size="4" value="C3H8"><br/><br/>
 
-    <label>Carbon monoxide yield </label>
+    <label>Carbon monoxide yield (kg/kg)</label>
     <input class="input-small" name="input_Y_CO" type="text" size="4" value="0.00"><br/><br/>
 
-    <label>Soot yield </label>
+    <label>Soot yield (kg/kg)</label>
     <input class="input-small" name="input_Y_s" type="text" size="4" value="0.00"><br/><br/>
 
     <label>Hydrogen atomic fraction in soot </label>
@@ -92,10 +92,8 @@ def print_html_body():
     <label>Soot: </label>
     <input class="input-small" name="input_bg_7" type="text" size="4" value="0.00"><br/><br/>
 
-    <!--
     <label><input type="checkbox" name="sel_prec_value" value="prec" id="prec">
     &nbsp;Print extra decimal precision </label>
-    -->
     """
 
     CHEM_INPUT = """<table border=0>
@@ -115,7 +113,7 @@ def print_html_footer():
 def check_input_fields():
     
     try:
-        sel_formula = form["sel_formula"].value
+        input_formula = form["input_formula"].value
         input_Y_s = form["input_Y_s"].value
         input_Y_CO = form["input_Y_CO"].value
         input_X_H = form["input_X_H"].value
@@ -133,8 +131,8 @@ def check_input_fields():
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
-    input_fields = ("sel_formula", "input_Y_s", "input_Y_CO", "input_X_H", "input_bg_1", "input_bg_2", "input_bg_3", "input_bg_4", "input_bg_5", "input_bg_6", "input_bg_7")
-    input_values = (sel_formula, input_Y_s, input_Y_CO, input_X_H, input_bg_1, input_bg_2, input_bg_3, input_bg_4, input_bg_5, input_bg_6, input_bg_7)
+    input_fields = ("input_formula", "input_Y_s", "input_Y_CO", "input_X_H", "input_bg_1", "input_bg_2", "input_bg_3", "input_bg_4", "input_bg_5", "input_bg_6", "input_bg_7")
+    input_values = (input_formula, input_Y_s, input_Y_CO, input_X_H, input_bg_1, input_bg_2, input_bg_3, input_bg_4, input_bg_5, input_bg_6, input_bg_7)
 
     # Loops through input values to check for empty fields and returns an error if so
     count = 0
@@ -164,7 +162,7 @@ def check_input_fields():
         fill_previous_values()
         sys.exit()
     
-    formula = sel_formula
+    formula = input_formula
     y_s = float(input_Y_s)
     y_CO = float(input_Y_CO)
     X_H = float(input_X_H)
@@ -292,7 +290,7 @@ def check_input_fields():
     v_2.T[i_water_vapor]    = x.item(2)
     v_2.T[i_nitrogen]       = x.item(3)
 
-    nu_1 = -1       # fuel stoich coeff
+    nu_1 = -1 # fuel stoich coeff
     nu_2 = np.sum(v_2) # prod stoich coeff
 
     v_2 = v_2/nu_2 # normalize volume fractions
@@ -303,27 +301,34 @@ def check_input_fields():
 
     Z2Y = Z2Y.T
 
-    coeff_fuel = Z2Y[0,1]
+    coeff_fuel = Z2Y[0,1] # Fuel
 
-    coeff_lhs_1 = Z2Y[0,0]
-    coeff_lhs_2 = Z2Y[1,0]
-    coeff_lhs_3 = Z2Y[2,0]
-    coeff_lhs_4 = Z2Y[3,0]
-    coeff_lhs_5 = Z2Y[4,0]
-    coeff_lhs_6 = Z2Y[5,0]
-    coeff_lhs_7 = Z2Y[6,0]
+    coeff_lhs_1 = Z2Y[0,0] # Fuel
+    coeff_lhs_2 = Z2Y[1,0] # O2
+    coeff_lhs_3 = Z2Y[2,0] # N2
+    coeff_lhs_4 = Z2Y[3,0] # H2O
+    coeff_lhs_5 = Z2Y[4,0] # CO2
+    coeff_lhs_6 = Z2Y[5,0] # CO
+    coeff_lhs_7 = Z2Y[6,0] # C
 
-    coeff_rhs_1 = Z2Y[0,2]
-    coeff_rhs_2 = Z2Y[1,2]
-    coeff_rhs_3 = Z2Y[2,2]
-    coeff_rhs_4 = Z2Y[3,2]
-    coeff_rhs_5 = Z2Y[4,2]
-    coeff_rhs_6 = Z2Y[5,2]
-    coeff_rhs_7 = Z2Y[6,2]
+    coeff_rhs_1 = Z2Y[0,2] # Fuel
+    coeff_rhs_2 = Z2Y[1,2] # O2
+    coeff_rhs_3 = Z2Y[2,2] # N2
+    coeff_rhs_4 = Z2Y[3,2] # H2O
+    coeff_rhs_5 = Z2Y[4,2] # CO2
+    coeff_rhs_6 = Z2Y[5,2] # CO
+    coeff_rhs_7 = Z2Y[6,2] # C
 
     #  =================
     #  = Print results =
     #  =================
+
+    # Print extra decimal precision if selected
+    try:
+        form["sel_prec_value"].value
+        decimal_precision = 6
+    except KeyError:
+        decimal_precision = 3
 
     if np.min(np.array([coeff_lhs_1, coeff_lhs_2, coeff_lhs_3, coeff_lhs_4, coeff_lhs_5, coeff_lhs_6, coeff_lhs_7,
               coeff_rhs_1, coeff_rhs_2, coeff_rhs_3, coeff_rhs_4, coeff_rhs_5, coeff_rhs_6, coeff_rhs_7])) < 0:
@@ -333,42 +338,41 @@ def check_input_fields():
 
     FORMULA_OUTPUT = """
     <h3>Balanced chemical equation</h3>
-    <h4>Reactants: <br><br> 
+    <h4>Reactants: <br><br>
     """
 
-    FORMULA_OUTPUT += '<font color="red">%0.6f</font> %s' % (coeff_fuel, formula.upper())
-
-    FORMULA_OUTPUT += '+ <font color="red">%0.6f</font>(' % (np.abs(nu_0))
+    FORMULA_OUTPUT += '<font color="red">{num:.{prec}f}</font> {text}'.format(num=coeff_fuel, prec=decimal_precision, text=formula.upper())
+    FORMULA_OUTPUT += '+ <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_0), prec=decimal_precision)
 
     if coeff_lhs_2 != 0:
-        FORMULA_OUTPUT += '<font color="blue">%0.6f</font> O<sub>2</sub>' % (coeff_lhs_2)
+        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font> O<sub>2</sub>'.format(num=coeff_lhs_2, prec=decimal_precision)
     if coeff_lhs_3 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> N<sub>2</sub>' % (coeff_lhs_3)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> N<sub>2</sub>'.format(num=coeff_lhs_3, prec=decimal_precision)
     if coeff_lhs_4 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> H<sub>2</sub>O' % (coeff_lhs_4)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> H<sub>2</sub>O'.format(num=coeff_lhs_4, prec=decimal_precision)
     if coeff_lhs_5 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> CO<sub>2</sub>' % (coeff_lhs_5)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO<sub>2</sub>'.format(num=coeff_lhs_5, prec=decimal_precision)
     if coeff_lhs_6 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> CO' % (coeff_lhs_6)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO'.format(num=coeff_lhs_6, prec=decimal_precision)
     if coeff_lhs_7 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> C' % (coeff_lhs_7)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> C'.format(num=coeff_lhs_7, prec=decimal_precision)
 
-    FORMULA_OUTPUT += ') <br><br> &darr; <br><br> <font color="red">%0.6f</font>(' % (np.abs(nu_2))
+    FORMULA_OUTPUT += ') <br><br> &darr; <br><br> Products: <br><br> <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_2), prec=decimal_precision)
 
     if coeff_rhs_2 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> O<sub>2</sub>' % (coeff_rhs_2)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> O<sub>2</sub>'.format(num=coeff_rhs_2, prec=decimal_precision)
     if coeff_rhs_3 != 0:
-        FORMULA_OUTPUT += '<font color="blue">%0.6f</font> N<sub>2</sub>' % (coeff_rhs_3)
+        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font> N<sub>2</sub>'.format(num=coeff_rhs_3, prec=decimal_precision)
     if coeff_rhs_4 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> H<sub>2</sub>O' % (coeff_rhs_4)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> H<sub>2</sub>O'.format(num=coeff_rhs_4, prec=decimal_precision)
     if coeff_rhs_5 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> CO<sub>2</sub>' % (coeff_rhs_5)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO<sub>2</sub>'.format(num=coeff_rhs_5, prec=decimal_precision)
     if coeff_rhs_6 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> CO' % (coeff_rhs_6)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO'.format(num=coeff_rhs_6, prec=decimal_precision)
     if coeff_rhs_7 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">%0.6f</font> C' % (coeff_rhs_7)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> C'.format(num=coeff_rhs_7, prec=decimal_precision)
 
-    FORMULA_OUTPUT += ')'
+    FORMULA_OUTPUT += ')</h4>'
 
     print FORMULA_OUTPUT
     
