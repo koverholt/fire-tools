@@ -342,7 +342,7 @@ def check_input_fields():
     """
 
     FORMULA_OUTPUT += '<font color="red">{num:.{prec}f}</font> {text}'.format(num=coeff_fuel, prec=decimal_precision, text=formula.upper())
-    FORMULA_OUTPUT += '+ <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_0), prec=decimal_precision)
+    FORMULA_OUTPUT += ' + <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_0), prec=decimal_precision)
 
     if coeff_lhs_2 != 0:
         FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font> O<sub>2</sub>'.format(num=coeff_lhs_2, prec=decimal_precision)
