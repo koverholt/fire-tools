@@ -342,35 +342,35 @@ def check_input_fields():
     """
 
     FORMULA_OUTPUT += '<font color="red">{num:.{prec}f}</font> {text}'.format(num=coeff_fuel, prec=decimal_precision, text=formula.upper())
-    FORMULA_OUTPUT += ' + <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_0), prec=decimal_precision)
+    FORMULA_OUTPUT += '&nbsp;+ <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_0), prec=decimal_precision)
 
     if coeff_lhs_2 != 0:
-        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font> O<sub>2</sub>'.format(num=coeff_lhs_2, prec=decimal_precision)
+        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font>&nbsp;O<sub>2</sub>'.format(num=coeff_lhs_2, prec=decimal_precision)
     if coeff_lhs_3 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> N<sub>2</sub>'.format(num=coeff_lhs_3, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;N<sub>2</sub>'.format(num=coeff_lhs_3, prec=decimal_precision)
     if coeff_lhs_4 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> H<sub>2</sub>O'.format(num=coeff_lhs_4, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;H<sub>2</sub>O'.format(num=coeff_lhs_4, prec=decimal_precision)
     if coeff_lhs_5 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO<sub>2</sub>'.format(num=coeff_lhs_5, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;CO<sub>2</sub>'.format(num=coeff_lhs_5, prec=decimal_precision)
     if coeff_lhs_6 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO'.format(num=coeff_lhs_6, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;CO'.format(num=coeff_lhs_6, prec=decimal_precision)
     if coeff_lhs_7 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> C'.format(num=coeff_lhs_7, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;C'.format(num=coeff_lhs_7, prec=decimal_precision)
 
     FORMULA_OUTPUT += ') <br><br> &darr; <br><br> Products: <br><br> <font color="red">{num:.{prec}f}</font>('.format(num=np.abs(nu_2), prec=decimal_precision)
 
     if coeff_rhs_2 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> O<sub>2</sub>'.format(num=coeff_rhs_2, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;O<sub>2</sub>'.format(num=coeff_rhs_2, prec=decimal_precision)
     if coeff_rhs_3 != 0:
-        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font> N<sub>2</sub>'.format(num=coeff_rhs_3, prec=decimal_precision)
+        FORMULA_OUTPUT += '<font color="blue">{num:.{prec}f}</font>&nbsp;N<sub>2</sub>'.format(num=coeff_rhs_3, prec=decimal_precision)
     if coeff_rhs_4 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> H<sub>2</sub>O'.format(num=coeff_rhs_4, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;H<sub>2</sub>O'.format(num=coeff_rhs_4, prec=decimal_precision)
     if coeff_rhs_5 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO<sub>2</sub>'.format(num=coeff_rhs_5, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;CO<sub>2</sub>'.format(num=coeff_rhs_5, prec=decimal_precision)
     if coeff_rhs_6 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> CO'.format(num=coeff_rhs_6, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;CO'.format(num=coeff_rhs_6, prec=decimal_precision)
     if coeff_rhs_7 != 0:
-        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font> C'.format(num=coeff_rhs_7, prec=decimal_precision)
+        FORMULA_OUTPUT += ' + <font color="blue">{num:.{prec}f}</font>&nbsp;C'.format(num=coeff_rhs_7, prec=decimal_precision)
 
     FORMULA_OUTPUT += ')</h4>'
 
