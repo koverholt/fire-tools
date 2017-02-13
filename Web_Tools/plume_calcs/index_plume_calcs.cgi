@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2012 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/plume_calcs/index.cgi'
+SCRIPT_NAME = '/cgi-bin/plume_calcs/index_plume_calcs.cgi'
 form = cgi.FieldStorage()
 
 global resolution
@@ -51,7 +51,7 @@ def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE HTML>
     <html><head><title>Flame Height and Plume Centerline Temperature Calculator</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
+
     <!-- Le styles -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -72,17 +72,17 @@ def print_html_header():
     <form action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
-    
+
+
 def print_html_body():
     HTML_XDIM = """<br/><b>Fire parameters</b><br/><br/>
-    
+
     <label>Fire size </label>
     <input class="input-small" name="sel_q_value" type="text" size="4" value="400"> kW <br/><br/>
-    
+
     <label>Fire diameter </label>
     <input class="input-small" name="sel_D_value" type="text" size="4" value="1"> m <br/><br/>
-    
+
     <label>Radiative fraction </label>
     <input class="input-small" name="sel_X_r_value" type="text" size="4" value="0.3"> -
     """
@@ -102,7 +102,7 @@ def print_html_footer():
     print HTML_TEMPLATE_FOOT
 
 def check_input_fields():
-    
+
     try:
         sel_q_value = form["sel_q_value"].value
         sel_D_value = form["sel_D_value"].value
@@ -110,7 +110,7 @@ def check_input_fields():
     except:
         print_html_footer()
         sys.exit()
-    
+
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
@@ -140,8 +140,8 @@ def check_input_fields():
         print """<h2><font color="red">""" + input_fields[count] + """ is not a valid number</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-        count += 1 
-        
+        count += 1
+
     sel_q_value = float(sel_q_value)
     sel_D_value = float(sel_D_value)
     sel_X_r_value = float(sel_X_r_value)
@@ -149,7 +149,7 @@ def check_input_fields():
     D = sel_D_value # m
     Q = sel_q_value # kW
     X_r = sel_X_r_value
-    
+
     #  =================================
     #  = Plume temperature calculation =
     #  =================================
@@ -165,7 +165,7 @@ def check_input_fields():
 
     for height in range(0,len(z)):
         delta_T_0_hes[height] = 25 * (Q_c**(2/5)/(z[height]-z_0))**(5/3) + 20
-        
+
     for height in range(0,len(z)):
         delta_T_0_mcc[height] = 22.3 * (Q**(2/5)/(z[height]))**(5/3) + 20
 
@@ -210,16 +210,16 @@ def check_input_fields():
     ylim([0, np.max([delta_T_0_hes[0], delta_T_0_mcc[0]]) + (50-np.max([delta_T_0_hes[0], delta_T_0_mcc[0]]) % 50)])
     legend()
     grid(True)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
-        ylabel_i.set_fontsize(14)    
+    for ylabel_i in ax.get_yticklabels():
+        ylabel_i.set_fontsize(14)
     savestring = "../../cgi-media/plume_calcs/cl_tmps%i.png" % np.random.randint(10000000)
     savefig(savestring, dpi=80)
 
     print "<img src='%s'><br/>" % savestring
-    
+
     print "<br/>"
     print "Plume centerline temperatures (above flame):<br/><br/>"
     print "<table>"
@@ -227,9 +227,9 @@ def check_input_fields():
     for i in range(0,len(z)):
         print "<tr><td>%0.2f </td><td> %0.0f</td><td> %0.0f</td></tr>" % (z[i], delta_T_0_hes[i], delta_T_0_mcc[i])
     print "</table>"
-    
+
     delete_old_files()
-    
+
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
           document.forms[0].%(FORM_ELEMENT_NAME)s.value = '%(FORM_VALUE)s';
@@ -251,8 +251,8 @@ def delete_old_files():
             if os.stat(fullpath).st_mtime < now - 3600:
                 if os.path.isfile(fullpath):
                     os.remove(fullpath)
-    
-    
+
+
 ###############################################################
 #  Actual start of execution of script using above functions  #
 ###############################################################

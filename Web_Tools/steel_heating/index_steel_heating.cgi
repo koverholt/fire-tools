@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2012 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/steel_heating/index.cgi'
+SCRIPT_NAME = '/cgi-bin/steel_heating/index_steel_heating.cgi'
 form = cgi.FieldStorage()
 
 global resolution
@@ -50,9 +50,9 @@ resolution = ''
 def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE HTML>
     <html><head><title>Calculator for Transient Steel Heating Under Fire Conditions</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">  
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-    <script type="text/javascript" src="../../cgi-media/jquery.js"></script>    
+    <script type="text/javascript" src="../../cgi-media/jquery.js"></script>
 
     <!-- Le styles -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -68,20 +68,20 @@ def print_html_header():
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
+
     </head><body>
     <h3><FONT FACE="Arial, Helvetica, Geneva"><font color="darkred">Enter the input parameters </font></h3>
     <form action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
-    
+
+
 def print_html_body():
     HTML_XDIM = """<br/>
     Simulation time <input class="input-small" name="sel_time_value" type="text" size="4" value="3"> hours<br/><br/>
-    
+
     <b>Steel parameters</b><br/><br/>
-    
+
     <blockquote>
     <label>Section factor </label>
     <input class="input-small" name="sel_FV_value" type="text" size="4" value="200"> 1/m <br/>
@@ -92,22 +92,22 @@ def print_html_body():
     <label>Emissivity </label>
     <input class="input-small" name="sel_eps_value" type="text" size="4" value="0.6">
     </blockquote>
-    
+
     <b>Fire parameters</b><br/><br/>
-    
+
     <blockquote>
     <label>Fire curve </label>
     <select name="sel_fire_curve">
     <option value="1">ISO 834</option>
     <option value="2">ASTM E119</option>
     </select>
-    
+
     <br/>
-    
+
     <label>Heat transfer coefficent </label>
     <input class="input-small" name="sel_h_value" type="text" size="4" value="25"> W/m<sup>2</sup>-K
     </blockquote>
-    
+
     <b>Insulation</b><br/><br/>
 
     <blockquote>
@@ -116,13 +116,13 @@ def print_html_body():
     <option value="1">Unprotected</option>
     <option value="2">Protected</option>
     </select>
-    
+
     <br/><br/>
-    
+
     <div id="prot">
-                        
+
     If protected steel, then input the following:<br/><br/>
-    
+
     <label>Thickness </label>
     <input class="input-small" name="sel_d_i_value" type="text" size="6" value="0.050"> m<br/>
     <label>Thermal conductivity </label>
@@ -149,7 +149,7 @@ def print_html_footer():
     print HTML_TEMPLATE_FOOT
 
 def check_input_fields():
-    
+
     try:
         sel_FV_value = form["sel_FV_value"].value
         sel_rho_s_value = form["sel_rho_s_value"].value
@@ -166,7 +166,7 @@ def check_input_fields():
     except:
         print_html_footer()
         sys.exit()
-    
+
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
@@ -196,8 +196,8 @@ def check_input_fields():
         print """<h2><font color="red">""" + input_fields[count] + """ is not a valid number</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-        count += 1 
-        
+        count += 1
+
     sel_FV_value = float(sel_FV_value)
     sel_rho_s_value = float(sel_rho_s_value)
     sel_c_s_value = float(sel_c_s_value)
@@ -210,6 +210,12 @@ def check_input_fields():
     sel_rho_i_value = float(sel_rho_i_value)
     sel_c_i_value = float(sel_c_i_value)
     sel_time_value = float(sel_time_value)
+
+    if sel_time_value >= 1000:
+        print """<h2><font color="red">Simulation time must be less than 1,000 hours</font></h2><br/>"""
+        fill_previous_values()
+        sys.exit()
+        count += 1
 
     # Choose fire time-temperature curve
     # 1 = ISO 834 curve
@@ -227,7 +233,7 @@ def check_input_fields():
     h = sel_h_value # W/m^2-K
     sigma = 0.0000000567 # W/m^2-K^4
     epsilon = sel_eps_value # -
-    
+
     # Insulation properties
     d_i = sel_d_i_value
     k_i = sel_k_i_value
@@ -261,7 +267,7 @@ def check_input_fields():
     for i in range(0,len(t)):
         dT_steel[i] = FV * 1/(rho_s * c_s) * (h*(T_fire_half[i] - T_steel[i]) + epsilon*sigma*((T_fire_half[i]+273)**4 - (T_steel[i]+273)**4)) * (dt*3600)
         T_steel[i+1] = T_steel[i] + dT_steel[i]
-        
+
     if sel_insulated_value == 2:
         for i in range(0,len(t)):
             dT_steel_protected[i] = FV * (k_i/(d_i*rho_s*c_s)) * (rho_s*c_s / (rho_s*c_s + (FV*d_i*rho_i*c_i) / 2)) * (T_fire_half[i] - T_steel_protected[i]) * (dt*3600)
@@ -270,29 +276,29 @@ def check_input_fields():
     # print dT_steel
 
     figure()
-    
+
     if sel_insulated_value == 2:
         plot(t, T_steel_protected[:-1], 'b-', lw=2, label="Protected")
         plot(t, T_steel[:-1], 'r--', lw=2, label="Unprotected")
         legend(loc=0)
     else:
         plot(t, T_steel[:-1], 'r-' ,lw=2)
-    
+
     axhline(y=600, color='black', ls='--')
     title('Steel temperature vs. time', fontsize=18)
     xlabel('Time (hours)', fontsize=18)
     ylabel('Temperature ($^\circ$C)', fontsize=18)
     grid(True)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
+    for ylabel_i in ax.get_yticklabels():
         ylabel_i.set_fontsize(14)
     savestring = "../../cgi-media/steel_heating/steel%i.png" % np.random.randint(10000000)
     savefig(savestring, dpi=80)
 
     print "<img src='%s'><br/>" % savestring
-    
+
     # if sel_print_info == "1":
 
     if sel_insulated_value == 1:
@@ -313,10 +319,10 @@ def check_input_fields():
             print "<tr><td>%0.1f </td><td> %0.2f</td><td> %0.2f</td></tr>" % (t[i]*60, T_steel[i], T_steel_protected[i])
         print "</table>"
         print "<br/><br/>"
-        
+
     delete_old_files()
 
-    
+
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
           document.forms[0].%(FORM_ELEMENT_NAME)s.value = '%(FORM_VALUE)s';
@@ -338,7 +344,7 @@ def delete_old_files():
             if os.stat(fullpath).st_mtime < now - 3600:
                 if os.path.isfile(fullpath):
                     os.remove(fullpath)
-    
+
 ###############################################################
 #  Actual start of execution of script using above functions  #
 ###############################################################

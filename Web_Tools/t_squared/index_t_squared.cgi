@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2012 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/t_squared/index.cgi'
+SCRIPT_NAME = '/cgi-bin/t_squared/index_t_squared.cgi'
 form = cgi.FieldStorage()
 
 global resolution
@@ -51,9 +51,9 @@ def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE HTML>
     <html><head><title>t-squared Fire Ramp Calculator</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
+
     <script type="text/javascript" src="../../cgi-media/jquery.js"></script>
-    
+
     <style type="text/css">
     .table1 {
         padding-left: 20px
@@ -74,17 +74,17 @@ def print_html_header():
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
+
     </head><body>
     <h3><FONT FACE="Arial, Helvetica, Geneva"><font color="darkred">Select input parameters </font></h3>
     <form action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
-    
+
+
 def print_html_body():
     HTML_XDIM = """<br/><b>Fire growth coefficient</b><br/><br/>
-    
+
     <blockquote>
     <label><input type="radio" name="sel_alpha_value" value="option1" id="option1" checked>&nbsp;Slow: 0.00293 kW/s<sup>2</sup></label>
     <label><input type="radio" name="sel_alpha_value" value="option2" id="option2">&nbsp;Medium: 0.01172 kW/s<sup>2</sup></label>
@@ -93,15 +93,15 @@ def print_html_body():
     <label><input type="radio" name="sel_alpha_value" value="other" id="other">&nbsp;Custom:</label>
     <label><input class="input-small" type="text" name="sel_custom_alpha_value" size="10"> kW/s<sup>2</sup></label>
     </blockquote>
-    
+
     <br/>
-    
+
     <b>Fire parameters</b><br/><br/>
-    
+
     <blockquote>Select when the t-squared fire ramp should stop:
-    
+
     <br/><br/>
-    
+
     <label><input type="radio" name="sel_stopping_value" value="opt1" id="opt1" checked>
     &nbsp;Maximum HRR:&nbsp;</label><input class="input-small" type="text" name="sel_hrr_value" size="10" value="300">
      kW
@@ -111,14 +111,14 @@ def print_html_body():
     </blockquote>
 
     <br/>
-    
+
     <b>Additional output parameters (optional)</b><br/><br/>
-    
+
     <blockquote>
     Select additional outputs:
-    
+
     <br/><br/>
-    
+
     <label><input type="checkbox" name="sel_save1_value" value="save1" id="save1">
     &nbsp;Downloadable CSV file </label>
     <label><input type="checkbox" name="sel_save2_value" value="save2" id="save2">
@@ -144,9 +144,9 @@ def print_html_footer():
     print HTML_TEMPLATE_FOOT
 
 def check_input_fields():
-    
+
     global sel_alpha_value, sel_stopping_value
-    
+
     try:
         sel_alpha_value = form["sel_alpha_value"].value
         sel_custom_alpha_value = form["sel_custom_alpha_value"].value
@@ -158,23 +158,23 @@ def check_input_fields():
     except:
         print_html_footer()
         sys.exit()
-    
+
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
     input_fields = ("sel_alpha_value", "sel_custom_alpha_value", "sel_stopping_value", "sel_hrr_value", "sel_time_value", "sel_fds_1", "sel_fds_2")
     input_values = (sel_alpha_value, sel_custom_alpha_value, sel_stopping_value, sel_hrr_value, sel_time_value, sel_fds_1, sel_fds_2)
-    
+
     if sel_alpha_value == "":
         print """<h2><font color="red">Please select a fire growth coefficient</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-        
+
     if sel_stopping_value == "":
         print """<h2><font color="red">Please select a stopping criteria</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-    
+
     # ==================
     # = Error checking =
     # ==================
@@ -195,7 +195,7 @@ def check_input_fields():
             fill_previous_values()
             sys.exit()
 
-    
+
     if sel_alpha_value == 'other':
         try:
             float(sel_custom_alpha_value)
@@ -203,10 +203,10 @@ def check_input_fields():
             print """<h2><font color="red">Please input a valid custom alpha parameter</font></h2><br/>"""
             fill_previous_values()
             sys.exit()
-            
+
     try:
         form["sel_save2_value"].value
-        
+
         try:
             float(sel_fds_1)
             float(sel_fds_2)
@@ -214,14 +214,14 @@ def check_input_fields():
             print """<h2><font color="red">Please input valid FDS fire vent dimensions</font></h2><br/>"""
             fill_previous_values()
             sys.exit()
-        
+
         sel_fds_1 = float(sel_fds_1)
         sel_fds_2 = float(sel_fds_2)
-        
+
         fds_fire_ramp_area = sel_fds_1 * sel_fds_2
     except KeyError:
         pass
-    
+
     if sel_hrr_value != "":
         sel_hrr_value = float(sel_hrr_value)
     if sel_time_value != "":
@@ -234,11 +234,11 @@ def check_input_fields():
         sel_time_value = 99999.0
     if sel_hrr_value > 99999.0:
         sel_hrr_value = 99999.0
-    
+
     # ==============
     # = Set values =
     # ==============
-    
+
     if sel_alpha_value == "option1":
         alpha = 0.00293
         title_alpha = "(slow growth)"
@@ -254,95 +254,95 @@ def check_input_fields():
     if sel_alpha_value == "other":
         alpha = sel_custom_alpha_value
         title_alpha = r"($\alpha$ = %0.4f kW/s$^2$)" % alpha
-    
+
     # ============================
     # = Calculate t-squared ramp =
     # ============================
-    
+
     if sel_stopping_value == "opt1":
         max_time = np.ceil(np.sqrt(sel_hrr_value / alpha))
         time = np.arange(max_time + 1)
         hrr = alpha * time**2
-        
+
         print "<h2>Results:</h2><br/>"
         print "<h3>"
         print str(int(sel_hrr_value)) + ' kW is attained at a time of ' + str(int(max_time)) + ' seconds'
         print "</h3>"
-        
+
     elif sel_stopping_value == "opt2":
         time = np.arange(sel_time_value + 1)
         hrr = alpha * time**2
         max_time = np.max(time)
         max_hrr = alpha * max_time**2
 
-        print "<h2>Results:</h2>"        
+        print "<h2>Results:</h2>"
         print "<h3>"
         print str(int(max_hrr)) + ' kW is attained at a time of ' + str(int(max_time)) + ' seconds'
         print "</h3>"
-    
+
     jobid = np.random.randint(10000000)
-    
+
     # ====================================
     # = Save .csv file for user download =
     # ====================================
-    
+
     try:
         form["sel_save1_value"].value
         header_rows = np.array([['alpha', alpha], ['Time (s)', 'HRR (kW)']])
         output_data = np.column_stack([time, hrr])
         csv_output = np.row_stack([header_rows, output_data])
         csv_output = csv_output.tolist()
-    
+
         csv_filename = '../../cgi-media/t_squared/case%i.csv' % jobid
-    
+
         for n in range(len(csv_output)):
             outstring = csv_output[n] + ['\n']
             stats(csv_filename, ','.join(outstring))
-            
+
         print "<a href='%s'>Download CSV file</a><br/><br/>" % csv_filename
     except KeyError:
         pass
-        
+
     # ===================================
     # = Save .fds text for FDS HRR ramp =
     # ===================================
-    
+
     try:
         form["sel_save2_value"].value
-    
+
         time_list = np.arange(0, np.max(time) + 1, 10)
         time_list = time_list.tolist()
 
         fds_filename = '../../cgi-media/t_squared/fds%i.txt' % jobid
         surf_string = "&SURF ID='fire', RAMP_Q='tsquared', HRRPUA=%0.1f, COLOR='RED' /" % (np.max(hrr) / fds_fire_ramp_area)
         stats(fds_filename, surf_string + '\n')
-    
+
         for n in time_list:
             fds_f_value = hrr[n] / np.max(hrr)
             ramp_text = "&RAMP ID='tsquared', T= %0.1f, F=%0.2f /" % (n, fds_f_value)
             outstring = ramp_text + '\n'
             stats(fds_filename, outstring)
-            
+
         print "<a href='%s'>Download FDS ramp file</a><br/><br/>" % fds_filename
     except KeyError:
         pass
-    
+
     # ============
     # = Plotting =
     # ============
 
     figure()
-    
+
     plot(time, hrr, 'b-', lw=3)
     title_string = 't-squared fire growth ' + title_alpha
     title(title_string, fontsize=18)
     xlabel('Time (s)', fontsize=18)
     ylabel('Heat release rate (kW)', fontsize=18)
     grid(True)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
+    for ylabel_i in ax.get_yticklabels():
         ylabel_i.set_fontsize(14)
     savestring = "../../cgi-media/t_squared/t_squared%i.png" % jobid
     savefig(savestring, dpi=80)
@@ -352,9 +352,9 @@ def check_input_fields():
     # ============================
     # = Delete old results files =
     # ============================
-    
+
     delete_old_files()
-    
+
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
           document.forms[0].%(FORM_ELEMENT_NAME)s.value = '%(FORM_VALUE)s';
@@ -367,7 +367,7 @@ def fill_previous_values():
         print """<script type="text/javascript">"""
         print "document.forms[0].%s.checked = true;" % (sel_alpha_value)
         print "document.forms[0].%s.checked = true;" % (sel_stopping_value)
-        
+
         try:
             form["sel_save1_value"].value
             print "document.forms[0].sel_save1_value.checked = true;"
@@ -400,8 +400,8 @@ def delete_old_files():
             if os.stat(fullpath).st_mtime < now - 3600:
                 if os.path.isfile(fullpath):
                     os.remove(fullpath)
-    
-    
+
+
 ###############################################################
 #  Actual start of execution of script using above functions  #
 ###############################################################

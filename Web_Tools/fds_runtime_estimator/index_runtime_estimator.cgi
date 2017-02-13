@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2012 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/fds_runtime_estimator/index.cgi'
+SCRIPT_NAME = '/cgi-bin/fds_runtime_estimator/index_runtime_estimator.cgi'
 form = cgi.FieldStorage()
 
 # Writes out html page templates and form fields
@@ -46,7 +46,7 @@ def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE html>
     <html><head><title>FDS Runtime Estimator</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
+
     <!-- Le styles -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -69,8 +69,8 @@ def print_html_header():
     <form enctype="multipart/form-data" class="well" action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
-    
+
+
 def print_html_body():
 
     # Windows option for file upload
@@ -82,7 +82,7 @@ def print_html_body():
         pass
 
     OUT_FILE_INPUT = """
-    
+
     <h3><FONT FACE="Arial, Helvetica, Geneva"><font color="darkred">Paste the contents of your FDS &lt;case&gt;.out file</font></h3><br/>
     <textarea class="input-xxlarge" id="outfile" name="outfile" rows="20"></textarea>
     <br/>
@@ -206,28 +206,28 @@ def check_input_fields(outfile=""):
             # If FDS time is zero, skip this line in the .out file
             if fds_time == 0:
                 continue
-            
+
             calc_time = 1
 
         if calc_time == 1:
-            # The predicted end time calculation routine 
+            # The predicted end time calculation routine
             predicted_end_time = cpu_time / (fds_time) * (t_end)
             remaining_time = predicted_end_time - cpu_time
             if remaining_time <= 0:
                 remaining_time = 0
-                
+
             all_fds_times = np.append(all_fds_times, fds_time)
             remaining_times = np.append(remaining_times, remaining_time)
             all_predicted_times = np.append(all_predicted_times, predicted_end_time)
             all_time_steps = np.append(all_time_steps, current_time_step)
             all_cpu_steps = np.append(all_cpu_steps, current_cpu_step)
-            
+
             calc_time = 0
 
     #  =================
     #  = Print results =
     #  =================
-    
+
     print '<br/><h2>When will your FDS simulation complete?</h2><br/>'
 
     # Determine the mesh that is taking the most CPU
@@ -275,11 +275,11 @@ def check_input_fields(outfile=""):
     title('Estimated FDS runtime vs. elapsed FDS simulation time', fontsize=14)
     xlabel('Elapsed FDS simulation time (seconds)', fontsize=16)
     ylabel('Estimated total FDS runtime (hours)', fontsize=16)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
-        ylabel_i.set_fontsize(14)    
+    for ylabel_i in ax.get_yticklabels():
+        ylabel_i.set_fontsize(14)
     grid(True)
     savestring = "../../cgi-media/fds_runtime_estimator/fds_runtime%i.png" % random_num
     savefig(savestring, dpi=80)
@@ -301,11 +301,11 @@ def check_input_fields(outfile=""):
     title('FDS time step vs. elapsed FDS simulation time', fontsize=14)
     xlabel('Elapsed FDS simulation time (seconds)', fontsize=16)
     ylabel('FDS time step (seconds)', fontsize=16)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
-        ylabel_i.set_fontsize(14)    
+    for ylabel_i in ax.get_yticklabels():
+        ylabel_i.set_fontsize(14)
     grid(True)
     savestring = "../../cgi-media/fds_runtime_estimator/fds_timestep%i.png" % random_num
     savefig(savestring, dpi=71)
@@ -327,11 +327,11 @@ def check_input_fields(outfile=""):
     title('FDS CPU/step vs. elapsed FDS simulation time', fontsize=14)
     xlabel('Elapsed FDS simulation time (seconds)', fontsize=16)
     ylabel('FDS CPU/step (seconds)', fontsize=16)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(14)
-    for ylabel_i in ax.get_yticklabels(): 
-        ylabel_i.set_fontsize(14)    
+    for ylabel_i in ax.get_yticklabels():
+        ylabel_i.set_fontsize(14)
     grid(True)
     savestring = "../../cgi-media/fds_runtime_estimator/fds_cpustep%i.png" % random_num
     savefig(savestring, dpi=80)
@@ -340,7 +340,7 @@ def check_input_fields(outfile=""):
 
     # Delete older files from previous runs
     delete_old_files()
-    
+
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
           document.forms[0].%(FORM_ELEMENT_NAME)s.value = "%(FORM_VALUE)s";
@@ -349,7 +349,7 @@ def fill_previous_values():
     # Loops through form fields and writes out a custom javascript line for each element
     # to keep the previously typed number in the form
     form_count = 0
-    
+
     # Replace newlines in .out file with appropriate newlines for javascript
     if textarea_option == 1:
         refill = textarea_print.replace("\r\n", "\\r\\n")
@@ -369,7 +369,7 @@ def delete_old_files():
             if os.stat(fullpath).st_mtime < now - 3600:
                 if os.path.isfile(fullpath):
                     os.remove(fullpath)
-    
+
 ###############################################################
 #  Actual start of execution of script using above functions  #
 ###############################################################

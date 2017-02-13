@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2011 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = './index.cgi'
+SCRIPT_NAME = './index_cfast.cgi'
 form = cgi.FieldStorage()
 
 cfast_input_file = """VERSN,6,CFAST Online Simulation
@@ -123,16 +123,16 @@ def print_html_header():
     }
 
     </style>
-    
+
     <style type="text/css" media="screen">
     html, body {
         background-color: #FFFFFF;
     }
-    
+
     </style>
-    
+
     <script type="text/javascript">
-      
+
       // this is a bit of a hack here
       // just list the tab content divs here
       var tabs = ["tab1","tab2","tab3","tab4","tab5"];
@@ -144,7 +144,7 @@ def print_html_header():
           var obj = document.getElementById(tabs[i]);
           obj.style.display = "none";
         }
-          
+
         // show the first tab
         tab1.style.display = "block";
 
@@ -157,7 +157,7 @@ def print_html_header():
           var obj = document.getElementById(tabs[i]);
           obj.style.display = "none";
         }
-          
+
         // show the tab we're interested in
         var obj = document.getElementById(tab);
         obj.style.display = "block";
@@ -165,7 +165,7 @@ def print_html_header():
       }
 
     </script>
-    
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -179,7 +179,7 @@ def print_html_header():
   })();
 
 </script>
-    
+
     </head>
     <body onload="initTab()">
 
@@ -212,11 +212,11 @@ def print_html_header():
     </ul>
 
     <!-- NOTE: jQuery that fires the change is in tabs.js -->
-    
+
     <form action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
+
 def print_html_body():
     HTML_XDIM = """
 
@@ -234,7 +234,7 @@ def print_html_body():
       </div>
 
       <div id="tab2" class="tabContent">
-      
+
           <label for="regularInput">Door width (m)</label>
           <input type="text" name="txt_door_width_value" value="0.9" />
 
@@ -259,7 +259,7 @@ def print_html_body():
           <input type="text" name="txt_q_value" value="400" />
 
       </div>
-      
+
       <div id="tab4" class="tabContent">
 
           <label for="regularInput">Simulation time (s)</label>
@@ -271,27 +271,27 @@ def print_html_body():
           </label>
 
           <br/>
-          
+
       </div>
-      
+
       <div id="tab5" class="tabContent">
 
           CFAST Online was created to quickly and easily run zone model fire simulations in your browser, without installing any software. It can also be used to quickly generate case files, then download a ZIP archive of the results to your local computer.
-          
+
           <br/><br/>
-          
+
           Many of the CFAST input parameters that are not available in the web interface utilize the default values. For more detailed control over the simulation, select the "Download CFAST output" option from the Simulation Parameters tab to download the case to your local computer.
-          
+
           <br/><br/>
-          
+
           This website is a frontend for the <a href="http://www.nist.gov/el/fire_research/cfast.cfm">CFAST zone model</a> (version 6.2.0), which is maintained by the National Institute of Standards and Technology. The results and CFAST case files are for educational purposes only, and any output should be reviewed by a qualified person. The accuracy of the results is not guaranteed in any way.
-          
+
        </div>
 
   <button type="submit">Run CFAST Online</button>
   <button type="reset">Reset inputs</button>
   </form>
-  
+
   """
 
     print HTML_XDIM
@@ -299,11 +299,11 @@ def print_html_body():
 def print_html_footer():
     HTML_TEMPLATE_FOOT = """<h5>CFAST Online is provided by <a href="http://www.koverholt.com">Kristopher Overholt</a>
     </h5><br/>
-    
+
     <h6>Note: This site is not affiliated with NIST or <a href="http://www.nist.gov/el/fire_research/cfast.cfm">official CFAST development</a>.</h6>
-    
+
     </div><!-- container -->
-    
+
 	<!-- JS
 	================================================== -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -312,11 +312,11 @@ def print_html_footer():
     </body>
     </html>"""
     print HTML_TEMPLATE_FOOT
-    
+
 # Checks the form field for empty submission, otherwise sends the query to the execute_search() fucntion
 def check_user_inputs():
     """Check user form inputs and load into dict"""
-    
+
     # Writes fields and values to lists for input looping
     inputs = {}
 
@@ -363,7 +363,7 @@ def check_user_inputs():
     # Convert all fields to floats
     for field in input_fields:
         inputs[field] = float(inputs[field])
-        
+
     return inputs, input_fields
 
 def cfast(sim_time, room_length, room_width, room_height, door_width, door_height, fire_type, fire_size, token1):
@@ -394,7 +394,7 @@ def cfast(sim_time, room_length, room_width, room_height, door_width, door_heigh
         alpha = 0.1876 # kW/s2
         hrrs += alpha * times**2
         hrrs = hrrs.clip(0, fire_size)
-    
+
     # Additional specifications
     specimen_length = 1
     specimen_width = 1
@@ -419,13 +419,13 @@ def cfast(sim_time, room_length, room_width, room_height, door_width, door_heigh
 
     # Create directory for case
     os.mkdir('../../cgi-media/cfast_online/' + str(token1))
-    
+
     # Name and write CFAST input file
     filename = '../../cgi-media/cfast_online/' + str(token1) + '/case.in'
     f = open(filename, 'w')
     f.write(outcase)
     f.close()
-    
+
 def run_cfast(token1):
     """Run CFAST model on case"""
     cfast_job = subprocess.Popen(['./bin/cfast_intel', '../../cgi-media/cfast_online/' + str(token1) + '/case'])
@@ -440,7 +440,7 @@ def run_cfast(token1):
         if cfast_job.poll() == 0:
             jobcomplete = 1
             break
-    
+
     if jobcomplete == 0:
         cfast_job.terminate()
         print '<h3><font color="red">Error: CFAST job ran too long; job terminated.</font></h3>'
@@ -452,13 +452,13 @@ def read_cfast_output(token1):
         cfast_n = np.genfromtxt('../../cgi-media/cfast_online/' + str(token1) + '/case_n.csv', delimiter=',', skip_header=3)
     except (IOError, StopIteration):
         print '<h2><font color="red">CFAST error:</font></h2>'
-        cfast_log = open('../../cgi-media/cfast_online/' + str(token1) + '/case.log', 'r') 
+        cfast_log = open('../../cgi-media/cfast_online/' + str(token1) + '/case.log', 'r')
         logtext = cfast_log.readlines()
         for line in logtext:
             print line + '<br/>'
         fill_previous_values(inputs, input_fields)
         sys.exit()
-        
+
     return cfast_n
 
 def save_figures(cfast_n, token1, fire_type, fire_size):
@@ -478,7 +478,7 @@ def save_figures(cfast_n, token1, fire_type, fire_size):
 
     plot_cfast(cfast_n, 7, 'Floor heat flux vs. time',
     'Time (s)', u'Heat flux (kW/m$^2$)', 'heat_flux', token1, fire_type, fire_size)
-    
+
     plot_cfast(cfast_n, 12, 'Heat release rate vs. time',
     'Time (s)', u'HRR (kW)', 'heat_release_rate', token1, fire_type, fire_size)
 
@@ -488,7 +488,7 @@ def save_figures(cfast_n, token1, fire_type, fire_size):
 def plot_cfast(data, column, plot_title, xlab, ylab, filename, token1, fire_type, fire_size):
     """Plot figures with matplotlib and save plots to working CFAST dir"""
     figure()
-    
+
     # Adjust heat flux from W to kW
     if column == 7:
         data[:,7] = data[:,7] / 1000
@@ -496,7 +496,7 @@ def plot_cfast(data, column, plot_title, xlab, ylab, filename, token1, fire_type
     # Adjust HRR from W to kW
     elif column == 12:
         data[:,12] = data[:,12] / 1000
-    
+
     plot(data[:,0], data[:,column], lw=3)
     title(plot_title, fontsize=20)
     # axvline(L, ls='--', color='black')
@@ -507,19 +507,19 @@ def plot_cfast(data, column, plot_title, xlab, ylab, filename, token1, fire_type
     if column == 10:
         ylim([0, fire_size + fire_size * 0.2])
     grid(True)
-    ax = gca()    
-    for xlabel_i in ax.get_xticklabels(): 
+    ax = gca()
+    for xlabel_i in ax.get_xticklabels():
         xlabel_i.set_fontsize(16)
-    for ylabel_i in ax.get_yticklabels(): 
-        ylabel_i.set_fontsize(16)    
+    for ylabel_i in ax.get_yticklabels():
+        ylabel_i.set_fontsize(16)
     savestring = '../../cgi-media/cfast_online/' + str(token1) + '/Figures/' + filename + '.png'
     savefig(savestring, dpi=80)
-    
+
     # Show plots in page
     print '<center>'
     print '<img src="../../cgi-media/cfast_online/' + str(token1) + '/Figures/' + filename + '.png">'
     print '</center>'
-    
+
 def zip_files(token1):
     """create archive of all case files"""
     zip_path = '../../cgi-media/cfast_online/' + str(token1) + '/'
@@ -528,7 +528,7 @@ def zip_files(token1):
     archive_list = os.listdir('./')
     for figs in os.listdir('./Figures'):
         archive_list += ['./Figures/' + figs]
-    
+
     # save the files in the archive_list into a PKZIP format .zip file
     zip_name = 'case_files.zip'
     zout = zipfile.ZipFile(zip_name, 'w')
@@ -572,10 +572,10 @@ def delete_old_files():
         fullpath = path + "/" + f
         if os.stat(fullpath).st_mtime < now - 3600:
             shutil.rmtree(fullpath)
-    
+
 # =============================================================
 # = Actual start of execution of script using above functions =
-# =============================================================    
+# =============================================================
 
 print_html_header()
 

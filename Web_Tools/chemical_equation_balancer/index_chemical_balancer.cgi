@@ -3,17 +3,17 @@
 # LICENSE
 #
 # Copyright (c) 2012 Kristopher Overholt
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,7 +31,7 @@ import cgitb
 cgitb.enable()
 
 # Variables to script path and that gather form fields
-SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index.cgi'
+SCRIPT_NAME = '/cgi-bin/chemical_equation_balancer/index_chemical_balancer.cgi'
 form = cgi.FieldStorage()
 
 # Writes out html page templates and form fields
@@ -39,7 +39,7 @@ def print_html_header():
     HTML_TEMPLATE_HEAD = """<!DOCTYPE HTML>
     <html><head><title>Chemical Equation Balancer</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
+
     <!-- Le styles -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -60,10 +60,10 @@ def print_html_header():
     <form action="%(SCRIPT_NAME)s" method="POST" enctype="multipart/form-data">"""
     print "Content-type: text/html\n"
     print HTML_TEMPLATE_HEAD % {'SCRIPT_NAME':SCRIPT_NAME}
-    
-    
+
+
 def print_html_body():
-    HTML_INPUTS = """    
+    HTML_INPUTS = """
     <label>Chemical formula of fuel </label>
     <input class="input-small" name="input_formula" type="text" size="4" value="C3H8"><br/><br/>
 
@@ -111,7 +111,7 @@ def print_html_footer():
     print HTML_TEMPLATE_FOOT
 
 def check_input_fields():
-    
+
     try:
         input_formula = form["input_formula"].value
         input_Y_s = form["input_Y_s"].value
@@ -127,7 +127,7 @@ def check_input_fields():
     except:
         print_html_footer()
         sys.exit()
-    
+
     # Writes fields and values to lists for input looping
     global input_fields
     global input_values
@@ -161,7 +161,7 @@ def check_input_fields():
         print """<h2><font color="red">Soot yield is not a valid number</font></h2><br/>"""
         fill_previous_values()
         sys.exit()
-    
+
     formula = input_formula
     y_s = float(input_Y_s)
     y_CO = float(input_Y_CO)
@@ -249,7 +249,7 @@ def check_input_fields():
                    [H, 0, 0, 2, 0, 0, X_H    ],              # H
                    [O, 2, 0, 1, 2, 1, 0      ],              # O
                    [N, 0, 2, 0, 0, 0, 0]     ], dtype=float) # N
-     
+
     MW = np.matrix([MW_C, MW_H, MW_O, MW_N]) # primitive species molecular weights
 
     W = E.T * MW.T
@@ -375,7 +375,7 @@ def check_input_fields():
     FORMULA_OUTPUT += ')</h4>'
 
     print FORMULA_OUTPUT
-    
+
 def fill_previous_values():
     js_form_fill = """<script type="text/javascript">
           document.forms[0].%(FORM_ELEMENT_NAME)s.value = '%(FORM_VALUE)s';
@@ -394,8 +394,8 @@ def fill_previous_values():
             pass
         print "</script>"
         form_count += 1
-    
-    
+
+
 ###############################################################
 #  Actual start of execution of script using above functions  #
 ###############################################################
